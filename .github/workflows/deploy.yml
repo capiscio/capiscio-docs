@@ -65,7 +65,7 @@ jobs:
       - name: Build documentation
         run: |
           cd capiscio-docs
-          mkdocs build --strict --verbose --config-file mkdocs-unified.yml
+          mkdocs build --strict --verbose
         env:
           ENABLE_MONOREPO: 'true'
           ENABLE_GIT_DATES: 'true'
