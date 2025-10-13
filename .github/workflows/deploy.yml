@@ -24,6 +24,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Required permissions for GitHub Deployments and Cloudflare Pages
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+
 jobs:
   # Build unified documentation (runs for all triggers)
   build:
