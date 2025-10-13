@@ -362,7 +362,7 @@ capiscio validate https://agent.example.com --detailed-scores --test-live
 capiscio validate agent.json --detailed-scores --json > scores.json
 ```
 
-[**See full CLI usage guide →**](../../capiscio-cli/scoring-system/)
+[**See full CLI usage guide →**](../capiscio-cli/scoring-system.md)
 
 ### Python API
 
@@ -385,7 +385,7 @@ if result.trust.rating == TrustRating.HIGHLY_TRUSTED:
     await process_payment(partner_url)
 ```
 
-[**See full Python usage guide →**](../../a2a-security/guides/scoring/)
+[**See full Python usage guide →**](../a2a-security/guides/scoring.md)
 
 ---
 
@@ -500,9 +500,9 @@ The old `result.score` property still exists but returns `compliance.total` and 
 
 ## See Also
 
-- **[CapiscIO CLI Scoring](https://docs.capisc.io/capiscio-cli/scoring-system/)** - Command-line usage and flags
-- **[A2A Security Scoring](https://docs.capisc.io/a2a-security/guides/scoring/)** - Python API and patterns
-- **[Core Concepts](https://docs.capisc.io/a2a-security/getting-started/concepts/)** - Understanding validation architecture
+- **[CapiscIO CLI Scoring](https://docs.capisc.io/capiscio-cli/scoring-system.md)** - Command-line usage and flags
+- **[A2A Security Scoring](https://docs.capisc.io/a2a-security/guides/scoring.md)** - Python API and patterns
+- **[Core Concepts](https://docs.capisc.io/a2a-security/getting-started/concepts.md)** - Understanding validation architecture
 
 ---
 

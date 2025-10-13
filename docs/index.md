@@ -24,15 +24,15 @@ Runtime security for A2A agents. Message validation, signature verification, and
 **Use when:** Building production A2A agents that need protection from malformed messages, protocol violations, and SSRF attacks.
 
 **Quick Links:**
-- [Quick Start →](a2a-security/getting-started/quickstart/)
-- [Installation Guide](a2a-security/getting-started/installation/)
-- [Configuration Reference](a2a-security/guides/configuration/)
-- [Scoring System](a2a-security/guides/scoring/)
+- [Quick Start →](a2a-security/getting-started/quickstart.md)
+- [Installation Guide](a2a-security/getting-started/installation.md)
+- [Configuration Reference](a2a-security/guides/configuration.md)
+- [Scoring System](a2a-security/guides/scoring.md)
 
-[![PyPI](https://img.shields.io/pypi/v/capiscio-a2a-security.svg)](https://pypi.org/project/capiscio-a2a-security/){:target="_blank"}
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/){:target="_blank"}
+[![PyPI](https://img.shields.io/pypi/v/capiscio-a2a-security.svg)](https://pypi.org/project/capiscio-a2a-security.md){:target="_blank"}
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads.md){:target="_blank"}
 
-[Browse A2A Security Docs →](a2a-security/){ .md-button .md-button--primary }
+[Browse A2A Security Docs →](a2a-security/index.md){ .md-button .md-button--primary }
 </div>
 
 <div class="product-card" markdown>
@@ -43,15 +43,15 @@ Command-line validation for A2A agent cards. Three-dimensional scoring, JWS sign
 **Use when:** Validating agent cards during development, CI/CD pipelines, or registry submissions.
 
 **Quick Links:**
-- [Getting Started](capiscio-cli/)
-- [Validation Process](capiscio-cli/validation-process/)
-- [Scoring System](capiscio-cli/scoring-system/)
-- [API Reference](capiscio-cli/api-reference/)
+- [Getting Started](capiscio-cli/README.md)
+- [Validation Process](capiscio-cli/validation-process.md)
+- [Scoring System](capiscio-cli/scoring-system.md)
+- [API Reference](capiscio-cli/api-reference.md)
 
 [![npm version](https://img.shields.io/npm/v/capiscio-cli.svg)](https://www.npmjs.com/package/capiscio-cli){:target="_blank"}
 [![Downloads](https://img.shields.io/npm/dm/capiscio-cli)](https://www.npmjs.com/package/capiscio-cli){:target="_blank"}
 
-[Browse CLI Docs →](capiscio-cli/){ .md-button .md-button--primary }
+[Browse CLI Docs →](capiscio-cli/README.md){ .md-button .md-button--primary }
 [Try Online Validator →](https://capisc.io/validator){ .md-button target="_blank" }
 </div>
 
@@ -104,7 +104,7 @@ Command-line validation for A2A agent cards. Three-dimensional scoring, JWS sign
 <div class="link-grid" markdown>
 
 - [:material-github: **GitHub**<br/>Source code & issues](https://github.com/capiscio){:target="_blank"}
-- [:material-package: **PyPI**<br/>Python packages](https://pypi.org/user/capiscio/){:target="_blank"}
+- [:material-package: **PyPI**<br/>Python packages](https://pypi.org/user/capiscio.md){:target="_blank"}
 - [:material-npm: **npm**<br/>Node.js packages](https://www.npmjs.com/~capiscio){:target="_blank"}
 - [:material-file-document: **A2A Spec**<br/>Protocol reference](https://github.com/a2aproject/A2A){:target="_blank"}
 

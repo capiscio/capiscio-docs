@@ -6,30 +6,30 @@ Need help with CapiscIO? Here are the best ways to get support.
 
 Start with the documentation for your specific product:
 
-- **[A2A Security Documentation](../a2a-security/)** - Security middleware guides and API reference
-- **[CapiscIO CLI Documentation](../capiscio-cli/)** - Command-line tools and validation
+- **[A2A Security Documentation](../a2a-security/index.md)** - Security middleware guides and API reference
+- **[CapiscIO CLI Documentation](../capiscio-cli/README.md)** - Command-line tools and validation
 
 ## Quick Links
 
 ### Getting Started
 
-- [A2A Security Quick Start](../a2a-security/getting-started/quickstart/)
-- [CapiscIO CLI Getting Started](../capiscio-cli/)
+- [A2A Security Quick Start](../a2a-security/getting-started/quickstart.md)
+- [CapiscIO CLI Getting Started](../capiscio-cli/README.md)
 - [A2A Protocol Specification](https://github.com/a2aproject/A2A){:target="_blank"}
 
 ### Common Tasks
 
 **For A2A Security:**
 
-- [Installation & Setup](../a2a-security/getting-started/installation/)
-- [Configuration Guide](../a2a-security/guides/configuration/)
-- [Core Concepts](../a2a-security/getting-started/concepts/)
+- [Installation & Setup](../a2a-security/getting-started/installation.md)
+- [Configuration Guide](../a2a-security/guides/configuration.md)
+- [Core Concepts](../a2a-security/getting-started/concepts.md)
 
 **For CapiscIO CLI:**
 
-- [Validation Process](../capiscio-cli/validation-process/)
-- [Scoring System](../capiscio-cli/scoring-system/)
-- [Architecture](../capiscio-cli/architecture/)
+- [Validation Process](../capiscio-cli/validation-process.md)
+- [Scoring System](../capiscio-cli/scoring-system.md)
+- [Architecture](../capiscio-cli/architecture.md)
 
 ## GitHub Resources
 
@@ -62,7 +62,7 @@ Want to contribute? See our [Contributing Guide](contributing.md) for details on
 
 ### Python (A2A Security)
 
-- **PyPI**: [a2a-security package](https://pypi.org/project/a2a-security/)
+- **PyPI**: [a2a-security package](https://pypi.org/project/a2a-security.md)
 - **Installation**: `pip install a2a-security`
 - **Requirements**: Python 3.10+
 
