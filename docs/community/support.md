@@ -23,12 +23,12 @@ Start with the documentation for your specific product:
 
 - [Installation & Setup](../a2a-security/getting-started/installation.md)
 - [Configuration Guide](../a2a-security/guides/configuration.md)
-- [Core Concepts](../a2a-security/getting-started/concepts.md)
+- [Core Concepts](../a2a-security/getting-started/concepts/)
 
 **For CapiscIO CLI:**
 
 - [Validation Process](../capiscio-cli/validation-process.md)
-- [Scoring System](../capiscio-cli/scoring-system.md)
+- [Scoring System](../capiscio-cli/scoring-system/)
 - [Architecture](../capiscio-cli/architecture.md)
 
 ## GitHub Resources
