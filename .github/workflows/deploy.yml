@@ -1,0 +1,322 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main  # Auto-deploy to production
+  pull_request:
+    branches:
+      - main  # Validate PRs with preview
+  workflow_dispatch:  # Manual trigger
+
+# Cancel in-progress runs for same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Build unified documentation (runs for all triggers)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout capiscio-docs
+        uses: actions/checkout@v4
+        with:
+          path: capiscio-docs
+          fetch-depth: 0  # Full history for git-revision-date plugin
+      
+      - name: Checkout a2a-security
+        uses: actions/checkout@v4
+        with:
+          repository: capiscio/a2a-security
+          path: a2a-security
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Checkout capiscio-cli
+        uses: actions/checkout@v4
+        with:
+          repository: capiscio/capiscio-cli
+          path: capiscio-cli
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          cd capiscio-docs
+          pip install -r requirements-docs.txt
+      
+      - name: Build documentation
+        run: |
+          cd capiscio-docs
+          mkdocs build --strict --verbose --config-file mkdocs-unified.yml
+        env:
+          ENABLE_MONOREPO: 'true'
+          ENABLE_GIT_DATES: 'true'
+      
+      - name: Create _headers file for Cloudflare
+        run: |
+          cd capiscio-docs/site
+          cat > _headers << 'EOF'
+          /*
+            X-Frame-Options: DENY
+            X-Content-Type-Options: nosniff
+            Referrer-Policy: strict-origin-when-cross-origin
+            Permissions-Policy: geolocation=(), microphone=(), camera=()
+            Cache-Control: public, max-age=3600, must-revalidate
+          
+          /*.html
+            Cache-Control: public, max-age=600, must-revalidate
+          
+          /assets/*
+            Cache-Control: public, max-age=31536000, immutable
+          
+          /sitemap.xml
+            Cache-Control: public, max-age=3600
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: capiscio-docs/site/
+          retention-days: 7
+  
+  # Deploy to DEV (automatic on main push or manual)
+  deploy-dev:
+    needs: build
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'dev')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: site/
+      
+      - name: Block search engines (Dev only)
+        run: |
+          cd site
+          # Override robots.txt to block all crawlers
+          cat > robots.txt << 'EOF'
+          User-agent: *
+          Disallow: /
+          EOF
+          
+          # Add X-Robots-Tag header to prevent indexing
+          cat > _headers << 'EOF'
+          /*
+            X-Frame-Options: DENY
+            X-Content-Type-Options: nosniff
+            Referrer-Policy: strict-origin-when-cross-origin
+            Permissions-Policy: geolocation=(), microphone=(), camera=()
+            X-Robots-Tag: noindex, nofollow
+            Cache-Control: public, max-age=600, must-revalidate
+          
+          /*.html
+            Cache-Control: public, max-age=300, must-revalidate
+          
+          /assets/*
+            Cache-Control: public, max-age=31536000, immutable
+          EOF
+      
+      - name: Deploy to Cloudflare Pages (Dev)
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: capiscio-docs-dev
+          directory: site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          wranglerVersion: '3'
+      
+      - name: Comment on commit
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const sha = context.sha;
+            const message = `## 🚀 Dev Deployment Complete
+            
+            📍 **Environment:** Development
+            🔗 **URL:** https://dev-docs.capisc.io
+            📝 **Commit:** ${sha.substring(0, 7)}
+            
+            > Auto-deployed from main branch`;
+            
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: sha,
+              body: message
+            });
+  
+  # Deploy to PROD (on version tags or manual)
+  deploy-prod:
+    needs: build
+    if: |
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'prod')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: site/
+      
+      - name: Deploy to Cloudflare Pages (Production)
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: capiscio-docs
+          directory: site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          wranglerVersion: '3'
+      
+      - name: Create release comment
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const tag = context.ref.replace('refs/tags/', '');
+            const message = `## 🎉 Production Deployment Complete
+            
+            📍 **Environment:** Production
+            🔗 **URL:** https://docs.capisc.io
+            🏷️ **Version:** ${tag}
+            
+            Documentation has been deployed to production!`;
+            
+            // Create a release if it doesn't exist
+            try {
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tag,
+                name: `Documentation ${tag}`,
+                body: message,
+                draft: false,
+                prerelease: false
+              });
+            } catch (error) {
+              console.log('Release might already exist:', error.message);
+            }
+      
+      - name: Check links (Production only)
+        run: |
+          pip install linkchecker
+          # Wait for propagation
+          sleep 30
+          linkchecker https://docs.capisc.io --no-warnings --ignore-url=/search || true
+        continue-on-error: true
+  
+  # PR Preview Deploy
+  deploy-preview:
+    needs: build
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: site/
+      
+      - name: Block search engines (Preview only)
+        run: |
+          cd site
+          # Override robots.txt to block all crawlers
+          cat > robots.txt << 'EOF'
+          User-agent: *
+          Disallow: /
+          EOF
+          
+          # Add X-Robots-Tag header to prevent indexing
+          cat > _headers << 'EOF'
+          /*
+            X-Frame-Options: DENY
+            X-Content-Type-Options: nosniff
+            Referrer-Policy: strict-origin-when-cross-origin
+            Permissions-Policy: geolocation=(), microphone=(), camera=()
+            X-Robots-Tag: noindex, nofollow
+            Cache-Control: public, max-age=300, must-revalidate
+          
+          /*.html
+            Cache-Control: public, max-age=60, must-revalidate
+          
+          /assets/*
+            Cache-Control: public, max-age=86400, immutable
+          EOF
+      
+      - name: Deploy to Cloudflare Pages (Preview)
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: capiscio-docs
+          directory: site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
+          wranglerVersion: '3'
+      
+      - name: Add deployment URL comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const branchName = context.payload.pull_request.head.ref;
+            const previewUrl = `https://${branchName}.capiscio-docs.pages.dev`;
+            
+            const comment = `## 📚 Documentation Preview
+            
+            Your documentation preview is ready!
+            
+            🔗 **Preview URL:** ${previewUrl}
+            🌿 **Branch:** \`${branchName}\`
+            
+            > Preview deploys automatically update on each commit to this PR.
+            > This preview will be deleted when the PR is merged or closed.
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+  
+  # Validate links on PRs
+  validate-pr:
+    needs: build
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: site/
+      
+      - name: Check for broken links
+        run: |
+          pip install linkchecker
+          cd site
+          python -m http.server 8000 &
+          sleep 5
+          linkchecker http://localhost:8000 --no-warnings --check-extern || true
+        continue-on-error: true

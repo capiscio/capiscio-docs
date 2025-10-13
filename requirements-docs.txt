@@ -1,0 +1,25 @@
+# MkDocs Unified Documentation Requirements
+# Install with: pip install -r requirements-docs.txt
+
+# Core MkDocs
+mkdocs>=1.5.3
+mkdocs-material>=9.5.0
+
+# Monorepo support
+mkdocs-monorepo-plugin>=1.0.5
+
+# Additional plugins
+mkdocs-git-revision-date-localized-plugin>=1.2.0
+mkdocstrings[python]>=0.24.0
+mike>=2.0.0
+
+# SEO plugins
+mkdocs-meta-descriptions-plugin>=3.0.0
+mkdocs-macros-plugin>=1.0.0
+
+# Theme dependencies
+pillow>=10.0.0
+cairosvg>=2.7.0
+
+# Search enhancement (optional - can add Pagefind post-build)
+# pagefind (installed separately via npm or binary)

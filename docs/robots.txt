@@ -1,0 +1,14 @@
+# robots.txt for CapiscIO Documentation
+# https://docs.capisc.io/
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://docs.capisc.io/sitemap.xml
+
+# Crawl-delay for polite bots
+Crawl-delay: 1
+
+# Block specific paths if needed (currently none)
+# Disallow: /admin/
