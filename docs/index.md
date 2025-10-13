@@ -27,7 +27,7 @@ Runtime security for A2A agents. Message validation, signature verification, and
 - [Quick Start →](a2a-security/getting-started/quickstart.md)
 - [Installation Guide](a2a-security/getting-started/installation.md)
 - [Configuration Reference](a2a-security/guides/configuration.md)
-- [Scoring System](a2a-security/guides/scoring.md)
+- [Scoring System](a2a-security/guides/scoring/)
 
 [![PyPI](https://img.shields.io/pypi/v/capiscio-a2a-security.svg)](https://pypi.org/project/capiscio-a2a-security.md){:target="_blank"}
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads.md){:target="_blank"}
@@ -45,7 +45,7 @@ Command-line validation for A2A agent cards. Three-dimensional scoring, JWS sign
 **Quick Links:**
 - [Getting Started](capiscio-cli/README.md)
 - [Validation Process](capiscio-cli/validation-process.md)
-- [Scoring System](capiscio-cli/scoring-system.md)
+- [Scoring System](capiscio-cli/scoring-system/)
 - [API Reference](capiscio-cli/api-reference.md)
 
 [![npm version](https://img.shields.io/npm/v/capiscio-cli.svg)](https://www.npmjs.com/package/capiscio-cli){:target="_blank"}
