@@ -3,11 +3,21 @@ name: Deploy Documentation
 on:
   push:
     branches:
-      - main  # Auto-deploy to production
+      - main  # Auto-deploy to dev
+    tags:
+      - 'v*'  # Deploy to prod on version tags
   pull_request:
     branches:
-      - main  # Validate PRs with preview
+      - main  # Validate PRs
   workflow_dispatch:  # Manual trigger
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
 
 # Cancel in-progress runs for same branch
 concurrency:
@@ -224,83 +234,7 @@ jobs:
           linkchecker https://docs.capisc.io --no-warnings --ignore-url=/search || true
         continue-on-error: true
   
-  # PR Preview Deploy
-  deploy-preview:
-    needs: build
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: documentation
-          path: site/
-      
-      - name: Block search engines (Preview only)
-        run: |
-          cd site
-          # Override robots.txt to block all crawlers
-          cat > robots.txt << 'EOF'
-          User-agent: *
-          Disallow: /
-          EOF
-          
-          # Add X-Robots-Tag header to prevent indexing
-          cat > _headers << 'EOF'
-          /*
-            X-Frame-Options: DENY
-            X-Content-Type-Options: nosniff
-            Referrer-Policy: strict-origin-when-cross-origin
-            Permissions-Policy: geolocation=(), microphone=(), camera=()
-            X-Robots-Tag: noindex, nofollow
-            Cache-Control: public, max-age=300, must-revalidate
-          
-          /*.html
-            Cache-Control: public, max-age=60, must-revalidate
-          
-          /assets/*
-            Cache-Control: public, max-age=86400, immutable
-          EOF
-      
-      - name: Deploy to Cloudflare Pages (Preview)
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: capiscio-docs
-          directory: site
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.head_ref }}
-          wranglerVersion: '3'
-      
-      - name: Add deployment URL comment
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const prNumber = context.payload.pull_request.number;
-            const branchName = context.payload.pull_request.head.ref;
-            const previewUrl = `https://${branchName}.capiscio-docs.pages.dev`;
-            
-            const comment = `## 📚 Documentation Preview
-            
-            Your documentation preview is ready!
-            
-            🔗 **Preview URL:** ${previewUrl}
-            🌿 **Branch:** \`${branchName}\`
-            
-            > Preview deploys automatically update on each commit to this PR.
-            > This preview will be deleted when the PR is merged or closed.
-            `;
-            
-            github.rest.issues.createComment({
-              issue_number: prNumber,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
-  
-  # Validate links on PRs
+  # PR Validation (no deployment)
   validate-pr:
     needs: build
     if: github.event_name == 'pull_request'
@@ -320,3 +254,37 @@ jobs:
           sleep 5
           linkchecker http://localhost:8000 --no-warnings --check-extern || true
         continue-on-error: true
+      
+      - name: Validate build
+        run: |
+          cd site
+          # Check that critical files exist
+          test -f index.html
+          test -f sitemap.xml
+          test -f robots.txt
+          echo "✅ Build validation passed"
+      
+      - name: Add validation comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            
+            const comment = `## ✅ Documentation Build Successful
+            
+            The documentation build completed successfully and passed validation checks.
+            
+            - ✅ Build completed without errors
+            - ✅ Critical files present (index.html, sitemap.xml, robots.txt)
+            - ✅ Link validation completed
+            
+            > This PR will deploy to **dev-docs.capisc.io** when merged to main.
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
