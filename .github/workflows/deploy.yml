@@ -26,7 +26,7 @@ concurrency:
 
 # Required permissions for GitHub Deployments and Cloudflare Pages
 permissions:
-  contents: read
+  contents: write  # Changed from read to write for commit comments
   deployments: write
   pull-requests: write
 
