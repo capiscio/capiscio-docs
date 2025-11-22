@@ -362,7 +362,7 @@ capiscio validate https://agent.example.com --detailed-scores --test-live
 capiscio validate agent.json --detailed-scores --json > scores.json
 ```
 
-[**See full CLI usage guide →**](../capiscio-node-js-cli/scoring-system.md)
+[**See full CLI usage guide →**](../capiscio-node-js-cli/guides/scoring.md)
 
 ### Python API
 
