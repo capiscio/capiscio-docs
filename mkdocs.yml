@@ -138,8 +138,8 @@ nav:
 
 watch:
   - docs
-  - ../capiscio-core/docs
-  - ../capiscio-python/docs
-  - ../capiscio-node/docs
-  - ../validate-a2a/docs
-  - ../capiscio-sdk-python/docs
+  # - ../capiscio-core/docs
+  # - ../capiscio-python/docs
+  # - ../capiscio-node/docs
+  # - ../validate-a2a/docs
+  # - ../capiscio-sdk-python/docs
