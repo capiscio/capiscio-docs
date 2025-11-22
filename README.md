@@ -6,7 +6,7 @@ This repository contains the landing page for CapiscIO documentation at [docs.ca
 
 The landing page serves as a navigation hub for all CapiscIO product documentation:
 
-- **A2A Security** (`/a2a-security`) - Runtime security middleware
+- **Python SDK** (`/capiscio-sdk-python`) - Runtime security middleware
 - **CLI Tool** (`/cli`) - Command-line utilities (coming soon)
 
 ## Local Development

@@ -183,13 +183,15 @@ hr {
 }
 
 /* Cross-references between products */
-a[href^="/cli/"],
-a[href^="/a2a-security/"] {
+a[href^="/capiscio-python-cli/"],
+a[href^="/capiscio-node-js-cli/"],
+a[href^="/capiscio-sdk-python/"] {
     position: relative;
 }
 
-a[href^="/cli/"]::after,
-a[href^="/a2a-security/"]::after {
+a[href^="/capiscio-python-cli/"]::after,
+a[href^="/capiscio-node-js-cli/"]::after,
+a[href^="/capiscio-sdk-python/"]::after {
     content: "→";
     margin-left: 0.25em;
     color: var(--md-accent-fg-color);

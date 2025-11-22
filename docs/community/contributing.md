@@ -16,8 +16,9 @@ Thank you for your interest in contributing to CapiscIO! We welcome contribution
 
 CapiscIO is organized as a monorepo documentation site with multiple products:
 
-- **[A2A Security](https://github.com/capiscio/a2a-security)** - Python middleware for Agent-to-Agent Protocol security
-- **[CapiscIO CLI](https://github.com/capiscio/capiscio-cli)** - Command-line tools for A2A validation and testing
+- **[Python SDK](https://github.com/capiscio/capiscio-sdk-python)** - Python middleware for Agent-to-Agent Protocol security
+- **[Node.js CLI](https://github.com/capiscio/capiscio-node)** - Command-line tools for A2A validation and testing
+- **[Python CLI](https://github.com/capiscio/capiscio-python)** - Python wrapper for the CLI
 - **[Documentation](https://github.com/capiscio/capiscio-docs)** - This unified documentation site
 
 ## 🚀 How to Contribute
@@ -26,8 +27,9 @@ CapiscIO is organized as a monorepo documentation site with multiple products:
 
 Found a bug or have a feature request? Please open an issue in the relevant repository:
 
-- **[A2A Security Issues](https://github.com/capiscio/a2a-security/issues){:target="_blank"}
-- [CapiscIO CLI Issues](https://github.com/capiscio/capiscio-cli/issues){:target="_blank"}
+- **[Python SDK Issues](https://github.com/capiscio/capiscio-sdk-python/issues){:target="_blank"}
+- **[Node.js CLI Issues](https://github.com/capiscio/capiscio-node/issues){:target="_blank"}
+- **[Python CLI Issues](https://github.com/capiscio/capiscio-python/issues){:target="_blank"}
 - [Documentation Issues](https://github.com/capiscio/capiscio-docs/issues){:target="_blank"}
 
 !!! tip "Good Bug Reports Include"
@@ -41,8 +43,9 @@ Found a bug or have a feature request? Please open an issue in the relevant repo
 
 Each product has its own contributing guidelines:
 
-- [A2A Security Contributing Guide](https://github.com/capiscio/a2a-security/blob/main/CONTRIBUTING.md)
-- [CLI Contributing Guide](https://github.com/capiscio/capiscio-cli/blob/main/CONTRIBUTING.md)
+- [Python SDK Contributing Guide](https://github.com/capiscio/capiscio-sdk-python/blob/main/CONTRIBUTING.md)
+- [Node.js CLI Contributing Guide](https://github.com/capiscio/capiscio-node/blob/main/CONTRIBUTING.md)
+- [Python CLI Contributing Guide](https://github.com/capiscio/capiscio-python/blob/main/CONTRIBUTING.md)
 
 ### 📝 Contributing to Documentation
 
@@ -52,8 +55,8 @@ Documentation contributions are always welcome! Here's how:
     Each product maintains its own docs that are aggregated into the unified site. You can edit docs in the product repo and they'll automatically appear in docs.capisc.io.
 
 **1. Fork the relevant repository**
-   - For product docs: Fork the product repo (e.g., `a2a-security`)
-   - For landing pages: Fork `capiscio-docs`
+   - For product docs: Fork the product repo (e.g., `capiscio-sdk-python`)
+   - For the main site: Fork `capiscio-docs`
 
 2. **Make your changes locally**
    ```bash
@@ -113,7 +116,7 @@ The unified documentation site aggregates all product docs:
 
 **Test a single product**:
 ```bash
-cd a2a-security  # or capiscio-cli
+cd capiscio-sdk-python  # or capiscio-node
 mkdocs serve
 ```
 
@@ -122,8 +125,8 @@ mkdocs serve
 # Directory structure needed:
 # parent/
 #   ├── capiscio-docs/
-#   ├── a2a-security/
-#   └── capiscio-cli/
+#   ├── capiscio-sdk-python/
+#   └── capiscio-node/
 
 cd capiscio-docs
 mkdocs build -f mkdocs-unified.yml
@@ -154,7 +157,7 @@ Our documentation uses a confident, helpful voice:
 **Example:**
 
 ```python
-from capiscio_a2a_security import secure
+from capiscio_sdk import secure
 
 # Wrap your agent with security
 secured_agent = secure(MyAgentExecutor())
@@ -180,8 +183,8 @@ We use Material for MkDocs with these extensions:
 
 By participating in this project, you agree to abide by our Code of Conduct:
 
-- [A2A Security Code of Conduct](https://github.com/capiscio/a2a-security/blob/main/CODE_OF_CONDUCT.md)
-- [CLI Code of Conduct](https://github.com/capiscio/capiscio-cli/blob/main/CODE_OF_CONDUCT.md)
+- [Python SDK Code of Conduct](https://github.com/capiscio/capiscio-sdk-python/blob/main/CODE_OF_CONDUCT.md)
+- [Node.js CLI Code of Conduct](https://github.com/capiscio/capiscio-node/blob/main/CODE_OF_CONDUCT.md)
 
 ## Questions?
 
@@ -194,7 +197,7 @@ By participating in this project, you agree to abide by our Code of Conduct:
 ## See Also
 
 - **[Getting Help](support.md)** - Support resources and FAQs
-- **[A2A Security Contributing](https://github.com/capiscio/a2a-security/blob/main/CONTRIBUTING.md){:target="_blank"}** - Product-specific guidelines
-- **[CapiscIO CLI Contributing](https://github.com/capiscio/capiscio-cli/blob/main/CONTRIBUTING.md){:target="_blank"}** - CLI contribution guide
+- **[Python SDK Contributing](https://github.com/capiscio/capiscio-sdk-python/blob/main/CONTRIBUTING.md){:target="_blank"}** - Product-specific guidelines
+- **[Node.js CLI Contributing](https://github.com/capiscio/capiscio-node/blob/main/CONTRIBUTING.md){:target="_blank"}** - CLI contribution guide
 
 Thank you for helping make CapiscIO better! 🚀

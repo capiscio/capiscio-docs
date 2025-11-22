@@ -3,7 +3,7 @@
 
 site_name: CapiscIO Documentation
 site_url: https://docs.capisc.io
-site_description: Unified documentation for CapiscIO - Security and tooling infrastructure for the A2A protocol
+site_description: Unified documentation for CapiscIO - The Authority Layer for the Agent-to-Agent (A2A) Protocol.
 site_author: CapiscIO Team
 copyright: Copyright &copy; 2025 CapiscIO
 
@@ -16,31 +16,24 @@ theme:
   logo: assets/logo.png
   favicon: assets/favicon.ico
   palette:
-    # Light mode
-    - scheme: default
-      primary: blue grey
-      accent: cyan
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Dark mode
     - scheme: slate
       primary: blue grey
       accent: cyan
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
-  
-  font:
-    text: Roboto
-    code: Roboto Mono
+    - scheme: default
+      primary: blue grey
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   
   features:
-    # Navigation
     - navigation.instant
     - navigation.instant.progress
     - navigation.tracking
-    - navigation.tabs           # Top-level product tabs
+    - navigation.tabs
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.expand
@@ -48,64 +41,29 @@ theme:
     - navigation.indexes
     - navigation.top
     - navigation.footer
-    
-    # Table of contents
     - toc.follow
     - toc.integrate
-    
-    # Search
     - search.suggest
     - search.highlight
     - search.share
-    
-    # Content
     - content.code.copy
     - content.code.annotate
     - content.tabs.link
     - content.tooltips
-    
-    # Header
     - header.autohide
 
-# Plugins
 plugins:
-  - search:
-      lang: en
-      separator: '[\s\-,:!=\[\]()"&/]+|(?!\b)(?=[A-Z][a-z])|\.(\?!\d)|&[lg]t;'
-  
-  # Monorepo plugin to include subproject docs
+  - search
   - monorepo:
       enabled: !ENV [ENABLE_MONOREPO, true]
-  
-  # Git revision dates for version info
   - git-revision-date-localized:
       enable_creation_date: true
       type: timeago
       fallback_to_build_date: true
       enabled: !ENV [ENABLE_GIT_DATES, true]
       strict: false
-  
-  # SEO meta descriptions (reads from page frontmatter)
-  - meta-descriptions:
-      export_csv: false
-      quiet: false
-      enable_checks: true
-      min_length: 50
-      max_length: 160
-  
-  # Social cards for Open Graph/Twitter (optional - requires Cairo)
-  # Uncomment when Cairo is installed: https://squidfunk.github.io/mkdocs-material/setup/setting-up-social-cards/#dependencies
-  # - social:
-  #     cards: true
-  #     cards_layout_options:
-  #       background_color: "#263238"  # Blue Grey 900
-  #       color: "#00bcd4"  # Cyan
-  #       font_family: Roboto
 
-# Markdown extensions (standardized across all products)
 markdown_extensions:
-  # Python Markdown
-  - abbr
   - admonition
   - attr_list
   - def_list
@@ -116,8 +74,6 @@ markdown_extensions:
       permalink: true
       permalink_title: Anchor link to this section
       toc_depth: 3
-  
-  # Python Markdown Extensions
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
@@ -152,84 +108,38 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
 
-# Extra configuration
 extra:
   homepage: https://docs.capisc.io
-  
-  # SEO: Organization structured data
-  organization:
-    name: Capiscio
-    legal_name: Capiscio, Inc.
-    url: https://capisc.io
-    logo: https://docs.capisc.io/assets/logo.png
-    founding_date: 2025-09-01
-    contact_email: hello@capisc.io
-    founder:
-      name: Beon de Nood
-      url: https://newvector.group/founder
-  
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/capiscio
       name: CapiscIO on GitHub
-    - icon: fontawesome/brands/python
-      link: https://pypi.org/user/capiscio/
-      name: CapiscIO on PyPI
-    - icon: fontawesome/brands/npm
-      link: https://www.npmjs.com/~capiscio
-      name: CapiscIO on npm
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/capiscio
       name: CapiscIO on Twitter
-    - icon: fontawesome/brands/linkedin
-      link: https://linkedin.com/company/capiscio
-      name: CapiscIO on LinkedIn
-  
-  # SEO: Default meta tags
-  meta:
-    - name: keywords
-      content: "A2A protocol, AI agent validation, agent trust, protocol compliance, agent security, A2A Security, CapiscIO CLI"
-    - name: author
-      content: CapiscIO Team
-    - property: og:type
-      content: website
-    - property: og:site_name
-      content: CapiscIO Documentation
-    - property: og:locale
-      content: en_US
-    - name: twitter:card
-      content: summary_large_image
-    - name: twitter:site
-      content: "@capiscio"
-    - name: twitter:creator
-      content: "@capiscio"
 
-# Navigation structure - unified across all products
 nav:
   - Home: index.md
   
-  - Guides:
-    - Scoring System: guides/scoring-system.md
-  
-  - A2A Security: '!include ../a2a-security/mkdocs.yml'
-  
-  - Capiscio CLI: '!include ../capiscio-cli/mkdocs.yml'
-  
-  - Community:
-    - Contributing: community/contributing.md
-    - Support: community/support.md
+  - Concepts:
+      - Validation Process: concepts/validation.md
+      - Scoring System: concepts/scoring.md
 
-# Extra CSS (unified styling)
-extra_css:
-  - stylesheets/unified.css
+  - Validate:
+      - Node CLI: '!include ../capiscio-node/mkdocs.yml'
+      - GitHub Action: '!include ../validate-a2a/mkdocs.yml'
+      - Python CLI: '!include ../capiscio-python/mkdocs.yml'
 
-# Extra JavaScript
-extra_javascript:
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - Secure:
+      - Python SDK: '!include ../capiscio-sdk-python/mkdocs.yml'
 
-# Watch for changes in all included repos
-watch:
-  - docs
-  - ../a2a-security/docs
-  - ../capiscio-cli/docs
+  - Platform:
+      - Core Engine: '!include ../capiscio-core/mkdocs.yml'
+
+# watch:
+#   - docs
+#   - ../capiscio-core/docs
+#   - ../capiscio-python/docs
+#   - ../capiscio-node/docs
+#   - ../validate-a2a/docs
+#   - ../capiscio-sdk-python/docs

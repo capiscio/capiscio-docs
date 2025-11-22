@@ -1,101 +1,71 @@
 ---
-title: CapiscIO Documentation - Security & Tooling for A2A Protocol
-description: Unified docs for A2A Security middleware and CLI tool. Protect AI agents with runtime security, signature verification, and protocol compliance.
-keywords: A2A protocol, AI agent security, agent validation, protocol compliance, CapiscIO CLI, A2A Security middleware
+title: CapiscIO Documentation - The Authority Layer for A2A
+description: Unified documentation for CapiscIO. The Authority Layer for the Agent-to-Agent (A2A) Protocol.
+keywords: A2A protocol, AI agent validation, agent trust, protocol compliance, agent security, CapiscIO
 og:image: https://docs.capisc.io/assets/social-card-home.png
 canonical_url: https://docs.capisc.io/
 ---
 
 # CapiscIO Documentation
 
-Technical documentation for CapiscIO security and tooling infrastructure for the [A2A protocol](https://github.com/a2aproject/A2A){:target="_blank"}.
+Welcome to the official documentation for **CapiscIO**, the Authority Layer for the [Agent-to-Agent (A2A) Protocol](https://github.com/a2aproject/A2A){:target="_blank"}.
 
 ---
 
-## Documentation by Product
-
-<div class="product-grid" markdown>
-
-<div class="product-card" markdown>
-### 📦 A2A Security Middleware
-
-Runtime security for A2A agents. Message validation, signature verification, and protocol compliance.
-
-**Use when:** Building production A2A agents that need protection from malformed messages, protocol violations, and SSRF attacks.
-
-**Quick Links:**
-- [Quick Start →](a2a-security/getting-started/quickstart.md)
-- [Installation Guide](a2a-security/getting-started/installation.md)
-- [Configuration Reference](a2a-security/guides/configuration.md)
-- [Scoring System](a2a-security/guides/scoring/)
-
-[![PyPI](https://img.shields.io/pypi/v/capiscio-a2a-security.svg)](https://pypi.org/project/capiscio-a2a-security.md){:target="_blank"}
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads.md){:target="_blank"}
-
-[Browse A2A Security Docs →](a2a-security/index.md){ .md-button .md-button--primary }
-</div>
-
-<div class="product-card" markdown>
-### 🔧 CapiscIO CLI
-
-Command-line validation for A2A agent cards. Three-dimensional scoring, JWS signature verification, live endpoint testing, and compliance checking.
-
-**Use when:** Validating agent cards during development, CI/CD pipelines, or registry submissions.
-
-**Quick Links:**
-- [Getting Started](capiscio-cli/README.md)
-- [Validation Process](capiscio-cli/validation-process.md)
-- [Scoring System](capiscio-cli/scoring-system/)
-- [API Reference](capiscio-cli/api-reference.md)
-
-[![npm version](https://img.shields.io/npm/v/capiscio-cli.svg)](https://www.npmjs.com/package/capiscio-cli){:target="_blank"}
-[![Downloads](https://img.shields.io/npm/dm/capiscio-cli)](https://www.npmjs.com/package/capiscio-cli){:target="_blank"}
-
-[Browse CLI Docs →](capiscio-cli/README.md){ .md-button .md-button--primary }
-[Try Online Validator →](https://capisc.io/validator){ .md-button target="_blank" }
-</div>
-
-</div>
-
----
-
-## When to Use Which Product?
+## Explore the Platform
 
 <div class="grid cards" markdown>
 
--   :material-shield-lock:{ .lg .middle } **A2A Security Middleware**
+-   :material-server-network:{ .lg .middle } **The Authority Layer**
 
     ---
 
-    Choose when you're **building an A2A agent** and need runtime protection:
+    The core binary that powers the CapiscIO ecosystem. It handles validation, scoring, and trust verification.
 
-    - ✅ Validating incoming requests before processing
-    - ✅ Protecting against malformed messages
-    - ✅ Rate limiting and SSRF prevention
-    - ✅ Integrating security into your Python agent
+    [Explore Core Docs →](capiscio-core/index.md){ .md-button }
 
-    **Installation:** `pip install capiscio-a2a-security`
-
--   :material-check-decagram:{ .lg .middle } **CapiscIO CLI**
+-   :material-tools:{ .lg .middle } **Developer Tools**
 
     ---
 
-    Choose when you need to **validate agent cards**:
+    CLI wrappers and CI/CD actions to integrate CapiscIO into your workflow.
 
-    - ✅ Testing agent cards during development
-    - ✅ CI/CD validation in your pipeline
-    - ✅ Registry submission compliance checking
-    - ✅ Understanding scoring and trust metrics
+    - [Python CLI](capiscio-python-cli/index.md)
+    - [Node.js CLI](capiscio-node-js-cli/index.md)
+    - [GitHub Action](capiscio-github-action/index.md)
 
-    **Installation:** `npm install -g capiscio-cli`
+-   :material-code-braces:{ .lg .middle } **SDKs & Libraries**
+
+    ---
+
+    Integrate CapiscIO directly into your agent code.
+
+    - [Python SDK](capiscio-python-sdk/index.md)
 
 </div>
 
-!!! tip "Use Both Together"
-    Most production A2A agents benefit from **both** tools:
-    
-    - **capiscio-cli** validates your agent card during development
-    - **A2A Security** protects your agent at runtime
+---
+
+## Getting Started
+
+If you are new to CapiscIO, we recommend starting with the **CLI** for your preferred language to validate your first Agent Card.
+
+1.  **Install the CLI:**
+    ```bash
+    # Python
+    pip install capiscio
+
+    # Node.js
+    npm install -g capiscio
+    ```
+
+2.  **Validate an Agent:**
+    ```bash
+    capiscio validate ./agent-card.json
+    ```
+
+3.  **Integrate in CI/CD:**
+    Use the [GitHub Action](capiscio-github-action/index.md) to automatically validate your agent on every commit.
 
 ---
 
@@ -104,19 +74,6 @@ Command-line validation for A2A agent cards. Three-dimensional scoring, JWS sign
 <div class="link-grid" markdown>
 
 - [:material-github: **GitHub**<br/>Source code & issues](https://github.com/capiscio){:target="_blank"}
-- [:material-package: **PyPI**<br/>Python packages](https://pypi.org/user/capiscio.md){:target="_blank"}
-- [:material-npm: **npm**<br/>Node.js packages](https://www.npmjs.com/~capiscio){:target="_blank"}
 - [:material-file-document: **A2A Spec**<br/>Protocol reference](https://github.com/a2aproject/A2A){:target="_blank"}
 
-</div>
-
----
-
-## Need Help?
-
-- **Found a bug?** Open an issue on the relevant repository (see product documentation)
-- **General questions?** Check the [CapiscIO website](https://capisc.io){:target="_blank"}
-
-<div style="text-align: center; padding: 2rem 0; margin-top: 2rem; border-top: 1px solid var(--md-default-fg-color--lightest); color: var(--md-default-fg-color--light); font-size: 0.9em;">
-Latest: A2A Security v0.1.0 • CLI v2.0.0 • License: MIT & Apache-2.0
 </div>
