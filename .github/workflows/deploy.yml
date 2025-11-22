@@ -41,6 +41,14 @@ jobs:
           path: capiscio-docs
           fetch-depth: 0  # Full history for git-revision-date plugin
       
+      - name: Checkout capiscio-core
+        uses: actions/checkout@v4
+        with:
+          repository: capiscio/capiscio-core
+          path: capiscio-core
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout capiscio-sdk-python
         uses: actions/checkout@v4
         with:
@@ -48,12 +56,28 @@ jobs:
           path: capiscio-sdk-python
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Checkout capiscio-cli
+
+      - name: Checkout capiscio-python
         uses: actions/checkout@v4
         with:
-          repository: capiscio/capiscio-cli
-          path: capiscio-cli
+          repository: capiscio/capiscio-python
+          path: capiscio-python
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout capiscio-node
+        uses: actions/checkout@v4
+        with:
+          repository: capiscio/capiscio-node
+          path: capiscio-node
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout validate-a2a
+        uses: actions/checkout@v4
+        with:
+          repository: capiscio/validate-a2a
+          path: validate-a2a
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
