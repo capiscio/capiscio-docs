@@ -6,30 +6,31 @@ Need help with CapiscIO? Here are the best ways to get support.
 
 Start with the documentation for your specific product:
 
-- **[A2A Security Documentation](../a2a-security/index.md)** - Security middleware guides and API reference
-- **[CapiscIO CLI Documentation](../capiscio-cli/README.md)** - Command-line tools and validation
+- **[Python SDK Documentation](../capiscio-python-sdk/index.md)** - Security middleware guides and API reference
+- **[Node.js CLI Documentation](../capiscio-node-js-cli/index.md)** - Command-line tools and validation
+- **[Python CLI Documentation](../capiscio-python-cli/index.md)** - Python wrapper for the CLI
 
 ## Quick Links
 
 ### Getting Started
 
-- [A2A Security Quick Start](../a2a-security/getting-started/quickstart.md)
-- [CapiscIO CLI Getting Started](../capiscio-cli/README.md)
+- [Python SDK Quick Start](../capiscio-python-sdk/getting-started/quickstart.md)
+- [Node.js CLI Getting Started](../capiscio-node-js-cli/index.md)
 - [A2A Protocol Specification](https://github.com/a2aproject/A2A){:target="_blank"}
 
 ### Common Tasks
 
-**For A2A Security:**
+**For Python SDK:**
 
-- [Installation & Setup](../a2a-security/getting-started/installation.md)
-- [Configuration Guide](../a2a-security/guides/configuration.md)
-- [Core Concepts](../a2a-security/getting-started/concepts/)
+- [Installation & Setup](../capiscio-python-sdk/getting-started/installation.md)
+- [Configuration Guide](../capiscio-python-sdk/guides/configuration.md)
+- [Core Concepts](../capiscio-python-sdk/getting-started/concepts.md)
 
-**For CapiscIO CLI:**
+**For Node.js CLI:**
 
-- [Validation Process](../capiscio-cli/validation-process.md)
-- [Scoring System](../capiscio-cli/scoring-system/)
-- [Architecture](../capiscio-cli/architecture.md)
+- [Validation Process](../concepts/validation.md)
+- [Scoring System](../concepts/scoring.md)
+- [Architecture](../capiscio-node-js-cli/reference/architecture.md)
 
 ## GitHub Resources
 
@@ -37,7 +38,7 @@ Start with the documentation for your specific product:
 
 Report bugs or request features in the relevant repository:
 
-- [A2A Security Issues](https://github.com/capiscio/a2a-security/issues){:target="_blank"}
+- [Python SDK Issues](https://github.com/capiscio/capiscio-sdk-python/issues){:target="_blank"}
 - [CapiscIO CLI Issues](https://github.com/capiscio/capiscio-cli/issues){:target="_blank"}
 - [Documentation Issues](https://github.com/capiscio/capiscio-docs/issues){:target="_blank"}
 
@@ -60,10 +61,10 @@ Want to contribute? See our [Contributing Guide](contributing.md) for details on
 
 ## Package Resources
 
-### Python (A2A Security)
+### Python (SDK)
 
-- **PyPI**: [a2a-security package](https://pypi.org/project/a2a-security.md)
-- **Installation**: `pip install a2a-security`
+- **PyPI**: [capiscio-sdk-python package](https://pypi.org/project/capiscio-sdk-python/)
+- **Installation**: `pip install capiscio-sdk-python`
 - **Requirements**: Python 3.10+
 
 ### Node.js (CapiscIO CLI)
@@ -87,22 +88,22 @@ CapiscIO implements the Agent-to-Agent (A2A) Protocol. Learn more:
 We welcome contributions! Check out:
 
 - [Contributing Guidelines](contributing.md)
-- [Code of Conduct](https://github.com/capiscio/a2a-security/blob/main/CODE_OF_CONDUCT.md)
-- [Security Policy](https://github.com/capiscio/a2a-security/blob/main/SECURITY.md)
+- [Code of Conduct](https://github.com/capiscio/capiscio-sdk-python/blob/main/CODE_OF_CONDUCT.md)
+- [Security Policy](https://github.com/capiscio/capiscio-sdk-python/blob/main/SECURITY.md)
 
 ### Stay Updated
 
 - **GitHub**: Watch the repositories for updates
-  - [capiscio/a2a-security](https://github.com/capiscio/a2a-security)
-  - [capiscio/capiscio-cli](https://github.com/capiscio/capiscio-cli)
-- **Releases**: Check [Releases](https://github.com/capiscio/a2a-security/releases) for changelogs
+  - [capiscio/capiscio-sdk-python](https://github.com/capiscio/capiscio-sdk-python)
+  - [capiscio/capiscio-node](https://github.com/capiscio/capiscio-node)
+- **Releases**: Check [Releases](https://github.com/capiscio/capiscio-sdk-python/releases) for changelogs
 
 ## Security Issues
 
 Found a security vulnerability? Please report it responsibly:
 
 - **Do not** open a public issue
-- See [Security Policy](https://github.com/capiscio/a2a-security/blob/main/SECURITY.md) for reporting process
+- See [Security Policy](https://github.com/capiscio/capiscio-sdk-python/blob/main/SECURITY.md) for reporting process
 - Security issues are handled with priority
 
 ## Frequently Asked Questions
@@ -112,13 +113,13 @@ Found a security vulnerability? Please report it responsibly:
 
 ### Installation Issues
 
-**Q: `pip install capiscio-a2a-security` fails**
+**Q: `pip install capiscio-sdk-python` fails**
 
 A: Ensure you have Python 3.10 or higher:
 ```bash
 python --version
 pip install --upgrade pip
-pip install a2a-security
+pip install capiscio-sdk-python
 ```
 
 **Q: CLI command not found after installation**
@@ -140,7 +141,7 @@ capiscio validate path/to/agent-card.json
 
 Or programmatically with Python:
 ```python
-from a2a_security import validate_message
+from capiscio_sdk import validate_message
 
 result = validate_message(message_data)
 ```
@@ -155,9 +156,9 @@ A: Check the [CLI repository examples](https://github.com/capiscio/capiscio-cli/
 
 A: Each repository has its own test suite:
 
-**A2A Security**:
+**Python SDK**:
 ```bash
-cd a2a-security
+cd capiscio-sdk-python
 pip install -e ".[dev]"
 pytest
 ```
@@ -182,7 +183,7 @@ mkdocs serve
 
 If you can't find what you're looking for:
 
-1. Search existing [GitHub Issues](https://github.com/capiscio/a2a-security/issues)
+1. Search existing [GitHub Issues](https://github.com/capiscio/capiscio-sdk-python/issues)
 2. Check the [A2A Specification](https://github.com/a2aproject/A2A)
 3. Open a new issue with details about your problem
 
