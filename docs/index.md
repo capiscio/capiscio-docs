@@ -48,24 +48,27 @@ Welcome to the official documentation for **CapiscIO**, the Authority Layer for 
 
 ## Getting Started
 
-If you are new to CapiscIO, we recommend starting with the **CLI** for your preferred language to validate your first Agent Card.
+The fastest way to secure your agent is with the **CapiscIO SDK**. It provides "Enforcement First" security with zero configuration.
 
-1.  **Install the CLI:**
+1.  **Install the SDK:**
     ```bash
-    # Python
-    pip install capiscio
-
-    # Node.js
-    npm install -g capiscio
+    pip install capiscio-sdk
     ```
 
-2.  **Validate an Agent:**
+2.  **Secure your Agent (FastAPI):**
+    ```python
+    from capiscio_sdk.simple_guard import SimpleGuard
+    from capiscio_sdk.integrations.fastapi import CapiscioMiddleware
+
+    # Auto-generates keys and enforces Identity + Integrity
+    app.add_middleware(CapiscioMiddleware, guard=SimpleGuard(dev_mode=True))
+    ```
+
+3.  **Validate an External Agent:**
+    Use the CLI to check compliance of other agents in your network.
     ```bash
     capiscio validate ./agent-card.json
     ```
-
-3.  **Integrate in CI/CD:**
-    Use the [GitHub Action](capiscio-github-action/index.md) to automatically validate your agent on every commit.
 
 ---
 
@@ -75,5 +78,7 @@ If you are new to CapiscIO, we recommend starting with the **CLI** for your pref
 
 - [:material-github: **GitHub**<br/>Source code & issues](https://github.com/capiscio){:target="_blank"}
 - [:material-file-document: **A2A Spec**<br/>Protocol reference](https://github.com/a2aproject/A2A){:target="_blank"}
+- [:material-shield-check: **Enforcement Guide**<br/>How Guard verifies requests](guides/enforcement-first.md)
+- [:material-key: **Trust Model**<br/>How keys and trust stores work](concepts/trust-model.md)
 
 </div>
