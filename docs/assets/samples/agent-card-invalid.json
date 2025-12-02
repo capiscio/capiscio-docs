@@ -1,0 +1,12 @@
+{
+  "name": "",
+  "description": "Missing required field: name is empty",
+  "url": "not-a-valid-url",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": "yes"
+  },
+  "skills": [],
+  "defaultInputModes": ["telepathy"],
+  "defaultOutputModes": ["text"]
+}

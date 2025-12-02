@@ -42,16 +42,34 @@ When no input is specified, the CLI searches for agent cards in these locations 
 ./src/agent-card.json
 ./public/.well-known/agent-card.json
 ./dist/.well-known/agent-card.json
-./agent.json (legacy support)
-./.well-known/agent.json (legacy support)
+./agent-card.json (legacy support)
+./.well-known/agent-card.json (legacy support)
 ```
 
 ### URL Handling
 
+Agent cards can be hosted at **any URL**. CapiscIO validates whatever URL you provide:
+
+```bash
+# Direct URL to agent card (most common)
+capiscio validate https://my-agent.example.com/agent-card.json
+
+# Well-known path (for discovery)
+capiscio validate https://example.com/.well-known/agent-card.json
+
+# API-style paths (multi-tenant hosting)
+capiscio validate https://api.example.com/agents/weather/agent-card.json
+```
+
+If only a domain is provided, CapiscIO will attempt discovery:
+
 1. **Direct URL validation**: Tests if URL directly contains agent card JSON
-2. **Well-known endpoint discovery**: Tries `/.well-known/agent-card.json` (A2A v0.3.0 standard)
-3. **Legacy endpoint fallback**: Falls back to `/.well-known/agent.json` (legacy)
+2. **Well-known endpoint discovery**: Tries `/.well-known/agent-card.json` (A2A recommended for public discovery)
+3. **Legacy endpoint fallback**: Falls back to `/.well-known/agent-card.json` (legacy)
 4. **Protocol inference**: Automatically adds `https://` if missing
+
+!!! tip "Multi-agent hosting"
+    When hosting multiple agents on one domain, use direct URLs like `/agents/{name}/agent-card.json` rather than the well-known path.
 
 ### File Processing
 
@@ -149,9 +167,32 @@ Each skill in the `skills` array must have:
 ## Validation Modes
 
 ### Progressive Mode (Default)
-```bash
-capiscio validate agent.json --progressive
-```
+
+=== "Command"
+
+    ```bash
+    capiscio validate agent.json --progressive
+    ```
+
+=== "Output"
+
+    ```ansi
+    ✅ A2A AGENT VALIDATION PASSED
+    
+    Mode: Progressive (balanced)
+    
+    ┌───────────────────────────────────────┐
+    │  Score: 85/100                        │
+    │  Checks: 12 passed, 0 failed          │
+    └───────────────────────────────────────┘
+
+    ✓ Core A2A requirements met
+    ⚠️ 2 suggestions for improvement
+    
+    💡 Suggestions:
+      - Add authentication scheme for production
+      - Include skill examples for better discovery
+    ```
 
 **Characteristics:**
 - Balanced validation approach
@@ -166,9 +207,49 @@ capiscio validate agent.json --progressive
 - General-purpose validation
 
 ### Strict Mode
-```bash
-capiscio validate agent.json --strict
-```
+
+=== "Command"
+
+    ```bash
+    capiscio validate agent.json --strict
+    ```
+
+=== "Output (Pass)"
+
+    ```ansi
+    ✅ STRICT VALIDATION PASSED
+    
+    Mode: Strict (production-ready)
+    
+    ┌───────────────────────────────────────┐
+    │  Score: 100/100                       │
+    │  Checks: 15 passed, 0 failed          │
+    └───────────────────────────────────────┘
+
+    ✓ Full A2A protocol compliance
+    ✓ Security scheme verified
+    ✓ All endpoints accessible
+    
+    🚀 Agent is production ready!
+    ```
+
+=== "Output (Fail)"
+
+    ```ansi
+    ❌ STRICT VALIDATION FAILED
+    
+    Mode: Strict (production-ready)
+    
+    ┌───────────────────────────────────────┐
+    │  Score: 72/100 (need ≥95)             │
+    │  Checks: 10 passed, 2 failed          │
+    └───────────────────────────────────────┘
+
+    ❌ MISSING_AUTH: No authentication scheme
+    ❌ ENDPOINT_UNREACHABLE: /a2a returned 404
+    
+    Exit code: 1
+    ```
 
 **Characteristics:**
 - Full A2A protocol compliance required
@@ -183,9 +264,30 @@ capiscio validate agent.json --strict
 - Compliance verification
 
 ### Conservative Mode
-```bash
-capiscio validate agent.json --conservative
-```
+
+=== "Command"
+
+    ```bash
+    capiscio validate agent.json --conservative
+    ```
+
+=== "Output"
+
+    ```ansi
+    ✅ BASIC VALIDATION PASSED
+    
+    Mode: Conservative (minimal)
+    
+    ┌───────────────────────────────────────┐
+    │  Score: 60/100                        │
+    │  Checks: 5 passed, 0 failed           │
+    └───────────────────────────────────────┘
+
+    ✓ Basic schema structure valid
+    ✓ Required fields present
+    
+    ℹ️  Skipped: endpoint testing, security checks
+    ```
 
 **Characteristics:**
 - Minimal validation requirements
@@ -203,7 +305,7 @@ capiscio validate agent.json --conservative
 ### Legacy Endpoint Handling
 
 **Detection Logic:**
-1. Check if URL uses `.well-known/agent.json` (legacy)
+1. Check if URL uses `.well-known/agent-card.json` (legacy)
 2. Generate warning if legacy endpoint detected
 3. Suggest migration to `.well-known/agent-card.json`
 
@@ -338,12 +440,11 @@ Version: 0.3.0 (Strictness: progressive)
 ## See Also
 
 - **[Scoring System](scoring.md)** - Understand how validation results translate to scores
-- **[API Reference](../capiscio-node-js-cli/reference/api.md)** - Use validation programmatically
-- **[Architecture](../capiscio-node-js-cli/reference/architecture.md)** - Internal validator implementation details
-- **[Python SDK](../capiscio-python-sdk/index.md)** - Runtime protection for production agents
+- **[CLI Reference](../reference/cli/index.md)** - Command-line validation reference
+- **[Python SDK](../reference/sdk-python/index.md)** - Runtime protection for production agents
 
 !!! tip "Production Deployment"
-    capiscio-cli validates agent cards during development and CI/CD. For runtime protection, use [CapiscIO Python SDK](../capiscio-python-sdk/index.md).
+    capiscio-cli validates agent cards during development and CI/CD. For runtime protection, use [CapiscIO Python SDK](../reference/sdk-python/index.md).
 
 ## Contributing to Validation
 
@@ -351,6 +452,6 @@ See the [GitHub repository](https://github.com/capiscio/capiscio-cli) for inform
 
 ## Related Documentation
 
-- [CLI Usage Guide](../capiscio-node-js-cli/getting-started/installation.md)
-- [API Reference](../capiscio-node-js-cli/reference/api.md)
+- [CLI Usage Guide](../reference/cli/index.md)
+- [CLI Reference](../reference/cli/index.md)
 - [A2A Protocol Specification](https://github.com/a2aproject/A2A){:target="_blank"}

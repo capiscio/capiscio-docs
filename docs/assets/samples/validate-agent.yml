@@ -1,0 +1,24 @@
+name: Validate Agent Card
+
+on:
+  push:
+    paths:
+      - 'agent-card.json'
+      - '.well-known/agent-card.json'
+  pull_request:
+    paths:
+      - 'agent-card.json'
+      - '.well-known/agent-card.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate Agent Card
+        uses: capiscio/validate-a2a@v1
+        with:
+          path: agent-card.json
+          strict: true
+          fail-on-warning: false

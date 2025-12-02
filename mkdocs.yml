@@ -15,16 +15,20 @@ theme:
   name: material
   logo: assets/logo.png
   favicon: assets/favicon.ico
+  custom_dir: docs/overrides
+  font:
+    text: Inter
+    code: JetBrains Mono
   palette:
     - scheme: slate
-      primary: blue grey
-      accent: cyan
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
     - scheme: default
-      primary: blue grey
-      accent: cyan
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -35,8 +39,8 @@ theme:
     - navigation.tracking
     - navigation.tabs
     - navigation.tabs.sticky
-    - navigation.sections
-    - navigation.expand
+    # - navigation.sections  # Disabled: makes nested items appear at same level
+    # - navigation.expand    # Disabled: auto-expands all sections
     - navigation.path
     - navigation.indexes
     - navigation.top
@@ -62,6 +66,19 @@ plugins:
       fallback_to_build_date: true
       enabled: !ENV [ENABLE_GIT_DATES, true]
       strict: false
+  - mkdocstrings:
+      enabled: !ENV [ENABLE_MKDOCSTRINGS, true]
+      default_handler: python
+      handlers:
+        python:
+          paths: ["../capiscio-sdk-python"]
+          options:
+            show_source: false
+            show_root_heading: true
+            show_signature_annotations: true
+            separate_signature: true
+            docstring_style: google
+            members_order: source
 
 markdown_extensions:
   - admonition
@@ -118,23 +135,95 @@ extra:
       link: https://twitter.com/capiscio
       name: CapiscIO on Twitter
 
+extra_css:
+  - assets/stylesheets/custom.css
+
 nav:
   - Home: index.md
   
+  - Quickstarts:
+      - quickstarts/index.md
+      - Validate Your Agent:
+          - quickstarts/validate/1-intro.md
+          - quickstarts/validate/2-install.md
+          - quickstarts/validate/3-validate.md
+          - quickstarts/validate/4-reports.md
+          - quickstarts/validate/5-next.md
+      - Secure Your Agent:
+          - quickstarts/secure/1-intro.md
+          - quickstarts/secure/2-sdk.md
+          - quickstarts/secure/3-guard.md
+          - quickstarts/secure/4-test.md
+          - quickstarts/secure/5-production.md
+      - CI/CD Integration:
+          - quickstarts/cicd/1-intro.md
+          - quickstarts/cicd/2-action.md
+          - quickstarts/cicd/3-thresholds.md
+          - quickstarts/cicd/4-comments.md
+          - quickstarts/cicd/5-matrix.md
+
   - Concepts:
       - Validation Process: concepts/validation.md
       - Scoring System: concepts/scoring.md
+      - Trust Model: concepts/trust-model.md
 
-  - Validate:
-      - Node CLI: '!include ../capiscio-node/mkdocs.yml'
-      - GitHub Action: '!include ../validate-a2a/mkdocs.yml'
-      - Python CLI: '!include ../capiscio-python/mkdocs.yml'
+  - Recipes:
+      - recipes/index.md
+      - Validation:
+          - Validate from URL: recipes/validation/validate-url.md
+          - Bulk Validation: recipes/validation/bulk-validate.md
+          - Schema-Only Mode: recipes/validation/schema-only.md
+          - Strict Mode: recipes/validation/strict-mode.md
+          - Custom Timeout: recipes/validation/custom-timeout.md
+      - Security:
+          - Sign Outbound: recipes/security/sign-outbound.md
+          - Verify Inbound: recipes/security/verify-inbound.md
+          - Trust Badges: recipes/security/badges.md
+          - Badge Keeper: recipes/security/badge-keeper.md
+          - Security Gateway: recipes/security/gateway-setup.md
+          - Dev Mode: recipes/security/dev-mode.md
+          - Key Rotation: recipes/security/key-rotation.md
+          - Trust Store: recipes/security/trust-store.md
+      - Integrations:
+          - FastAPI: recipes/integrations/fastapi.md
+          - Flask: recipes/integrations/flask.md
+          - Express: recipes/integrations/express.md
+          - LangChain: recipes/integrations/langchain.md
+      - CI/CD:
+          - Pre-commit Hook: recipes/cicd/pre-commit.md
+          - GitLab CI: recipes/cicd/gitlab-ci.md
+          - Jenkins: recipes/cicd/jenkins.md
 
-  - Secure:
-      - Python SDK: '!include ../capiscio-sdk-python/mkdocs.yml'
+  - Samples: samples.md
 
-  - Platform:
-      - Core Engine: '!include ../capiscio-core/mkdocs.yml'
+  - Reference:
+      - reference/index.md
+      - CLI Reference: reference/cli/index.md
+      - Python SDK:
+          - reference/sdk-python/index.md
+          - SecurityConfig: reference/sdk-python/config.md
+          - CapiscioSecurityExecutor: reference/sdk-python/executor.md
+          - SimpleGuard: reference/sdk-python/simple-guard.md
+          - Types: reference/sdk-python/types.md
+          - Errors: reference/sdk-python/errors.md
+      - Go API: reference/go-api.md
+      - Configuration: reference/configuration.md
+      - Agent Card Schema: reference/agent-card-schema.md
+      - Installation:
+          - reference/wrappers/index.md
+          - Python (pip): reference/wrappers/python.md
+          - Node.js (npm): reference/wrappers/node.md
+          - GitHub Action: reference/wrappers/github-action.md
+
+  - Guides:
+      - Enforcement First: guides/enforcement-first.md
+      - Scoring System: guides/scoring-system.md
+
+  - Troubleshooting: troubleshooting.md
+
+  - Community:
+      - Contributing: community/contributing.md
+      - Support: community/support.md
 
 # watch:
 #   - docs

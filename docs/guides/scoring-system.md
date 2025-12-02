@@ -362,7 +362,7 @@ capiscio validate https://agent.example.com --detailed-scores --test-live
 capiscio validate agent.json --detailed-scores --json > scores.json
 ```
 
-[**See full CLI usage guide →**](../capiscio-node-js-cli/guides/scoring.md)
+[**See full CLI usage guide →**](../reference/cli/index.md)
 
 ### Python API
 
@@ -385,7 +385,7 @@ if result.trust.rating == TrustRating.HIGHLY_TRUSTED:
     await process_payment(partner_url)
 ```
 
-[**See full Python usage guide →**](../capiscio-python-sdk/guides/scoring.md)
+[**See full Python SDK guide →**](../reference/sdk-python/index.md)
 
 ---
 
@@ -500,9 +500,9 @@ The old `result.score` property still exists but returns `compliance.total` and 
 
 ## See Also
 
-- **[CapiscIO CLI Scoring](https://docs.capisc.io/capiscio-node-js-cli/scoring-system.md)** - Command-line usage and flags
-- **[Python SDK Scoring](https://docs.capisc.io/capiscio-python-sdk/guides/scoring.md)** - Python API and patterns
-- **[Core Concepts](https://docs.capisc.io/capiscio-python-sdk/getting-started/concepts.md)** - Understanding validation architecture
+- **[CapiscIO CLI Scoring](../reference/cli/index.md)** - Command-line usage and flags
+- **[Python SDK Reference](../reference/sdk-python/index.md)** - Python API and patterns
+- **[Validation Concepts](../concepts/validation.md)** - Understanding validation architecture
 
 ---
 

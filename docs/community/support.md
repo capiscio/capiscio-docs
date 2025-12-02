@@ -6,31 +6,30 @@ Need help with CapiscIO? Here are the best ways to get support.
 
 Start with the documentation for your specific product:
 
-- **[Python SDK Documentation](../capiscio-python-sdk/index.md)** - Security middleware guides and API reference
-- **[Node.js CLI Documentation](../capiscio-node-js-cli/index.md)** - Command-line tools and validation
-- **[Python CLI Documentation](../capiscio-python-cli/index.md)** - Python wrapper for the CLI
+- **[Python SDK Documentation](../reference/sdk-python/index.md)** - Security middleware guides and API reference
+- **[CLI Documentation](../reference/cli/index.md)** - Command-line tools and validation
 
 ## Quick Links
 
 ### Getting Started
 
-- [Python SDK Quick Start](../capiscio-python-sdk/getting-started/quickstart.md)
-- [Node.js CLI Getting Started](../capiscio-node-js-cli/index.md)
+- [Python SDK Quick Start](../quickstarts/secure/1-intro.md)
+- [CLI Getting Started](../reference/cli/index.md)
 - [A2A Protocol Specification](https://github.com/a2aproject/A2A){:target="_blank"}
 
 ### Common Tasks
 
 **For Python SDK:**
 
-- [Installation & Setup](../capiscio-python-sdk/getting-started/installation.md)
-- [Configuration Guide](../capiscio-python-sdk/guides/configuration.md)
-- [Core Concepts](../capiscio-python-sdk/getting-started/concepts.md)
+- [Installation & Setup](../quickstarts/secure/2-sdk.md)
+- [Configuration Guide](../reference/configuration.md)
+- [Core Concepts](../concepts/validation.md)
 
 **For Node.js CLI:**
 
 - [Validation Process](../concepts/validation.md)
 - [Scoring System](../concepts/scoring.md)
-- [Architecture](../capiscio-node-js-cli/reference/architecture.md)
+- [CLI Reference](../reference/cli/index.md)
 
 ## GitHub Resources
 
@@ -184,7 +183,8 @@ mkdocs serve
 If you can't find what you're looking for:
 
 1. Search existing [GitHub Issues](https://github.com/capiscio/capiscio-sdk-python/issues)
-2. Check the [A2A Specification](https://github.com/a2aproject/A2A)
-3. Open a new issue with details about your problem
+2. [Ask in Discussions](https://github.com/orgs/capiscio/discussions) - Community Q&A
+3. Check the [A2A Specification](https://github.com/a2aproject/A2A)
+4. Open a new issue with details about your problem
 
 We're here to help! 🤝
