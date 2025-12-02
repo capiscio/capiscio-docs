@@ -91,6 +91,8 @@ jobs:
         run: |
           cd capiscio-docs
           pip install -r requirements-docs.txt
+          # Install capiscio-sdk-python in editable mode for mkdocstrings to resolve types
+          pip install -e ../capiscio-sdk-python
       
       - name: Build documentation
         run: |
