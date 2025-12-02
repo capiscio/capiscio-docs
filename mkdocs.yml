@@ -81,7 +81,7 @@ plugins:
             members_order: source
             # Allow unresolved references for external types (Exception, pydantic.BaseModel, etc.)
             show_if_no_docstring: false
-          import:
+          inventories:
             # Enable cross-references to Python stdlib and pydantic
             - https://docs.python.org/3/objects.inv
             - https://docs.pydantic.dev/latest/objects.inv

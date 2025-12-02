@@ -49,162 +49,55 @@ from capiscio_sdk import ValidationResult, ValidationIssue, ValidationSeverity
 
 ---
 
-## SimpleGuard
+## API Reference
 
-The recommended way to add security to your agent. Zero-config with convention-over-configuration.
+<div class="grid cards" markdown>
 
-::: capiscio_sdk.simple_guard.SimpleGuard
-    options:
-      show_root_heading: false
-      show_source: false
-      members_order: source
-      heading_level: 3
-      show_signature_annotations: true
-      separate_signature: true
-      docstring_style: google
-      docstring_section_style: spacy
-      filters:
-        - "!^_"  # Exclude private methods
+-   :material-shield-check: **SimpleGuard**
 
----
+    ---
 
-## CapiscioSecurityExecutor
+    Zero-config security middleware. Convention-over-configuration for signing
+    and verifying A2A messages.
 
-Full-featured security wrapper for production agents using the A2A SDK.
+    [:octicons-arrow-right-24: SimpleGuard API](simple-guard.md)
 
-::: capiscio_sdk.executor.CapiscioSecurityExecutor
-    options:
-      show_root_heading: false
-      show_source: false
-      members_order: source
-      heading_level: 3
-      show_signature_annotations: true
-      separate_signature: true
-      docstring_style: google
-      filters:
-        - "!^_"
+-   :material-cog: **SecurityConfig**
 
----
+    ---
 
-## Helper Functions
+    Configuration classes for downstream protection, upstream validation,
+    and security presets.
 
-### secure()
+    [:octicons-arrow-right-24: Configuration API](config.md)
 
-::: capiscio_sdk.executor.secure
-    options:
-      show_root_heading: false
-      heading_level: 4
+-   :material-run-fast: **CapiscioSecurityExecutor**
 
-### secure_agent()
+    ---
 
-::: capiscio_sdk.executor.secure_agent
-    options:
-      show_root_heading: false
-      heading_level: 4
+    Full-featured security wrapper for production agents using the A2A SDK.
+    Includes `secure()` and `secure_agent()` decorators.
 
----
+    [:octicons-arrow-right-24: Executor API](executor.md)
 
-## Configuration
+-   :material-alert-circle: **Errors**
 
-### SecurityConfig
+    ---
 
-::: capiscio_sdk.config.SecurityConfig
-    options:
-      show_root_heading: false
-      show_source: false
-      heading_level: 3
-      show_signature_annotations: true
-      members_order: source
+    Exception classes for security errors, validation failures,
+    signature issues, and rate limiting.
 
-### DownstreamConfig
+    [:octicons-arrow-right-24: Errors API](errors.md)
 
-::: capiscio_sdk.config.DownstreamConfig
-    options:
-      show_root_heading: false
-      show_source: false
-      heading_level: 3
+-   :material-format-list-bulleted-type: **Types**
 
-### UpstreamConfig
+    ---
 
-::: capiscio_sdk.config.UpstreamConfig
-    options:
-      show_root_heading: false
-      show_source: false
-      heading_level: 3
+    Data types for validation results, issues, and severity levels.
 
----
+    [:octicons-arrow-right-24: Types API](types.md)
 
-## Errors
-
-All errors inherit from `CapiscioSecurityError`.
-
-### ConfigurationError
-
-::: capiscio_sdk.errors.ConfigurationError
-    options:
-      show_root_heading: false
-      heading_level: 4
-      show_source: false
-
-### VerificationError
-
-::: capiscio_sdk.errors.VerificationError
-    options:
-      show_root_heading: false
-      heading_level: 4
-      show_source: false
-
-### CapiscioValidationError
-
-::: capiscio_sdk.errors.CapiscioValidationError
-    options:
-      show_root_heading: false
-      heading_level: 4
-      show_source: false
-
-### CapiscioSignatureError
-
-::: capiscio_sdk.errors.CapiscioSignatureError
-    options:
-      show_root_heading: false
-      heading_level: 4
-      show_source: false
-
-### CapiscioRateLimitError
-
-::: capiscio_sdk.errors.CapiscioRateLimitError
-    options:
-      show_root_heading: false
-      heading_level: 4
-      show_source: false
-
----
-
-## Types
-
-### ValidationResult
-
-::: capiscio_sdk.types.ValidationResult
-    options:
-      show_root_heading: false
-      heading_level: 3
-      show_source: false
-
-### ValidationIssue
-
-::: capiscio_sdk.types.ValidationIssue
-    options:
-      show_root_heading: false
-      heading_level: 3
-      show_source: false
-
-### ValidationSeverity
-
-::: capiscio_sdk.types.ValidationSeverity
-    options:
-      show_root_heading: false
-      heading_level: 3
-      show_source: false
+</div>
 
 ---
 
@@ -248,5 +141,4 @@ In `dev_mode=True`, SimpleGuard auto-generates all missing files.
 ## See Also
 
 - [Quickstart: Secure Your Agent](../../quickstarts/secure/1-intro.md)
-- [SimpleGuard Deep Dive](./simple-guard.md)
 - [Configuration Guide](../configuration.md)

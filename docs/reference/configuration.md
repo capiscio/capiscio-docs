@@ -79,15 +79,6 @@ your-project/              # ← SimpleGuard finds this via walk-up
 
 Configuration for `CapiscioSecurityExecutor`. Controls security behavior for incoming and outgoing requests.
 
-### Constructor
-
-::: capiscio_sdk.config.SecurityConfig
-    options:
-      show_root_heading: false
-      show_source: false
-      heading_level: 4
-      members: false
-
 ### Fields
 
 | Field | Type | Default | Description |
@@ -123,13 +114,6 @@ config = SecurityConfig.from_env()
 
 Controls how incoming requests are validated.
 
-::: capiscio_sdk.config.DownstreamConfig
-    options:
-      show_root_heading: false
-      show_source: false
-      heading_level: 4
-      members: false
-
 ### Fields
 
 | Field | Type | Default | Description |
@@ -160,13 +144,6 @@ downstream = DownstreamConfig(
 ## UpstreamConfig
 
 Controls how outgoing requests to other agents are handled.
-
-::: capiscio_sdk.config.UpstreamConfig
-    options:
-      show_root_heading: false
-      show_source: false
-      heading_level: 4
-      members: false
 
 ### Fields
 
