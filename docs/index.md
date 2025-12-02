@@ -161,6 +161,22 @@ Install the CLI and validate a sample agent card in under 60 seconds:
 
     [:octicons-arrow-right-24: Scoring System](concepts/scoring.md)
 
+-   :material-shield-check:{ .lg .middle } **Enforcement First**
+
+    ---
+
+    How Guard verifies requests.
+
+    [:octicons-arrow-right-24: Enforcement Guide](guides/enforcement-first.md)
+
+-   :material-key:{ .lg .middle } **Trust Model**
+
+    ---
+
+    How keys and trust stores work.
+
+    [:octicons-arrow-right-24: Trust Model](concepts/trust-model.md)
+
 </div>
 
 ---
@@ -254,4 +270,3 @@ Complete API documentation for every package in the ecosystem.
     [:octicons-arrow-right-24: Open an Issue](https://github.com/capiscio/capiscio-core/issues/new)
 
 </div>
-
