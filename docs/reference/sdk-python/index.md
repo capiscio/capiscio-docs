@@ -1,0 +1,144 @@
+---
+title: Python SDK Reference
+description: Complete API reference for capiscio-sdk (auto-generated from source)
+---
+
+# Python SDK Reference
+
+Complete API reference for the `capiscio-sdk` Python package.
+
+!!! info "Auto-Generated Documentation"
+    This reference is automatically generated from the SDK source code docstrings.
+    It is always accurate and up-to-date with the installed SDK version.
+
+## Installation
+
+```bash
+pip install capiscio-sdk
+```
+
+**Requirements:** Python ≥3.10
+
+---
+
+## Quick Import Reference
+
+```python
+# Core security class
+from capiscio_sdk import SimpleGuard
+
+# Executor wrapper and decorators
+from capiscio_sdk import CapiscioSecurityExecutor, secure, secure_agent
+
+# Configuration
+from capiscio_sdk import SecurityConfig, DownstreamConfig, UpstreamConfig
+
+# Errors
+from capiscio_sdk.errors import (
+    ConfigurationError,
+    VerificationError,
+    CapiscioSecurityError,
+    CapiscioValidationError,
+    CapiscioSignatureError,
+    CapiscioRateLimitError,
+)
+
+# Types
+from capiscio_sdk import ValidationResult, ValidationIssue, ValidationSeverity
+```
+
+---
+
+## API Reference
+
+<div class="grid cards" markdown>
+
+-   :material-shield-check: **SimpleGuard**
+
+    ---
+
+    Zero-config security middleware. Convention-over-configuration for signing
+    and verifying A2A messages.
+
+    [:octicons-arrow-right-24: SimpleGuard API](simple-guard.md)
+
+-   :material-cog: **SecurityConfig**
+
+    ---
+
+    Configuration classes for downstream protection, upstream validation,
+    and security presets.
+
+    [:octicons-arrow-right-24: Configuration API](config.md)
+
+-   :material-run-fast: **CapiscioSecurityExecutor**
+
+    ---
+
+    Full-featured security wrapper for production agents using the A2A SDK.
+    Includes `secure()` and `secure_agent()` decorators.
+
+    [:octicons-arrow-right-24: Executor API](executor.md)
+
+-   :material-alert-circle: **Errors**
+
+    ---
+
+    Exception classes for security errors, validation failures,
+    signature issues, and rate limiting.
+
+    [:octicons-arrow-right-24: Errors API](errors.md)
+
+-   :material-format-list-bulleted-type: **Types**
+
+    ---
+
+    Data types for validation results, issues, and severity levels.
+
+    [:octicons-arrow-right-24: Types API](types.md)
+
+</div>
+
+---
+
+## File Structure Convention
+
+SimpleGuard uses convention-over-configuration. It expects this directory structure:
+
+```
+your-project/
+├── agent-card.json          # Your agent's identity card
+└── capiscio_keys/
+    ├── private.pem          # Ed25519 private key
+    ├── public.pem           # Ed25519 public key  
+    └── trusted/             # Trust store directory
+        ├── {kid1}.pem       # Trusted public key (filename = key ID)
+        └── {kid2}.pem       # Another trusted key
+```
+
+In `dev_mode=True`, SimpleGuard auto-generates all missing files.
+
+---
+
+## Header Convention
+
+| Header | Description |
+|--------|-------------|
+| `X-Capiscio-JWS` | JWS token from `make_headers()` |
+| `Authorization: Bearer <jws>` | Alternative header format |
+
+---
+
+## Constants
+
+| Constant | Value | Description |
+|----------|-------|-------------|
+| `MAX_TOKEN_AGE` | 60 seconds | Token expiration time |
+| `CLOCK_SKEW_LEEWAY` | 5 seconds | Allowed clock drift |
+
+---
+
+## See Also
+
+- [Quickstart: Secure Your Agent](../../quickstarts/secure/1-intro.md)
+- [Configuration Guide](../configuration.md)

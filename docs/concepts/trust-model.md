@@ -156,4 +156,4 @@ The trust store contains **public** keys only. The private key (`private.pem`) s
 ## See Also
 
 - [Enforcement First Security](../guides/enforcement-first.md) — How Guard verifies requests
-- [SimpleGuard API](../capiscio-python-sdk/index.md) — SDK reference
+- [SimpleGuard API](../reference/sdk-python/simple-guard.md) — SDK reference

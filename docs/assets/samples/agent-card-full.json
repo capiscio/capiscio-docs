@@ -1,0 +1,63 @@
+{
+  "name": "CodeReview Pro",
+  "description": "AI-powered code review assistant that analyzes pull requests for bugs, security issues, and style improvements",
+  "url": "https://codereview.example.com",
+  "version": "2.1.0",
+  "documentationUrl": "https://docs.codereview.example.com",
+  "provider": {
+    "organization": "DevTools Inc",
+    "url": "https://devtools.example.com",
+    "contactEmail": "support@devtools.example.com"
+  },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": true,
+    "stateTransitionHistory": true
+  },
+  "skills": [
+    {
+      "id": "code-review",
+      "name": "Code Review",
+      "description": "Reviews code for bugs, security vulnerabilities, and style issues",
+      "tags": ["code", "review", "security", "bugs"],
+      "examples": [
+        "Review this Python function for potential bugs",
+        "Check this code for SQL injection vulnerabilities",
+        "Suggest improvements for this React component"
+      ],
+      "inputModes": ["text", "file"],
+      "outputModes": ["text"]
+    },
+    {
+      "id": "code-explain",
+      "name": "Code Explanation",
+      "description": "Explains complex code in simple terms",
+      "tags": ["code", "explanation", "learning"],
+      "examples": [
+        "Explain what this regex does",
+        "Walk me through this algorithm"
+      ],
+      "inputModes": ["text", "file"],
+      "outputModes": ["text"]
+    },
+    {
+      "id": "refactor-suggest",
+      "name": "Refactoring Suggestions",
+      "description": "Suggests code refactoring improvements",
+      "tags": ["refactoring", "clean-code", "optimization"],
+      "examples": [
+        "How can I simplify this function?",
+        "Suggest a more efficient approach"
+      ],
+      "inputModes": ["text"],
+      "outputModes": ["text"]
+    }
+  ],
+  "defaultInputModes": ["text"],
+  "defaultOutputModes": ["text"],
+  "authentication": {
+    "schemes": ["bearer", "oauth2"],
+    "credentials": "header"
+  },
+  "supportsAuthenticatedExtendedCard": true
+}

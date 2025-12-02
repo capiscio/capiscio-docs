@@ -190,7 +190,7 @@ By participating in this project, you agree to abide by our Code of Conduct:
 
 - Check the [Support](support.md) page for help resources
 - Open an issue in the relevant repository
-- Join the community discussions on GitHub
+- [Join the community discussions](https://github.com/orgs/capiscio/discussions)
 
 ---
 

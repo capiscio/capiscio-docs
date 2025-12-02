@@ -1,0 +1,32 @@
+{
+  "name": "My First Agent",
+  "description": "A helpful AI assistant built with CapiscIO",
+  "url": "https://my-agent.example.com",
+  "version": "1.0.0",
+  "provider": {
+    "organization": "My Company",
+    "url": "https://mycompany.com"
+  },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false
+  },
+  "skills": [
+    {
+      "id": "general-assistant",
+      "name": "General Assistant",
+      "description": "Answers questions and helps with various tasks",
+      "tags": ["general", "assistant", "qa"],
+      "examples": [
+        "What's the weather like today?",
+        "Help me write an email",
+        "Explain quantum computing"
+      ]
+    }
+  ],
+  "defaultInputModes": ["text"],
+  "defaultOutputModes": ["text"],
+  "authentication": {
+    "schemes": ["none"]
+  }
+}
