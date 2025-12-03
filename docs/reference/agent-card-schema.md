@@ -410,4 +410,4 @@ capiscio validate ./agent-card.json --schema-only
 
 - [Validate Your First Agent](../quickstarts/validate/1-intro.md)
 - [CLI Reference](cli/index.md)
-- [A2A Specification](https://google.github.io/A2A/specification/)
+- [A2A Specification](https://a2a-protocol.org/latest/specification/)

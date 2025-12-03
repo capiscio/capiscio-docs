@@ -1,0 +1,73 @@
+# CapiscIO Documentation
+
+> Complete documentation for CapiscIO - The Universal Authority Layer for AI Agents. Learn to validate A2A agent cards, add cryptographic identity with Trust Badges, and enforce security with the Gateway sidecar.
+
+CapiscIO solves the critical problem that agent cards can pass schema validation but fail in production. The CLI validates both cryptographic authenticity AND protocol compliance. The SDK provides enforcement-first security middleware.
+
+## Quickstarts
+
+- [Validate Your Agent](https://docs.capisc.io/quickstarts/validate/1-intro/): Validate A2A agent cards in 5 minutes using the CLI
+- [Secure Your Agent](https://docs.capisc.io/quickstarts/secure/1-intro/): Add cryptographic identity with SimpleGuard (zero-config middleware)
+- [CI/CD Integration](https://docs.capisc.io/quickstarts/cicd/1-intro/): Automate validation in GitHub Actions with quality gates
+
+## Concepts
+
+- [Validation Process](https://docs.capisc.io/concepts/validation/): How agent card validation works (schema, signatures, live testing)
+- [Scoring System](https://docs.capisc.io/concepts/scoring/): Three-dimensional scoring: Compliance (0-100), Trust (0-100), Availability (0-100)
+- [Trust Model](https://docs.capisc.io/concepts/trust-model/): Cryptographic trust, Trust Badges, key management, and trust stores
+
+## Reference
+
+- [CLI Reference](https://docs.capisc.io/reference/cli/): All commands (validate), flags (--strict, --test-live, --json, --skip-signature), and exit codes
+- [Python SDK](https://docs.capisc.io/reference/sdk-python/): SimpleGuard, CapiscioSecurityExecutor, SecurityConfig, middleware integrations
+- [Go API](https://docs.capisc.io/reference/go-api/): capiscio-core library for badge issuance, verification, and gateway
+- [Agent Card Schema](https://docs.capisc.io/reference/agent-card-schema/): Complete JSON schema for A2A v0.3.0 agent cards
+- [Configuration](https://docs.capisc.io/reference/configuration/): Environment variables and configuration options
+
+## Recipes
+
+- [Sign Outbound Messages](https://docs.capisc.io/recipes/security/sign-outbound/): Add JWS signatures to outgoing A2A requests
+- [Verify Inbound Messages](https://docs.capisc.io/recipes/security/verify-inbound/): Validate signatures + body hash on incoming requests
+- [FastAPI Integration](https://docs.capisc.io/recipes/integrations/fastapi/): Add CapiscioMiddleware to FastAPI apps
+- [Express Integration](https://docs.capisc.io/recipes/integrations/express/): Use Guard with Express.js
+- [Key Rotation](https://docs.capisc.io/recipes/security/key-rotation/): Rotate Ed25519 keys without downtime
+- [Trust Store](https://docs.capisc.io/recipes/security/trust-store/): Configure trusted public keys for verification
+
+## Installation
+
+```bash
+# CLI via npm (Node.js wrapper around Go binary)
+npm install -g capiscio
+
+# CLI via pip (Python wrapper around Go binary)
+pip install capiscio
+
+# Python SDK (runtime security middleware)
+pip install capiscio-sdk
+```
+
+## Key Terms
+
+- A2A Protocol: Agent-to-Agent protocol v0.3.0 by Google for AI agent interoperability
+- Agent Card: JSON file at /.well-known/agent.json describing agent capabilities, endpoints, and authentication
+- Trust Badge: VC-aligned JWS token (X-Capiscio-Badge header) serving as agent identity passport
+- JWS: JSON Web Signature (RFC 7515) for cryptographic message/card integrity
+- Body Hash (bh): SHA-256 hash claim in JWS for payload integrity verification
+- SimpleGuard: Zero-config Python class that auto-generates Ed25519 keys and enforces identity/integrity/freshness
+- Gateway: Reverse proxy sidecar that blocks requests without valid Trust Badges
+- Compliance Score: 0-100 measuring A2A protocol adherence
+- Trust Score: 0-100 measuring cryptographic security posture
+- Availability Score: 0-100 measuring endpoint health (requires --test-live)
+
+## What You Get With SimpleGuard
+
+1. Zero-Config Identity: Auto-generates Ed25519 keys and agent-card.json on first run
+2. Payload Integrity: Enforces SHA-256 body hash verification, blocks tampered payloads (403)
+3. Replay Protection: Strict 60-second token expiration, prevents replay attacks
+4. Performance: <1ms overhead with Server-Timing headers for monitoring
+
+## Optional
+
+- [Troubleshooting](https://docs.capisc.io/troubleshooting/): Common issues and solutions
+- [Contributing](https://docs.capisc.io/community/contributing/): How to contribute
+- [Samples](https://docs.capisc.io/samples/): Example agent cards and configurations
