@@ -58,6 +58,13 @@ theme:
 
 plugins:
   - search
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+      cache_safe: true
   - monorepo:
       enabled: !ENV [ENABLE_MONOREPO, true]
   - git-revision-date-localized:

@@ -87,7 +87,6 @@ CapiscIO implements the Agent-to-Agent (A2A) Protocol. Learn more:
 We welcome contributions! Check out:
 
 - [Contributing Guidelines](contributing.md)
-- [Code of Conduct](https://github.com/capiscio/capiscio-sdk-python/blob/main/CODE_OF_CONDUCT.md)
 - [Security Policy](https://github.com/capiscio/capiscio-sdk-python/blob/main/SECURITY.md)
 
 ### Stay Updated

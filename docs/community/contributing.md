@@ -45,7 +45,6 @@ Each product has its own contributing guidelines:
 
 - [Python SDK Contributing Guide](https://github.com/capiscio/capiscio-sdk-python/blob/main/CONTRIBUTING.md)
 - [Node.js CLI Contributing Guide](https://github.com/capiscio/capiscio-node/blob/main/CONTRIBUTING.md)
-- [Python CLI Contributing Guide](https://github.com/capiscio/capiscio-python/blob/main/CONTRIBUTING.md)
 
 ### 📝 Contributing to Documentation
 
@@ -181,10 +180,12 @@ We use Material for MkDocs with these extensions:
 
 ## Code of Conduct
 
-By participating in this project, you agree to abide by our Code of Conduct:
+By participating in this project, you agree to abide by our [community standards](https://github.com/capiscio/.github). We expect all contributors to:
 
-- [Python SDK Code of Conduct](https://github.com/capiscio/capiscio-sdk-python/blob/main/CODE_OF_CONDUCT.md)
-- [Node.js CLI Code of Conduct](https://github.com/capiscio/capiscio-node/blob/main/CODE_OF_CONDUCT.md)
+- Be respectful and inclusive
+- Provide constructive feedback
+- Follow project guidelines
+- Help others learn and grow
 
 ## Questions?
 
