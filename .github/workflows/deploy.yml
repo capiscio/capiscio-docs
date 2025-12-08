@@ -80,6 +80,14 @@ jobs:
           path: validate-a2a
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout capiscio-rfcs
+        uses: actions/checkout@v4
+        with:
+          repository: capiscio/capiscio-rfcs
+          path: capiscio-rfcs
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set up Python
         uses: actions/setup-python@v5

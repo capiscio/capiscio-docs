@@ -1,204 +1,162 @@
 # Contributing to CapiscIO
 
-> **Help us build better A2A tooling** - Contributions welcome from developers of all skill levels
+We welcome contributions from developers of all skill levels. Whether you're fixing a typo, improving documentation, or adding new features, your help makes CapiscIO better for everyone.
 
-Thank you for your interest in contributing to CapiscIO! We welcome contributions from the community.
+---
 
-!!! success "Ways to Contribute"
-    - 🐛 Report bugs and issues
-    - 💡 Suggest new features
-    - 📝 Improve documentation
-    - 🔧 Submit code improvements
-    - 🧪 Add tests and examples
-    - 🌍 Help with translations
+## Ways to Contribute
 
-## 📦 Project Structure
+| Contribution Type | Description |
+|-------------------|-------------|
+| **Bug Reports** | Report issues with clear reproduction steps |
+| **Feature Requests** | Suggest improvements or new capabilities |
+| **Documentation** | Fix typos, clarify explanations, add examples |
+| **Code** | Submit bug fixes, features, or optimizations |
+| **Tests** | Improve test coverage and add edge cases |
 
-CapiscIO is organized as a monorepo documentation site with multiple products:
+---
 
-- **[Python SDK](https://github.com/capiscio/capiscio-sdk-python)** - Python middleware for Agent-to-Agent Protocol security
-- **[Node.js CLI](https://github.com/capiscio/capiscio-node)** - Command-line tools for A2A validation and testing
-- **[Python CLI](https://github.com/capiscio/capiscio-python)** - Python wrapper for the CLI
-- **[Documentation](https://github.com/capiscio/capiscio-docs)** - This unified documentation site
+## Project Repositories
 
-## 🚀 How to Contribute
+CapiscIO is organized across multiple repositories:
 
-### 🐛 Reporting Issues
+| Repository | Description |
+|------------|-------------|
+| [capiscio-sdk-python](https://github.com/capiscio/capiscio-sdk-python) | Python middleware for A2A security |
+| [capiscio-node](https://github.com/capiscio/capiscio-node) | Node.js CLI for validation and testing |
+| [capiscio-python](https://github.com/capiscio/capiscio-python) | Python wrapper for the CLI |
+| [capiscio-docs](https://github.com/capiscio/capiscio-docs) | This unified documentation site |
 
-Found a bug or have a feature request? Please open an issue in the relevant repository:
+---
 
-- **[Python SDK Issues](https://github.com/capiscio/capiscio-sdk-python/issues){:target="_blank"}
-- **[Node.js CLI Issues](https://github.com/capiscio/capiscio-node/issues){:target="_blank"}
-- **[Python CLI Issues](https://github.com/capiscio/capiscio-python/issues){:target="_blank"}
-- [Documentation Issues](https://github.com/capiscio/capiscio-docs/issues){:target="_blank"}
+## Reporting Issues
 
-!!! tip "Good Bug Reports Include"
-    - Clear description of the issue
-    - Steps to reproduce
-    - Expected vs actual behavior
-    - Version information
-    - Relevant logs or screenshots
+Open an issue in the relevant repository with:
 
-### 💻 Contributing Code
+1. **Clear description** of the problem or suggestion
+2. **Steps to reproduce** (for bugs)
+3. **Expected vs actual behavior**
+4. **Version information** (CLI version, Python version, OS)
+5. **Logs or screenshots** if applicable
 
-Each product has its own contributing guidelines:
+**Issue trackers:**
 
-- [Python SDK Contributing Guide](https://github.com/capiscio/capiscio-sdk-python/blob/main/CONTRIBUTING.md)
-- [Node.js CLI Contributing Guide](https://github.com/capiscio/capiscio-node/blob/main/CONTRIBUTING.md)
+- [Python SDK Issues](https://github.com/capiscio/capiscio-sdk-python/issues)
+- [Node.js CLI Issues](https://github.com/capiscio/capiscio-node/issues)
+- [Documentation Issues](https://github.com/capiscio/capiscio-docs/issues)
 
-### 📝 Contributing to Documentation
+---
 
-Documentation contributions are always welcome! Here's how:
+## Contributing Code
 
-!!! info "Documentation Structure"
-    Each product maintains its own docs that are aggregated into the unified site. You can edit docs in the product repo and they'll automatically appear in docs.capisc.io.
+Each repository has its own contributing guidelines:
 
-**1. Fork the relevant repository**
-   - For product docs: Fork the product repo (e.g., `capiscio-sdk-python`)
-   - For the main site: Fork `capiscio-docs`
+- [Python SDK CONTRIBUTING.md](https://github.com/capiscio/capiscio-sdk-python/blob/main/CONTRIBUTING.md)
+- [Node.js CLI CONTRIBUTING.md](https://github.com/capiscio/capiscio-node/blob/main/CONTRIBUTING.md)
 
-2. **Make your changes locally**
-   ```bash
-   # Clone your fork
-   git clone https://github.com/YOUR_USERNAME/REPO_NAME
-   cd REPO_NAME
-   
-   # Install dependencies
-   pip install -r requirements-docs.txt  # or requirements.txt
-   
-   # Preview your changes
-   mkdocs serve
-   ```
+### General Workflow
 
-**3. Test your changes**
+1. **Fork** the repository
+2. **Clone** your fork locally
+3. **Create a branch** for your changes
+4. **Make changes** and commit with clear messages
+5. **Test** your changes thoroughly
+6. **Push** to your fork
+7. **Open a pull request** with a clear description
 
-!!! warning "Before Submitting"
-    Make sure your changes work correctly:
-    
-    - ✅ Preview locally at http://localhost:8000
-    - ✅ Ensure all links work
-    - ✅ Check formatting and code examples
-    - ✅ Verify diagrams render correctly
-    - ✅ Test on both light and dark themes
+---
 
-**4. Submit a pull request**
-   - Push to your fork
-   - Open a PR against the main repository
-   - Describe your changes clearly
+## Contributing Documentation
 
-## Documentation Structure
+Documentation improvements are always welcome.
 
-### Product Documentation
+### Local Setup
 
-Each product maintains its own documentation:
+```bash
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/capiscio-docs
+cd capiscio-docs
+
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements-docs.txt
+
+# Preview locally
+mkdocs serve
+```
+
+### Before Submitting
+
+Verify your changes:
+
+- Preview renders correctly at `http://localhost:8000`
+- All links work (no broken references)
+- Code examples are correct and tested
+- Content displays properly in both light and dark themes
+
+### Documentation Structure
 
 ```
-product-repo/
+capiscio-docs/
 ├── docs/
 │   ├── index.md
-│   ├── getting-started.md
-│   └── ...
+│   ├── quickstarts/
+│   ├── concepts/
+│   ├── recipes/
+│   ├── reference/
+│   └── community/
 ├── mkdocs.yml
 └── requirements-docs.txt
 ```
 
-### Unified Build
+---
 
-The unified documentation site aggregates all product docs:
+## Style Guidelines
 
-- **Root site**: `capiscio-docs` repository
-- **Aggregation**: Uses `mkdocs-monorepo-plugin`
-- **Theme**: Standardized Material theme across all products
-- **Navigation**: Tabs for each product section
+### Writing
 
-### Local Development
+- **Be concise** — developers want quick answers
+- **Use examples** — show, don't just tell
+- **Link related topics** — help readers navigate
+- **Test code samples** — ensure examples work
 
-**Test a single product**:
-```bash
-cd capiscio-sdk-python  # or capiscio-node
-mkdocs serve
-```
-
-**Test unified site** (requires all repos checked out):
-```bash
-# Directory structure needed:
-# parent/
-#   ├── capiscio-docs/
-#   ├── capiscio-sdk-python/
-#   └── capiscio-node/
-
-cd capiscio-docs
-mkdocs build -f mkdocs-unified.yml
-mkdocs serve -f mkdocs-unified.yml
-```
-
-## 📐 Style Guidelines
-
-### ✍️ Writing Style
-
-Our documentation uses a confident, helpful voice:
-
-!!! example "Writing Principles"
-    - **Be concise**: Developers want quick answers
-    - **Use examples**: Show, don't just tell  
-    - **Link liberally**: Cross-reference related topics
-    - **Test code**: Ensure all code examples work
-    - **Problem/Solution**: Frame features as solutions to real problems
-
-### 🎨 🎨 Formatting
+### Formatting
 
 - Use sentence case for headings
-- Use code blocks with language specifiers
-- Add expected output for examples
-- Use admonitions for tips, warnings, notes
-- Include emojis in key headings for visual hierarchy
+- Include language specifiers in code blocks
+- Show expected output for examples
+- Use tables for structured information
 
-**Example:**
+**Example code block:**
 
 ```python
-from capiscio_sdk import secure
+from capiscio_sdk import SimpleGuard
 
-# Wrap your agent with security
-secured_agent = secure(MyAgentExecutor())
-
-# Output: Agent wrapped with production security settings
+guard = SimpleGuard()
+result = guard.verify_request(request)
+# Returns: VerificationResult with success=True/False
 ```
 
-!!! tip "Pro Tip"
-    Always show expected output for code examples. It helps developers verify their implementation.
-
-### 📚 Markdown Extensions
-
-We use Material for MkDocs with these extensions:
-
-- Code blocks with syntax highlighting
-- Admonitions (notes, warnings, tips)
-- Tables with formatting
-- Task lists
-- Footnotes
-- Math notation (KaTeX)
+---
 
 ## Code of Conduct
 
-By participating in this project, you agree to abide by our [community standards](https://github.com/capiscio/.github). We expect all contributors to:
+All contributors are expected to:
 
 - Be respectful and inclusive
 - Provide constructive feedback
 - Follow project guidelines
 - Help others learn and grow
 
-## Questions?
-
-- Check the [Support](support.md) page for help resources
-- Open an issue in the relevant repository
-- [Join the community discussions](https://github.com/orgs/capiscio/discussions)
+See our [community standards](https://github.com/capiscio/.github) for details.
 
 ---
 
-## See Also
+## Getting Help
 
-- **[Getting Help](support.md)** - Support resources and FAQs
-- **[Python SDK Contributing](https://github.com/capiscio/capiscio-sdk-python/blob/main/CONTRIBUTING.md){:target="_blank"}** - Product-specific guidelines
-- **[Node.js CLI Contributing](https://github.com/capiscio/capiscio-node/blob/main/CONTRIBUTING.md){:target="_blank"}** - CLI contribution guide
-
-Thank you for helping make CapiscIO better! 🚀
+- **[Support page](support.md)** — FAQs and troubleshooting
+- **[GitHub Discussions](https://github.com/orgs/capiscio/discussions)** — Ask questions and share ideas
+- **Issue trackers** — Report bugs in the relevant repository
