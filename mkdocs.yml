@@ -238,6 +238,8 @@ nav:
       - Contributing: community/contributing.md
       - Support: community/support.md
 
+  - RFCs: '!include ../capiscio-rfcs/mkdocs.yml'
+
 # watch:
 #   - docs
 #   - ../capiscio-core/docs
