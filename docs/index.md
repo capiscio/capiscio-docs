@@ -223,6 +223,32 @@ Complete API documentation for every package in the ecosystem.
 
 ---
 
+## :material-file-document-edit: RFCs
+
+Formal proposals for significant changes to CapiscIO protocols and standards.
+
+<div class="grid cards" markdown>
+
+-   :material-check-circle:{ .lg .middle } **RFC-001: AGCP v5.0**
+
+    ---
+
+    Agent-to-Guard Communication Protocol — the foundation for secure agent communication.
+
+    [:octicons-arrow-right-24: Read RFC](rfcs/001-agcp.md)
+
+-   :material-pencil:{ .lg .middle } **Propose an RFC**
+
+    ---
+
+    Have an idea for improving CapiscIO? Learn how to submit a proposal.
+
+    [:octicons-arrow-right-24: Contributing Guide](rfcs/CONTRIBUTING.md)
+
+</div>
+
+---
+
 ## :material-frequently-asked-questions: Common Questions
 
 ??? question "What's the difference between the CLI and SDK?"
