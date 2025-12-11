@@ -33,13 +33,13 @@ Think of `SimpleGuard` as a Customs Officer at the border of your agent. It stop
 
 If any answer is "No", the request is rejected immediately.
 
-## 1. Agent Identity Verification (JWS)
+## 1. Agent Identity Verification (Trust Badge)
 
-CapiscIO uses **JSON Web Signatures (JWS)** with **Ed25519** keys to prove agent identity.
+CapiscIO uses **Trust Badges** (signed JWS tokens per RFC-002) with **Ed25519** keys to prove agent identity.
 
 ### The Handshake
 1.  **Sender**: Signs the request using their private key.
-2.  **Header**: The request includes an `X-Capiscio-JWS` header containing the signature.
+2.  **Header**: The request includes an `X-Capiscio-Badge` header containing the signature (RFC-002 §9.1).
 3.  **Receiver**:
     *   Extracts the Key ID (`kid`) from the header.
     *   Looks up the public key in the local Trust Store (`./capiscio_keys/trusted/`).

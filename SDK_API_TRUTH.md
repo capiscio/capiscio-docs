@@ -101,7 +101,7 @@ def make_headers(self, payload: Dict[str, Any], body: Optional[bytes] = None) ->
 
 **Parameters:** Same as `sign_outbound()`
 
-**Returns:** `Dict[str, str]` - `{"X-Capiscio-JWS": "<token>"}`
+**Returns:** `Dict[str, str]` - `{"X-Capiscio-Badge": "<token>"}` (RFC-002 §9.1)
 
 ---
 
@@ -214,12 +214,12 @@ project_root/
 
 ---
 
-## Header Names
+## Header Names (RFC-002 §9.1)
 
 | Header | Value |
 |--------|-------|
-| `X-Capiscio-JWS` | JWS token from `make_headers()` |
-| `Authorization` | `Bearer <jws>` (alternative) |
+| `X-Capiscio-Badge` | Trust Badge token from `make_headers()` |
+| `Authorization` | `Badge <token>` (alternative) |
 
 ---
 

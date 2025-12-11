@@ -87,12 +87,12 @@ SimpleGuard implements three security guarantees:
 | **Integrity** | Body hash (`bh` claim) proves content wasn't modified |
 | **Freshness** | Timestamps (`iat`, `exp`) prevent replay attacks |
 
-### The JWS Token
+### The Trust Badge
 
-Every request includes a JWS (JSON Web Signature) header:
+Every request includes a Trust Badge header (RFC-002 §9.1):
 
 ```
-X-Capiscio-JWS: eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI6ImxvY2FsLWRldi1rZXkifQ...
+X-Capiscio-Badge: eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI6ImxvY2FsLWRldi1rZXkifQ...
 ```
 
 The token contains:

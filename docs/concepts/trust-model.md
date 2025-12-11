@@ -153,7 +153,36 @@ Soon: use the Registry for dynamic key discovery.
 
 The trust store contains **public** keys only. The private key (`private.pem`) should be protected with filesystem permissions (0600) and never committed to version control.
 
+## Trust Badges
+
+For scenarios requiring portable, verifiable identity across systems, CapiscIO supports **Trust Badges**—signed JWS tokens that prove an agent's identity and trust level.
+
+```python
+from capiscio_sdk import verify_badge, TrustLevel
+
+# Verify an incoming badge
+result = verify_badge(
+    token,
+    trusted_issuers=["https://registry.capisc.io"],
+)
+
+if result.valid:
+    print(f"Agent: {result.claims.agent_id}")
+    print(f"Trust Level: {result.claims.trust_level}")
+```
+
+Trust badges include:
+
+- **Agent DID** — Decentralized identifier for the agent
+- **Trust Level** — 1 (Domain Validated), 2 (Organization Validated), or 3 (Extended Validation)
+- **Issuer** — The Certificate Authority that issued the badge
+- **Expiration** — When the badge expires
+
+See the RFC-002: Trust Badge System specification for full details.
+
 ## See Also
 
 - [Enforcement First Security](../guides/enforcement-first.md) — How Guard verifies requests
 - [SimpleGuard API](../reference/sdk-python/simple-guard.md) — SDK reference
+- [Badge API](../reference/sdk-python/badge.md) — Trust Badge verification API
+- [Trust Badges Recipe](../recipes/security/badges.md) — Practical examples

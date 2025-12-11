@@ -214,6 +214,7 @@ nav:
       - CLI Reference: reference/cli/index.md
       - Python SDK:
           - reference/sdk-python/index.md
+          - Badge: reference/sdk-python/badge.md
           - SecurityConfig: reference/sdk-python/config.md
           - CapiscioSecurityExecutor: reference/sdk-python/executor.md
           - SimpleGuard: reference/sdk-python/simple-guard.md

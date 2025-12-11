@@ -21,50 +21,127 @@ You need to:
 
 ## Solution
 
-### Step 1: Generate a Key Pair
+=== "Python SDK"
 
-First, create an Ed25519 key pair for signing badges:
+    ### Verify a Badge
 
-```bash
-capiscio key gen --out-priv private.jwk --out-pub public.jwk
-```
+    ```python
+    from capiscio_sdk import verify_badge, TrustLevel
 
-!!! danger "Protect Your Private Key"
-    Never share `private.jwk` or commit it to version control.
+    # Verify badge with trusted issuer check
+    result = verify_badge(
+        token,
+        trusted_issuers=["https://registry.capisc.io"],
+        audience="https://my-service.example.com",
+    )
 
-### Step 2: Issue a Badge
+    if result.valid:
+        print(f"✅ Agent: {result.claims.agent_id}")
+        print(f"   Trust Level: {result.claims.trust_level}")
+        print(f"   Domain: {result.claims.domain}")
+    else:
+        print(f"❌ Failed: {result.error}")
+    ```
 
-Create a trust badge for your agent:
+    ### Parse Without Verification
 
-```bash
-capiscio badge issue \
-  --sub "did:capiscio:agent:my-agent" \
-  --domain "my-agent.example.com" \
-  --exp 24h \
-  --key ./private.jwk
-```
+    ```python
+    from capiscio_sdk import parse_badge
 
-This outputs a JWT token:
+    # Inspect badge claims before verification
+    claims = parse_badge(token)
+    print(f"Issuer: {claims.issuer}")
+    print(f"Expires: {claims.expires_at}")
+    print(f"Is Expired: {claims.is_expired}")
+    ```
 
-```
-eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6Y2FwaXNjaW86YWdlbnQ6bXktYWdlbnQi...
-```
+    ### Request a New Badge
 
-### Step 3: Verify a Badge
+    ```python
+    import asyncio
+    from capiscio_sdk import request_badge, TrustLevel
 
-To verify a badge you've received:
+    async def get_badge():
+        token = await request_badge(
+            agent_id="my-agent",
+            ca_url="https://registry.capisc.io",
+            api_key=os.environ["CAPISCIO_API_KEY"],
+            domain="example.com",
+            trust_level=TrustLevel.LEVEL_2,
+        )
+        return token
 
-```bash
-capiscio badge verify "eyJhbGciOiJFZERTQSI..." --key ./public.jwk
-```
+    badge = asyncio.run(get_badge())
+    ```
 
-Output on success:
+=== "CLI"
 
-```
-✅ Badge Valid!
-Subject: did:capiscio:agent:my-agent
-Issuer: https://registry.capisc.io
-Expires: 2025-12-02T19:48:00Z
+    ### Step 1: Generate a Key Pair
+
+    First, create an Ed25519 key pair for signing badges:
+
+    ```bash
+    capiscio key gen --out-priv private.jwk --out-pub public.jwk
+    ```
+
+    !!! danger "Protect Your Private Key"
+        Never share `private.jwk` or commit it to version control.
+
+    ### Step 2: Issue a Badge
+
+    Create a trust badge for your agent:
+
+    ```bash
+    capiscio badge issue \
+      --sub "did:capiscio:agent:my-agent" \
+      --domain "my-agent.example.com" \
+      --exp 24h \
+      --key ./private.jwk
+    ```
+
+    This outputs a JWT token:
+
+    ```
+    eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6Y2FwaXNjaW86YWdlbnQ6bXktYWdlbnQi...
+    ```
+
+    ### Step 3: Verify a Badge
+
+    To verify a badge you've received:
+
+    ```bash
+    capiscio badge verify "eyJhbGciOiJFZERTQSI..." --key ./public.jwk
+    ```
+
+    Output on success:
+
+    ```
+    ✅ Badge Valid!
+    Subject: did:capiscio:agent:my-agent
+    Issuer: https://registry.capisc.io
+    Expires: 2025-12-02T19:48:00Z
+    ```
+
+---
+
+## Trust Levels
+
+| Level | Name | Description |
+|-------|------|-------------|
+| 1 | Domain Validated (DV) | Basic domain ownership verification |
+| 2 | Organization Validated (OV) | Business identity verification |
+| 3 | Extended Validation (EV) | Rigorous vetting process |
+
+```python
+from capiscio_sdk import TrustLevel
+
+# Check trust level
+if result.claims.trust_level == TrustLevel.LEVEL_3:
+    print("High assurance agent - full access granted")
+elif result.claims.trust_level == TrustLevel.LEVEL_2:
+    print("Business verified - standard access")
+else:
+    print("Basic verification - limited access")
 ```
 
 ---
@@ -127,45 +204,58 @@ curl -X POST https://other-agent.example.com/api/task \
 
 ---
 
-## Programmatic Usage (Python)
+## Programmatic Usage (Python SDK)
+
+The Python SDK provides a native API for badge verification (recommended over CLI subprocess):
 
 ```python
-import subprocess
-import json
+from capiscio_sdk import verify_badge, parse_badge, TrustLevel
 
-def issue_badge(subject: str, domain: str, key_path: str, expiry: str = "1h") -> str:
-    """Issue a trust badge using the CLI."""
-    result = subprocess.run([
-        "capiscio", "badge", "issue",
-        "--sub", subject,
-        "--domain", domain,
-        "--exp", expiry,
-        "--key", key_path
-    ], capture_output=True, text=True)
-    
-    if result.returncode != 0:
-        raise RuntimeError(f"Failed to issue badge: {result.stderr}")
-    
-    return result.stdout.strip()
-
-def verify_badge(token: str, key_path: str) -> bool:
-    """Verify a trust badge using the CLI."""
-    result = subprocess.run([
-        "capiscio", "badge", "verify", token,
-        "--key", key_path
-    ], capture_output=True, text=True)
-    
-    return result.returncode == 0
-
-# Usage
-badge = issue_badge(
-    subject="did:capiscio:agent:my-agent",
-    domain="my-agent.example.com",
-    key_path="./private.jwk"
+# Verify a badge with full validation
+result = verify_badge(
+    token,
+    trusted_issuers=["https://registry.capisc.io"],
+    audience="https://my-agent.example.com",
 )
 
-is_valid = verify_badge(badge, "./public.jwk")
-print(f"Badge valid: {is_valid}")
+if result.valid:
+    claims = result.claims
+    print(f"Agent: {claims.agent_id}")
+    print(f"Trust Level: {claims.trust_level}")
+    print(f"Domain: {claims.domain}")
+    print(f"Expires: {claims.expires_at}")
+else:
+    print(f"Verification failed: {result.error}")
+    print(f"Error code: {result.error_code}")
+```
+
+### FastAPI Middleware Example
+
+```python
+from capiscio_sdk import verify_badge
+from fastapi import FastAPI, Request, HTTPException
+
+app = FastAPI()
+
+@app.middleware("http")
+async def badge_auth(request: Request, call_next):
+    if request.url.path in ["/health", "/docs"]:
+        return await call_next(request)
+    
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        raise HTTPException(401, "Missing badge token")
+    
+    result = verify_badge(
+        auth[7:],
+        trusted_issuers=["https://registry.capisc.io"],
+    )
+    
+    if not result.valid:
+        raise HTTPException(401, f"Invalid badge: {result.error}")
+    
+    request.state.agent = result.claims
+    return await call_next(request)
 ```
 
 ---
@@ -188,6 +278,7 @@ Check the key path exists and has correct permissions.
 
 ## See Also
 
+- [Badge API Reference](../../reference/sdk-python/badge.md) - Full Python SDK reference
 - [Badge Keep Daemon](./badge-keeper.md) - Auto-renew badges
 - [CLI Reference: badge](../../reference/cli/index.md#badge-issue) - Full command reference
 - [Security Gateway](./gateway-setup.md) - Validate badges automatically

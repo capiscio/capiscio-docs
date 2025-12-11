@@ -143,17 +143,17 @@ async def get_agent_card():
 async def handle_message(request: Request):
     """Handle incoming A2A messages with signature verification."""
     
-    # 1. Get the JWS token from header
-    jws_token = request.headers.get("X-Capiscio-JWS")
-    if not jws_token:
-        raise HTTPException(status_code=401, detail="Missing X-Capiscio-JWS header")
+    # 1. Get the Badge token from header (RFC-002 §9.1)
+    badge_token = request.headers.get("X-Capiscio-Badge")
+    if not badge_token:
+        raise HTTPException(status_code=401, detail="Missing X-Capiscio-Badge header")
     
     # 2. Get the request body
     body = await request.body()
     
     # 3. Verify the signature
     try:
-        claims = guard.verify_inbound(jws_token, body=body)
+        claims = guard.verify_inbound(badge_token, body=body)
         print(f"✅ Verified request from: {claims.get('iss')}")
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Signature verification failed: {e}")

@@ -59,7 +59,7 @@ def test_authenticated_request():
     headers["Content-Type"] = "application/json"
     
     print(f"📤 Sending signed request...")
-    print(f"   JWS Token: {headers['X-Capiscio-JWS'][:50]}...")
+    print(f"   Badge Token: {headers['X-Capiscio-Badge'][:50]}...")
     
     # Send it
     response = httpx.post(
@@ -79,7 +79,7 @@ def test_authenticated_request():
 def test_unauthenticated_request():
     """Send a request without a signature."""
     print("\n" + "="*50)
-    print("TEST 2: Unauthenticated Request (No JWS)")
+    print("TEST 2: Unauthenticated Request (No Badge)")
     print("="*50)
     
     body = json.dumps({
@@ -223,17 +223,17 @@ You should see:
 TEST 1: Authenticated Request
 ==================================================
 📤 Sending signed request...
-   JWS Token: eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI6...
+   Badge Token: eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI6...
 📥 Response Status: 200
    Response Body: {'jsonrpc': '2.0', 'id': 'test-1', 'result': {'message': 'Hello! You said: Hello from authenticated client!'}}
 ✅ SUCCESS: Authenticated request accepted!
 
 ==================================================
-TEST 2: Unauthenticated Request (No JWS)
+TEST 2: Unauthenticated Request (No Badge)
 ==================================================
 📤 Sending unsigned request...
 📥 Response Status: 401
-   Response Body: {'detail': 'Missing X-Capiscio-JWS header'}
+   Response Body: {'detail': 'Missing X-Capiscio-Badge header'}
 ✅ SUCCESS: Unauthenticated request correctly rejected!
 
 ==================================================
@@ -295,7 +295,7 @@ And JSON logs from SimpleGuard:
 
 ## Testing with cURL
 
-You can also test manually with cURL, but you'll need to generate the JWS token:
+You can also test manually with cURL, but you'll need to generate the Badge token:
 
 ```python
 # Generate a token to use with cURL
@@ -304,7 +304,7 @@ guard = SimpleGuard(dev_mode=True)
 
 body = b'{"jsonrpc":"2.0","id":"curl-test","method":"greeting","params":{}}'
 headers = guard.make_headers({}, body=body)
-print(f"Token: {headers['X-Capiscio-JWS']}")
+print(f"Token: {headers['X-Capiscio-Badge']}")
 ```
 
 Then use it:
@@ -312,7 +312,7 @@ Then use it:
 ```bash
 curl -X POST http://localhost:8000/ \
   -H "Content-Type: application/json" \
-  -H "X-Capiscio-JWS: <paste-token-here>" \
+  -H "X-Capiscio-Badge: <paste-token-here>" \
   -d '{"jsonrpc":"2.0","id":"curl-test","method":"greeting","params":{}}'
 ```
 

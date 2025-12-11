@@ -29,13 +29,13 @@ from capiscio_sdk.errors import VerificationError
 guard = SimpleGuard(dev_mode=True)
 
 def handle_request(request):
-    # Get the JWS from header
-    jws = request.headers.get("X-Capiscio-JWS")
+    # Get the Badge from header (RFC-002 §9.1)
+    badge = request.headers.get("X-Capiscio-Badge")
     body = request.body
     
     try:
         # Verify the signature
-        payload = guard.verify_inbound(jws, body=body)
+        payload = guard.verify_inbound(badge, body=body)
         
         # Signature valid! payload contains claims
         print(f"Request from: {payload['iss']}")
@@ -104,14 +104,14 @@ guard = SimpleGuard(dev_mode=True)
 
 class A2AHandler:
     def handle(self, headers: dict, body: bytes):
-        # 1. Extract JWS header
-        jws = headers.get("X-Capiscio-JWS")
-        if not jws:
-            raise ValueError("Missing X-Capiscio-JWS header")
+        # 1. Extract Badge header (RFC-002 §9.1)
+        badge = headers.get("X-Capiscio-Badge")
+        if not badge:
+            raise ValueError("Missing X-Capiscio-Badge header")
         
         # 2. Verify signature
         try:
-            claims = guard.verify_inbound(jws, body=body)
+            claims = guard.verify_inbound(badge, body=body)
         except VerificationError:
             raise PermissionError("Invalid signature")
         

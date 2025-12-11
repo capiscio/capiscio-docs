@@ -30,6 +30,19 @@ from capiscio_sdk import SimpleGuard
 # Executor wrapper and decorators
 from capiscio_sdk import CapiscioSecurityExecutor, secure, secure_agent
 
+# Trust Badge API
+from capiscio_sdk import (
+    verify_badge,
+    parse_badge,
+    request_badge,
+    request_badge_sync,
+    BadgeClaims,
+    VerifyOptions,
+    VerifyResult,
+    VerifyMode,
+    TrustLevel,
+)
+
 # Configuration
 from capiscio_sdk import SecurityConfig, DownstreamConfig, UpstreamConfig
 
@@ -52,6 +65,15 @@ from capiscio_sdk import ValidationResult, ValidationIssue, ValidationSeverity
 ## API Reference
 
 <div class="grid cards" markdown>
+
+-   :material-badge-account: **Badge API**
+
+    ---
+
+    Trust Badge verification and management. Verify agent identity,
+    parse badge claims, and request new badges from CAs.
+
+    [:octicons-arrow-right-24: Badge API](badge.md)
 
 -   :material-shield-check: **SimpleGuard**
 
@@ -120,12 +142,12 @@ In `dev_mode=True`, SimpleGuard auto-generates all missing files.
 
 ---
 
-## Header Convention
+## Header Convention (RFC-002 §9.1)
 
 | Header | Description |
 |--------|-------------|
-| `X-Capiscio-JWS` | JWS token from `make_headers()` |
-| `Authorization: Bearer <jws>` | Alternative header format |
+| `X-Capiscio-Badge` | Trust Badge token from `make_headers()` |
+| `Authorization: Badge <token>` | Alternative header format |
 
 ---
 

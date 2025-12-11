@@ -55,9 +55,9 @@ response = httpx.post(
 ```python
 headers = guard.make_headers(payload, body)
 
-# Returns dict like:
+# Returns dict like (RFC-002 §9.1):
 {
-    "X-Capiscio-JWS": "eyJhbGciOiJFZERTQSIsInR5cCI6Ikp..."  # JWS signature
+    "X-Capiscio-Badge": "eyJhbGciOiJFZERTQSIsInR5cCI6Ikp..."  # Trust Badge
 }
 ```
 ```

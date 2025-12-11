@@ -178,14 +178,14 @@ class TestSimpleGuardMakeHeaders:
         headers = guard.make_headers({}, body=b"body")
         assert isinstance(headers, dict)
 
-    def test_make_headers_contains_jws(self):
-        """Docs: Returns {"X-Capiscio-JWS": token}"""
+    def test_make_headers_contains_badge(self):
+        """Docs: Returns {"X-Capiscio-Badge": token} per RFC-002 §9.1"""
         from capiscio_sdk.simple_guard import SimpleGuard
         guard = SimpleGuard(dev_mode=True)
         
         headers = guard.make_headers({}, body=b"body")
-        assert "X-Capiscio-JWS" in headers
-        assert isinstance(headers["X-Capiscio-JWS"], str)
+        assert "X-Capiscio-Badge" in headers
+        assert isinstance(headers["X-Capiscio-Badge"], str)
 
 
 class TestDevModeFeatures:
