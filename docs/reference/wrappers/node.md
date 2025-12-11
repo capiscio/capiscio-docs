@@ -54,9 +54,24 @@ capiscio validate https://agent.example.com --test-live
 
 # Strict validation mode
 capiscio validate agent-card.json --strict
+
+# Issue a self-signed badge (development)
+capiscio badge issue --self-sign
+
+# Verify a badge
+capiscio badge verify "eyJhbGciOiJFZERTQSJ9..." --accept-self-signed
 ```
 
 All CLI flags are identical to the core binary. See [:octicons-arrow-right-24: CLI Reference](../cli/index.md) for the complete command reference.
+
+### Wrapper-Specific Commands
+
+The Node.js wrapper provides additional maintenance commands:
+
+| Command | Description |
+|---------|-------------|
+| `capiscio --wrapper-version` | Display the wrapper package version |
+| `capiscio --wrapper-clean` | Remove cached binary (forces re-download) |
 
 ---
 
@@ -124,6 +139,14 @@ For programmatic validation in Node.js, spawn the CLI as a child process:
 ```typescript
 import { execSync } from 'child_process';
 
+interface ValidationResult {
+  success: boolean;
+  scoringResult: {
+    complianceScore: number;
+    trustScore: number;
+  };
+}
+
 function validateAgentCard(path: string): ValidationResult {
   const result = execSync(`npx capiscio validate ${path} --json`, {
     encoding: 'utf-8',
@@ -136,7 +159,7 @@ const result = validateAgentCard('./agent-card.json');
 console.log('Compliance:', result.scoringResult.complianceScore);
 ```
 
-For a full TypeScript SDK, see the [:octicons-arrow-right-24: Python SDK](../sdk-python/index.md) or consider contributing a Node.js SDK.
+A full Node.js SDK (`@capiscio/sdk`) is planned for future releases.
 
 ---
 
