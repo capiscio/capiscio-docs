@@ -1,0 +1,199 @@
+# capiscio-server Reference
+
+<!-- 
+  VERIFIED: 2025-12-11
+  Source: capiscio-server/internal/api/, capiscio-server/docs/swagger.json
+-->
+
+The **capiscio-server** is the backend API server that powers the CapiscIO Registry. It provides agent management, badge issuance (CA-signed), and trust verification services.
+
+!!! info "Version"
+    Current version: **v0.1.0** (pre-release)
+
+## Overview
+
+capiscio-server provides:
+
+- **Agent Registry** — CRUD operations for agent records
+- **Badge CA** — Certificate Authority for issuing trust badges (levels 1-4)
+- **JWKS Endpoint** — Public key set for badge verification
+- **DID Resolution** — `did:web` document serving for registered agents
+- **API Key Auth** — Secure API access management
+
+## Quick Links
+
+<div class="grid cards" markdown>
+
+-   :material-api:{ .lg .middle } **API Reference**
+
+    ---
+
+    Full OpenAPI documentation with all endpoints.
+
+    [:octicons-arrow-right-24: OpenAPI Spec](api.md)
+
+-   :material-docker:{ .lg .middle } **Deployment**
+
+    ---
+
+    Docker and self-hosted deployment guides.
+
+    [:octicons-arrow-right-24: Deployment Guide](deployment.md)
+
+-   :material-badge-account:{ .lg .middle } **Badge Issuance**
+
+    ---
+
+    How the CA issues trust badges.
+
+    [:octicons-arrow-right-24: Badge CA](badge-ca.md)
+
+</div>
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      capiscio-server                            │
+├─────────────┬─────────────┬─────────────┬─────────────────────┤
+│   API       │   Badge CA  │   Database  │   JWKS              │
+│   Handlers  │   Service   │   (Postgres)│   Endpoint          │
+├─────────────┼─────────────┼─────────────┼─────────────────────┤
+│ /v1/agents  │ Issue badge │ agents      │ /.well-known/       │
+│ /v1/badges  │ Verify      │ badges      │   jwks.json         │
+│ /v1/keys    │ Sign JWS    │ api_keys    │                     │
+└─────────────┴─────────────┴─────────────┴─────────────────────┘
+```
+
+---
+
+## API Endpoints Summary
+
+### Agents
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/agents` | List all agents |
+| `POST` | `/v1/agents` | Create new agent |
+| `GET` | `/v1/agents/{id}` | Get agent details |
+| `PUT` | `/v1/agents/{id}` | Update agent |
+| `DELETE` | `/v1/agents/{id}` | Delete agent |
+| `POST` | `/v1/agents/{id}/disable` | Disable agent |
+| `POST` | `/v1/agents/{id}/enable` | Enable agent |
+
+### Badges
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/agents/{id}/badge` | Issue badge for agent |
+| `POST` | `/v1/badges/verify` | Verify a badge token |
+| `GET` | `/.well-known/jwks.json` | Get CA public keys (JWKS) |
+
+### DID Resolution
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/agents/{id}/did.json` | Get agent's DID document |
+
+### API Keys
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/keys` | List API keys |
+| `POST` | `/v1/keys` | Create new API key |
+| `DELETE` | `/v1/keys/{id}` | Delete API key |
+
+---
+
+## Authentication
+
+capiscio-server supports two authentication methods:
+
+### API Key Authentication
+
+For programmatic access (agents, CI/CD):
+
+```bash
+curl -X POST https://registry.capisc.io/v1/agents/{id}/badge \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"domain": "my-agent.example.com", "trustLevel": "2"}'
+```
+
+### Clerk Authentication
+
+For the web dashboard (capiscio-ui), authentication is handled via [Clerk](https://clerk.dev).
+
+---
+
+## Trust Levels
+
+The server issues badges at trust levels 1-4 (Level 0 is self-signed, not CA-issued):
+
+| Level | Code | Validation Required |
+|-------|------|---------------------|
+| 1 | `REG` | Account registration |
+| 2 | `DV` | Domain verification (DNS TXT) |
+| 3 | `OV` | Organization verification |
+| 4 | `EV` | Manual security audit |
+
+Trust level is specified in badge requests:
+
+```json
+{
+  "domain": "my-agent.example.com",
+  "trustLevel": "2"
+}
+```
+
+---
+
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `DATABASE_URL` | Yes | — | PostgreSQL connection string |
+| `ENVIRONMENT` | No | `development` | Runtime environment |
+| `PORT` | No | `8080` | Server port |
+| `CA_KEY_PATH` | No | — | Path to CA private key (generates if missing) |
+| `CA_ISSUER_URL` | No | — | Issuer URL for badges |
+| `CLERK_SECRET_KEY` | Yes* | — | Clerk API secret (*for dashboard auth) |
+| `CLERK_WEBHOOK_SECRET` | Yes* | — | Clerk webhook secret (*for user sync) |
+
+---
+
+## Quick Start
+
+### Local Development
+
+```bash
+# Clone the repo
+git clone https://github.com/capiscio/capiscio-server
+cd capiscio-server
+
+# Start PostgreSQL
+docker-compose up -d db
+
+# Run the server
+./run_dev.sh
+# or
+make run
+```
+
+The server starts at `http://localhost:8080`.
+
+### View API Docs
+
+- **Swagger UI**: http://localhost:8080/swagger/index.html
+- **OpenAPI Spec**: http://localhost:8080/swagger/doc.json
+
+---
+
+## See Also
+
+- [API Reference](api.md) — Full endpoint documentation
+- [Deployment Guide](deployment.md) — Production deployment
+- [Badge CA](badge-ca.md) — Certificate Authority operations
+- [RFC-002: Trust Badge](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
