@@ -146,7 +146,7 @@ Use this for deployment gates:
 
 ## See Also
 
-- [:octicons-arrow-right-24: CI/CD Quickstart](../../quickstarts/cicd/1-intro.md) — Step-by-step CI/CD guide
+- [:octicons-arrow-right-24: CI/CD Guide](../../getting-started/cicd/1-intro.md) — Step-by-step CI/CD guide
 - [:octicons-arrow-right-24: CLI Reference](../cli/index.md) — Use CLI directly in workflows
 - [:octicons-arrow-right-24: Python Wrapper](python.md) — Alternative: pip install
 - [:octicons-arrow-right-24: Node.js Wrapper](node.md) — Alternative: npm install

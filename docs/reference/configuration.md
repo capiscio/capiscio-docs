@@ -247,4 +247,4 @@ executor = CapiscioSecurityExecutor(
 
 - [SDK Reference](./sdk-python/index.md) - Auto-generated API docs
 - [SimpleGuard Guide](./sdk-python/simple-guard.md) - Detailed SimpleGuard usage
-- [Security Quickstart](../quickstarts/secure/1-intro.md) - Getting started
+- [Security Guide](../getting-started/secure/1-intro.md) - Getting started

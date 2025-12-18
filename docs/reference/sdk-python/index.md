@@ -162,5 +162,5 @@ In `dev_mode=True`, SimpleGuard auto-generates all missing files.
 
 ## See Also
 
-- [Quickstart: Secure Your Agent](../../quickstarts/secure/1-intro.md)
+- [Getting Started: Secure Your Agent](../../getting-started/secure/1-intro.md)
 - [Configuration Guide](../configuration.md)

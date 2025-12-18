@@ -171,18 +171,40 @@ if result.valid:
     print(f"Trust Level: {result.claims.trust_level}")
 ```
 
+### Trust Levels (0-4)
+
+Trust levels indicate the validation rigor applied during badge issuance:
+
+| Level | Name | Validation | Issuer | Use Case |
+|-------|------|------------|--------|----------|
+| **0** | Self-Signed (SS) | None | Agent itself (`did:key`) | Development, testing, demos |
+| **1** | Registered (REG) | Account verified | CapiscIO CA | Internal agents, early development |
+| **2** | Domain Validated (DV) | DNS TXT or HTTP challenge | CapiscIO CA | Production B2B agents |
+| **3** | Organization Validated (OV) | DV + legal entity verification | CapiscIO CA | High-trust production |
+| **4** | Extended Validated (EV) | OV + manual security audit | CapiscIO CA | Regulated industries |
+
+!!! warning "Level 0 in Production"
+    Self-signed (Level 0) badges are for **development only**. In production, verifiers should reject Level 0 badges by default. Use `--accept-self-signed` (CLI) or `accept_self_signed=True` (SDK) to explicitly opt in during development.
+
+### DID Methods by Level
+
+| Level | Typical DID | Description |
+|-------|-------------|-------------|
+| 0 | `did:key` | Self-describing, derived from public key |
+| 1-4 | `did:web` | Registry or domain-hosted identity |
+
 Trust badges include:
 
 - **Agent DID** — Decentralized identifier for the agent
-- **Trust Level** — 1 (Domain Validated), 2 (Organization Validated), or 3 (Extended Validation)
-- **Issuer** — The Certificate Authority that issued the badge
-- **Expiration** — When the badge expires
+- **Trust Level** — 0-4 indicating validation rigor
+- **Issuer** — `did:key` for Level 0, CapiscIO CA for Levels 1-4
+- **Expiration** — When the badge expires (default: 5 minutes per RFC-002)
 
-See the RFC-002: Trust Badge System specification for full details.
+See [RFC-002: Trust Badge System](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) for full specification details.
 
 ## See Also
 
-- [Enforcement First Security](../guides/enforcement-first.md) — How Guard verifies requests
+- [Enforcement Security](enforcement.md) — How Guard verifies requests
 - [SimpleGuard API](../reference/sdk-python/simple-guard.md) — SDK reference
 - [Badge API](../reference/sdk-python/badge.md) — Trust Badge verification API
-- [Trust Badges Recipe](../recipes/security/badges.md) — Practical examples
+- [Trust Badges Guide](../how-to/security/badges.md) — Practical examples

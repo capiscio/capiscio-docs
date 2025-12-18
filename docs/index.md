@@ -1,7 +1,7 @@
 ---
-title: CapiscIO Documentation - The Authority Layer for A2A
-description: Unified documentation for CapiscIO. The Authority Layer for the Agent-to-Agent (A2A) Protocol.
-keywords: A2A protocol, AI agent validation, agent trust, protocol compliance, agent security, CapiscIO
+title: CapiscIO - The Authority Layer for AI Agents
+description: Verifiable identity and trust for the Agent-to-Agent (A2A) Protocol. Like Let's Encrypt, but for AI agents.
+keywords: A2A protocol, AI agent identity, DID, decentralized identifier, agent trust, trust badges, agent registry
 og:image: https://docs.capisc.io/assets/social-card-home.png
 canonical_url: https://docs.capisc.io/
 hide:
@@ -11,288 +11,405 @@ hide:
 
 <style>
 .md-typeset h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.hero-tagline {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--md-primary-fg-color);
   margin-bottom: 0.5rem;
 }
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: var(--md-default-fg-color--light);
   margin-bottom: 2rem;
+  max-width: 700px;
 }
-.quickstart-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+.value-prop {
+  background: var(--md-code-bg-color);
+  border-radius: 8px;
+  padding: 2rem;
   margin: 2rem 0;
 }
-.quickstart-card {
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: all 0.2s ease;
-}
-.quickstart-card:hover {
-  border-color: var(--md-accent-fg-color);
-  transform: translateY(-2px);
-}
-.quickstart-card h3 {
+.value-prop h3 {
   margin-top: 0;
 }
-.time-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  background: var(--md-accent-fg-color--transparent);
-  border-radius: 4px;
-  font-size: 0.75rem;
-  color: var(--md-accent-fg-color);
+.install-box {
+  background: var(--md-code-bg-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
 }
-.install-tabs {
-  margin: 2rem 0;
+.trust-levels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.trust-level {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background: var(--md-default-fg-color--lightest);
 }
 </style>
 
-# CapiscIO Documentation
+# CapiscIO
+
+<p class="hero-tagline">The Authority Layer for AI Agents</p>
 
 <p class="hero-subtitle">
-The Authority Layer for the Agent-to-Agent (A2A) Protocol.<br/>
-Validate compliance. Verify identity. Secure your agents.
+Like Let's Encrypt revolutionized HTTPS, CapiscIO brings verifiable identity and trust to the agent economy. Give your agent a DID, earn trust badges, be discovered.
 </p>
 
----
-
-## :material-rocket-launch: Quickstarts
-
-Get started in minutes. Each quickstart is self-contained and builds on practical examples.
-
-<div class="grid cards" markdown>
-
--   :material-check-decagram:{ .lg .middle } **Validate Your Agent**
-
-    ---
-
-    Ensure your agent card is A2A-compliant with the CapiscIO CLI.
-
-    **5 minutes** · Beginner
-
-    [:octicons-arrow-right-24: Start Validating](quickstarts/validate/1-intro.md)
-
--   :material-shield-lock:{ .lg .middle } **Secure Your Agent**
-
-    ---
-
-    Add cryptographic identity and request verification to your agent.
-
-    **15 minutes** · Intermediate
-
-    [:octicons-arrow-right-24: Add Security](quickstarts/secure/1-intro.md)
-
--   :material-pipe:{ .lg .middle } **CI/CD Integration**
-
-    ---
-
-    Automate validation in GitHub Actions with PR comments and quality gates.
-
-    **10 minutes** · Intermediate
-
-    [:octicons-arrow-right-24: Setup CI/CD](quickstarts/cicd/1-intro.md)
-
+<div class="hero-buttons">
+<a href="identity/" class="md-button md-button--primary">:material-identifier: Get Your Agent's Identity</a>
+<a href="getting-started/" class="md-button">:material-rocket-launch: Quick Start</a>
 </div>
 
 ---
 
-## :material-play-circle: Try It Now
+## The Three Pillars
 
-Install the CLI and validate a sample agent card in under 60 seconds:
+<div class="grid cards" markdown>
 
-=== "1. Install"
+-   :material-identifier:{ .lg .middle } **Decentralized Identity**
 
-    ```bash
-    npm install -g capiscio   # or: pip install capiscio
+    ---
+
+    Every agent gets a **DID** (Decentralized Identifier) — a globally unique, cryptographically verifiable identity that travels with your agent.
+
     ```
-
-=== "2. Download Sample"
-
-    ```bash
-    curl -O https://docs.capisc.io/assets/samples/agent-card.json
+    did:web:registry.capisc.io:agents:my-weather-bot
     ```
-
-=== "3. Validate"
-
-    ```bash
-    capiscio validate agent-card.json
-    ```
-
-=== "4. See Results"
-
-    ```ansi
-    [32m✅ A2A AGENT VALIDATION PASSED[0m
-
-    Score: [1m85/100[0m
     
-    [32m✓[0m Schema validation passed
-    [32m✓[0m Required fields present  
-    [32m✓[0m Skills properly defined
-    [33m○[0m Endpoint not tested (use --test-live)
+    - W3C standard — interoperable everywhere
+    - Cryptographic proof — unforgeable
+    - Portable — move providers, keep identity
+
+    [:octicons-arrow-right-24: Learn about DIDs](identity/index.md)
+
+-   :material-certificate:{ .lg .middle } **Trust Badges**
+
+    ---
+
+    Earn **trust levels 0-4** based on identity verification depth. Like SSL certificates for agents.
+
+    | Level | Verification |
+    |:-----:|--------------|
+    | 0 | Self-signed |
+    | 1 | Email verified |
+    | 2 | Domain validated |
+    | 3 | Organization validated |
+    | 4 | Extended validation |
+
+    [:octicons-arrow-right-24: Get a Trust Badge](trust/index.md)
+
+-   :material-database-search:{ .lg .middle } **Agent Registry**
+
+    ---
+
+    The **public directory** of trusted AI agents. Register once, be discovered everywhere.
+
+    - Search by capability
+    - Filter by trust level
+    - Verify before connecting
+
+    ```bash
+    capiscio search "weather forecast" --min-trust 2
     ```
 
-[:material-download: Download Sample Files](samples.md){ .md-button .md-button--primary }
-[:material-book-open-variant: Full Quickstart](quickstarts/validate/1-intro.md){ .md-button }
-
----
-
-## :material-compass: Learn the Concepts
-
-<div class="grid cards" markdown>
-
--   :material-ruler-square:{ .lg .middle } **How Validation Works**
-
-    ---
-
-    Understand the three-dimensional scoring system: Compliance, Trust, and Availability.
-
-    [:octicons-arrow-right-24: Validation Process](concepts/validation.md)
-
--   :material-counter:{ .lg .middle } **Understanding Scores**
-
-    ---
-
-    What the numbers mean and how to improve them.
-
-    [:octicons-arrow-right-24: Scoring System](concepts/scoring.md)
-
--   :material-shield-check:{ .lg .middle } **Enforcement First**
-
-    ---
-
-    How Guard verifies requests.
-
-    [:octicons-arrow-right-24: Enforcement Guide](guides/enforcement-first.md)
-
--   :material-key:{ .lg .middle } **Trust Model**
-
-    ---
-
-    How keys and trust stores work.
-
-    [:octicons-arrow-right-24: Trust Model](concepts/trust-model.md)
+    [:octicons-arrow-right-24: Browse Registry](registry/index.md)
 
 </div>
 
 ---
 
-## :material-book-open-variant: Reference Documentation
+## Zero to Verified in 60 Seconds
 
-Complete API documentation for every package in the ecosystem.
+<div class="install-box">
 
-<div class="grid cards" markdown>
+```bash
+# 1. Install
+npm install -g capiscio       # or: pip install capiscio
 
--   :material-console:{ .lg .middle } **CLI Reference**
+# 2. Initialize your agent
+capiscio init
 
-    ---
+# 3. Register and get your DID
+capiscio register
+```
 
-    All commands, flags, and examples.
+```
+✅ Agent registered!
 
-    [:octicons-arrow-right-24: CLI Docs](reference/cli/index.md)
+Your Agent DID: did:web:registry.capisc.io:agents:my-agent-7x2k
+Trust Level: 1 (Registered)
+Dashboard: https://registry.capisc.io/dashboard
+```
 
--   :material-language-python:{ .lg .middle } **Python SDK**
+</div>
 
-    ---
+[:material-rocket-launch: Full Getting Started Guide](getting-started/index.md){ .md-button .md-button--primary }
+[:material-download: Download Samples](samples.md){ .md-button }
 
-    SimpleGuard, Executor, and all classes.
+---
 
-    [:octicons-arrow-right-24: SDK Docs](reference/sdk-python/index.md)
+## Why CapiscIO?
 
--   :material-code-json:{ .lg .middle } **Agent Card Schema**
+<div class="value-prop" markdown>
 
-    ---
+### The Problem
 
-    Complete JSON Schema reference.
+AI agents are proliferating. But there's no standard way to:
 
-    [:octicons-arrow-right-24: Schema Docs](reference/agent-card-schema.md)
+- **Verify identity** — Is this really the agent it claims to be?
+- **Establish trust** — Can I trust this agent with my data?
+- **Discover agents** — How do I find an agent that can do X?
 
--   :material-cog:{ .lg .middle } **Configuration**
+API keys prove you paid. OAuth tokens expire. Self-descriptions can be forged.
 
-    ---
+### The Solution
 
-    All config options and environment variables.
+CapiscIO provides the **trust infrastructure** for the agent economy:
 
-    [:octicons-arrow-right-24: Config Docs](reference/configuration.md)
+| Component | What It Solves |
+|-----------|---------------|
+| **DID Identity** | Permanent, verifiable, portable agent identity |
+| **Trust Badges** | Tiered verification like SSL certificates |
+| **Registry** | Discovery + verification in one place |
+| **SDK/CLI** | Frictionless integration for developers |
+
+**Result:** Agents can prove who they are, establish trust, and find each other.
 
 </div>
 
 ---
 
-## :material-file-document-edit: RFCs
+## Developer-First Design
 
-Formal proposals for significant changes to CapiscIO protocols and standards.
+We obsess over developer experience. Every feature works in **three commands or less**.
 
-<div class="grid cards" markdown>
+=== "Generate Identity"
 
--   :material-check-circle:{ .lg .middle } **RFC-001: AGCP v5.0**
+    ```bash
+    capiscio keygen
+    # ✅ did:key:z6Mk... generated
+    ```
 
-    ---
+=== "Register Agent"
 
-    Agent-to-Guard Communication Protocol — the foundation for secure agent communication.
+    ```bash
+    capiscio register --name "my-agent"
+    # ✅ did:web:registry.capisc.io:agents:my-agent
+    ```
 
-    [:octicons-arrow-right-24: Read RFC](rfcs/001-agcp.md)
+=== "Request Badge"
 
--   :material-pencil:{ .lg .middle } **Propose an RFC**
+    ```bash
+    capiscio badge request --level 2
+    # ✅ Domain validation started
+    ```
 
-    ---
+=== "Add to Your App"
 
-    Have an idea for improving CapiscIO? Learn how to submit a proposal.
+    ```python
+    from capiscio_sdk import SimpleGuard
 
-    [:octicons-arrow-right-24: Contributing Guide](rfcs/CONTRIBUTING.md)
-
-</div>
-
----
-
-## :material-frequently-asked-questions: Common Questions
-
-??? question "What's the difference between the CLI and SDK?"
-
-    **CLI tools** (`capiscio` on npm/pip) are for **validation** - checking that agent cards are A2A-compliant.
+    guard = SimpleGuard(dev_mode=True)  # That's it!
     
-    **The SDK** (`capiscio-sdk` on pip) is for **security** - adding cryptographic identity and request verification to your running agent.
-
-??? question "Do I need to run the Go binary directly?"
-
-    No! The Node.js and Python CLIs automatically download and run the correct binary for your platform. Use the wrapper that matches your development environment.
-
-??? question "What's a compliance score of 85 mean?"
-
-    Your agent card passes all required A2A fields and 85% of recommended best practices. See [Understanding Scores](concepts/scoring.md) for the full breakdown.
+    @app.post("/task")
+    @guard.protect
+    async def handle(request):
+        # Requests are verified automatically
+        pass
+    ```
 
 ---
 
-## :material-link: Resources
+## Trust Hierarchy
+
+<div class="trust-levels">
+  <div class="trust-level">
+    <strong>Level 0</strong><br/>
+    <small>Self-Signed</small>
+  </div>
+  <div class="trust-level">
+    <strong>Level 1</strong><br/>
+    <small>Registered</small>
+  </div>
+  <div class="trust-level">
+    <strong>Level 2</strong><br/>
+    <small>Domain Validated</small>
+  </div>
+  <div class="trust-level">
+    <strong>Level 3</strong><br/>
+    <small>Org Validated</small>
+  </div>
+  <div class="trust-level">
+    <strong>Level 4</strong><br/>
+    <small>Extended</small>
+  </div>
+</div>
+
+Higher levels = more verification = more trust. Choose what's right for your use case:
+
+| Use Case | Recommended Level |
+|----------|-------------------|
+| Development & testing | 0 (self-signed) |
+| Personal projects | 1 (registered) |
+| Production APIs | 2 (domain validated) |
+| Enterprise integrations | 3 (org validated) |
+| Financial, healthcare | 4 (extended validation) |
+
+[:octicons-arrow-right-24: Learn about Trust Levels](trust/index.md)
+
+---
+
+## What You Can Build
 
 <div class="grid cards" markdown>
 
--   :fontawesome-brands-github:{ .lg .middle } **GitHub**
+-   :material-robot:{ .lg .middle } **Secure Agent Networks**
 
     ---
 
-    Source code, issues, and discussions.
+    Build multi-agent systems where agents verify each other's identity before communicating.
 
-    [:octicons-arrow-right-24: github.com/capiscio](https://github.com/capiscio)
-
--   :material-file-document:{ .lg .middle } **A2A Specification**
+-   :material-api:{ .lg .middle } **Trusted API Gateways**
 
     ---
 
-    The official Agent-to-Agent protocol spec.
+    Enforce trust level requirements at your API boundary. Only Level 2+ agents can access production endpoints.
 
-    [:octicons-arrow-right-24: A2A Project](https://github.com/a2aproject/A2A)
-
--   :material-help-circle:{ .lg .middle } **Get Help**
+-   :material-magnify:{ .lg .middle } **Agent Marketplaces**
 
     ---
 
-    Found a bug? Need help?
+    Create directories of verified agents. Users trust your curation because trust is cryptographically proven.
 
-    [:octicons-arrow-right-24: Open an Issue](https://github.com/capiscio/capiscio-core/issues/new)
+-   :material-shield-lock:{ .lg .middle } **Enterprise Integrations**
+
+    ---
+
+    Meet compliance requirements with org-validated identities and audit trails.
 
 </div>
+
+---
+
+## Built on Standards
+
+CapiscIO implements and extends open standards:
+
+| Standard | How We Use It |
+|----------|---------------|
+| **[A2A Protocol](https://github.com/a2aproject/A2A)** | Agent communication format |
+| **[W3C DIDs](https://www.w3.org/TR/did-core/)** | Decentralized identifiers |
+| **[JWS (RFC 7515)](https://tools.ietf.org/html/rfc7515)** | Request signing |
+| **[Ed25519](https://ed25519.cr.yp.to/)** | Cryptographic keys |
+
+We're not inventing new cryptography — we're applying proven standards to the agent economy.
+
+---
+
+## Documentation
+
+<div class="grid cards" markdown>
+
+-   :material-rocket-launch:{ .lg .middle } **Getting Started**
+
+    ---
+
+    Step-by-step guides for common tasks.
+
+    [:octicons-arrow-right-24: Getting Started](getting-started/index.md)
+
+-   :material-book-open:{ .lg .middle } **Concepts**
+
+    ---
+
+    Understand how CapiscIO works under the hood.
+
+    [:octicons-arrow-right-24: Concepts](concepts/index.md)
+
+-   :material-clipboard-list:{ .lg .middle } **How-To Guides**
+
+    ---
+
+    Task-oriented recipes for specific problems.
+
+    [:octicons-arrow-right-24: How-To Guides](how-to/index.md)
+
+-   :material-api:{ .lg .middle } **Reference**
+
+    ---
+
+    Complete API documentation.
+
+    [:octicons-arrow-right-24: Reference](reference/index.md)
+
+</div>
+
+---
+
+## Open Source
+
+CapiscIO is open source under the Apache 2.0 license.
+
+<div class="grid cards" markdown>
+
+-   :fontawesome-brands-github:{ .lg .middle } **capiscio-core**
+
+    ---
+
+    The Go CLI and core validation engine.
+
+    [:octicons-arrow-right-24: GitHub](https://github.com/capiscio/capiscio-core)
+
+-   :material-language-python:{ .lg .middle } **capiscio-sdk**
+
+    ---
+
+    Python SDK for runtime security.
+
+    [:octicons-arrow-right-24: GitHub](https://github.com/capiscio/capiscio-sdk-python)
+
+-   :material-server:{ .lg .middle } **capiscio-server**
+
+    ---
+
+    Registry and Badge CA server.
+
+    [:octicons-arrow-right-24: GitHub](https://github.com/capiscio/capiscio-server)
+
+-   :material-file-document:{ .lg .middle } **capiscio-docs**
+
+    ---
+
+    This documentation site.
+
+    [:octicons-arrow-right-24: GitHub](https://github.com/capiscio/capiscio-docs)
+
+</div>
+
+---
+
+## Get Started Now
+
+<div class="hero-buttons">
+<a href="identity/" class="md-button md-button--primary">:material-identifier: Get Your Agent's DID</a>
+<a href="trust/" class="md-button">:material-certificate: Request a Badge</a>
+<a href="registry/" class="md-button">:material-database-search: Browse Registry</a>
+</div>
+
+Questions? [Open an issue](https://github.com/capiscio/capiscio-core/issues) or [join the discussion](https://github.com/orgs/capiscio/discussions).

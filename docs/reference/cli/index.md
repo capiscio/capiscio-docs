@@ -64,6 +64,7 @@ The `capiscio` CLI provides commands for validating Agent Cards, managing crypto
 | [`badge verify`](#badge-verify) | Verify a trust badge |
 | [`badge keep`](#badge-keep) | Daemon to auto-renew badges |
 | [`gateway start`](#gateway-start) | Start the security gateway |
+| [`rpc`](#rpc) | Start gRPC server |
 
 ---
 
@@ -372,6 +373,61 @@ capiscio gateway start \
 
 ---
 
+## rpc
+
+Start the gRPC server for programmatic access to validation, scoring, and badge services.
+
+### Usage
+
+```bash
+capiscio rpc [flags]
+```
+
+### Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--address` | `string` | `:50051` | Address to listen on (host:port) |
+
+### Example
+
+```bash
+# Start on default port
+capiscio rpc
+
+# Start on custom port
+capiscio rpc --address localhost:9090
+```
+
+### Exposed Services
+
+The gRPC server exposes three services:
+
+| Service | Description |
+|---------|-------------|
+| `ScoringService` | Validate and score agent cards |
+| `BadgeService` | Issue, verify, and manage badges |
+| `ValidationService` | Schema validation |
+
+### Python SDK Usage
+
+```python
+from capiscio_sdk._rpc.client import CapiscioRPCClient
+
+# Connect to running server
+client = CapiscioRPCClient(address='localhost:50051', auto_start=False)
+
+# Verify a badge
+result = client.verify_badge(
+    token="eyJhbGciOiJFZERTQSI...",
+    accept_self_signed=True,  # Dev mode only
+)
+```
+
+For full gRPC documentation, see [gRPC Services Reference](../grpc.md).
+
+---
+
 ## Global Flags
 
 These flags are available for all commands:
@@ -403,6 +459,6 @@ The pip distribution includes wrapper management commands:
 ## See Also
 
 - [Go API Reference](../go-api.md) - Programmatic usage of capiscio-core
-- [Quickstart: Validate Your First Agent](../../quickstarts/validate/1-intro.md)
+- [Getting Started: Validate Your First Agent](../../getting-started/validate/1-intro.md)
 - [Configuration Reference](../configuration.md)
 - [Agent Card Schema](../agent-card-schema.md)

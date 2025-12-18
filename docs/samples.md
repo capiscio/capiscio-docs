@@ -251,6 +251,6 @@ if __name__ == "__main__":
 
 ## See Also
 
-- [Quickstart: Validate Your First Agent](quickstarts/validate/1-intro.md)
-- [Quickstart: Secure Your Agent](quickstarts/secure/1-intro.md)
+- [Getting Started: Validate Your First Agent](getting-started/validate/1-intro.md)
+- [Getting Started: Secure Your Agent](getting-started/secure/1-intro.md)
 - [Agent Card Schema Reference](reference/agent-card-schema.md)
