@@ -320,6 +320,18 @@ CapiscIO implements and extends open standards:
 
 We're not inventing new cryptography — we're applying proven standards to the agent economy.
 
+### CapiscIO RFCs
+
+Our core specifications are published as RFCs (Request for Comments):
+
+| RFC | Title | What It Defines |
+|-----|-------|----------------|
+| **[RFC-001](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/001-agcp.md)** | Agent Governance Control Plane (AGCP) | Authority delegation and transitive trust model |
+| **[RFC-002](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md)** | Trust Badge Specification | Cryptographic identity credentials (JWS format) |
+| **[RFC-003](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/003-key-ownership-proof.md)** | Key Ownership Proof Protocol | Challenge-response key binding for IAL-1 badges |
+
+[:octicons-arrow-right-24: Browse All RFCs](https://github.com/capiscio/capiscio-rfcs)
+
 ---
 
 ## Documentation
