@@ -103,11 +103,14 @@ Verify your changes:
 capiscio-docs/
 ├── docs/
 │   ├── index.md
-│   ├── quickstarts/
-│   ├── concepts/
-│   ├── recipes/
-│   ├── reference/
-│   └── community/
+│   ├── identity/         # DID-based identity
+│   ├── trust/            # Trust badges
+│   ├── registry/         # Agent registry
+│   ├── getting-started/  # Getting started guides
+│   ├── concepts/         # Core concepts
+│   ├── how-to/           # How-to guides
+│   ├── reference/        # API/CLI reference
+│   └── community/        # Community resources
 ├── mkdocs.yml
 └── requirements-docs.txt
 ```

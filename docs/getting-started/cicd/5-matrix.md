@@ -400,7 +400,7 @@ Congratulations! You've learned how to:
 
     Real-world CI/CD patterns
 
-    [:octicons-arrow-right-24: CI/CD Recipes](../../recipes/index.md)
+    [:octicons-arrow-right-24: CI/CD How-To Guides](../../how-to/index.md)
 
 -   :material-help-circle:{ .lg .middle } **Troubleshooting**
 

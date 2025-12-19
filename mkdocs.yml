@@ -46,7 +46,7 @@ theme:
     - navigation.top
     - navigation.footer
     - toc.follow
-    - toc.integrate
+    # - toc.integrate  # Disabled: keeps right-hand TOC for long pages
     - search.suggest
     - search.highlight
     - search.share
@@ -140,6 +140,8 @@ markdown_extensions:
 
 extra:
   homepage: https://docs.capisc.io
+  # Analytics: Cloudflare Pages auto-injects Web Analytics at the edge
+  # Enable in: CF Dashboard → Pages → capiscio-docs → Settings → Web Analytics
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/capiscio
@@ -154,64 +156,79 @@ extra_css:
 nav:
   - Home: index.md
   
-  - Quickstarts:
-      - quickstarts/index.md
+  # Strategic pillars - lead with value proposition
+  - Identity:
+      - identity/index.md
+  
+  - Trust:
+      - trust/index.md
+  
+  - Registry:
+      - registry/index.md
+  
+  # Learning paths
+  - Getting Started:
+      - getting-started/index.md
       - Validate Your Agent:
-          - quickstarts/validate/1-intro.md
-          - quickstarts/validate/2-install.md
-          - quickstarts/validate/3-validate.md
-          - quickstarts/validate/4-reports.md
-          - quickstarts/validate/5-next.md
+          - getting-started/validate/1-intro.md
+          - getting-started/validate/2-install.md
+          - getting-started/validate/3-validate.md
+          - getting-started/validate/4-reports.md
+          - getting-started/validate/5-next.md
       - Secure Your Agent:
-          - quickstarts/secure/1-intro.md
-          - quickstarts/secure/2-sdk.md
-          - quickstarts/secure/3-guard.md
-          - quickstarts/secure/4-test.md
-          - quickstarts/secure/5-production.md
+          - getting-started/secure/1-intro.md
+          - getting-started/secure/2-sdk.md
+          - getting-started/secure/3-guard.md
+          - getting-started/secure/4-test.md
+          - getting-started/secure/5-production.md
       - CI/CD Integration:
-          - quickstarts/cicd/1-intro.md
-          - quickstarts/cicd/2-action.md
-          - quickstarts/cicd/3-thresholds.md
-          - quickstarts/cicd/4-comments.md
-          - quickstarts/cicd/5-matrix.md
+          - getting-started/cicd/1-intro.md
+          - getting-started/cicd/2-action.md
+          - getting-started/cicd/3-thresholds.md
+          - getting-started/cicd/4-comments.md
+          - getting-started/cicd/5-matrix.md
+      - Complete Workflow: getting-started/complete-workflow.md
 
   - Concepts:
+      - concepts/index.md
       - Validation Process: concepts/validation.md
       - Scoring System: concepts/scoring.md
       - Trust Model: concepts/trust-model.md
+      - Enforcement: concepts/enforcement.md
 
-  - Recipes:
-      - recipes/index.md
+  - How-To Guides:
+      - how-to/index.md
       - Validation:
-          - Validate from URL: recipes/validation/validate-url.md
-          - Bulk Validation: recipes/validation/bulk-validate.md
-          - Schema-Only Mode: recipes/validation/schema-only.md
-          - Strict Mode: recipes/validation/strict-mode.md
-          - Custom Timeout: recipes/validation/custom-timeout.md
+          - Validate from URL: how-to/validation/validate-url.md
+          - Bulk Validation: how-to/validation/bulk-validate.md
+          - Schema-Only Mode: how-to/validation/schema-only.md
+          - Strict Mode: how-to/validation/strict-mode.md
+          - Custom Timeout: how-to/validation/custom-timeout.md
       - Security:
-          - Sign Outbound: recipes/security/sign-outbound.md
-          - Verify Inbound: recipes/security/verify-inbound.md
-          - Trust Badges: recipes/security/badges.md
-          - Badge Keeper: recipes/security/badge-keeper.md
-          - Security Gateway: recipes/security/gateway-setup.md
-          - Dev Mode: recipes/security/dev-mode.md
-          - Key Rotation: recipes/security/key-rotation.md
-          - Trust Store: recipes/security/trust-store.md
+          - Sign Outbound: how-to/security/sign-outbound.md
+          - Verify Inbound: how-to/security/verify-inbound.md
+          - Trust Badges: how-to/security/badges.md
+          - Badge Keeper: how-to/security/badge-keeper.md
+          - Security Gateway: how-to/security/gateway-setup.md
+          - Dev Mode: how-to/security/dev-mode.md
+          - Key Rotation: how-to/security/key-rotation.md
+          - Trust Store: how-to/security/trust-store.md
       - Integrations:
-          - FastAPI: recipes/integrations/fastapi.md
-          - Flask: recipes/integrations/flask.md
-          - Express: recipes/integrations/express.md
-          - LangChain: recipes/integrations/langchain.md
+          - FastAPI: how-to/integrations/fastapi.md
+          - Flask: how-to/integrations/flask.md
+          - Express: how-to/integrations/express.md
+          - LangChain: how-to/integrations/langchain.md
       - CI/CD:
-          - Pre-commit Hook: recipes/cicd/pre-commit.md
-          - GitLab CI: recipes/cicd/gitlab-ci.md
-          - Jenkins: recipes/cicd/jenkins.md
+          - Pre-commit Hook: how-to/cicd/pre-commit.md
+          - GitLab CI: how-to/cicd/gitlab-ci.md
+          - Jenkins: how-to/cicd/jenkins.md
 
   - Samples: samples.md
 
   - Reference:
       - reference/index.md
       - CLI Reference: reference/cli/index.md
+      - gRPC Services: reference/grpc.md
       - Python SDK:
           - reference/sdk-python/index.md
           - Badge: reference/sdk-python/badge.md
@@ -220,6 +237,11 @@ nav:
           - SimpleGuard: reference/sdk-python/simple-guard.md
           - Types: reference/sdk-python/types.md
           - Errors: reference/sdk-python/errors.md
+      - Server API:
+          - reference/server/index.md
+          - API Reference: reference/server/api.md
+          - Deployment: reference/server/deployment.md
+          - Badge CA: reference/server/badge-ca.md
       - Go API: reference/go-api.md
       - Configuration: reference/configuration.md
       - Agent Card Schema: reference/agent-card-schema.md
@@ -228,10 +250,6 @@ nav:
           - Python (pip): reference/wrappers/python.md
           - Node.js (npm): reference/wrappers/node.md
           - GitHub Action: reference/wrappers/github-action.md
-
-  - Guides:
-      - Enforcement First: guides/enforcement-first.md
-      - Scoring System: guides/scoring-system.md
 
   - Troubleshooting: troubleshooting.md
 

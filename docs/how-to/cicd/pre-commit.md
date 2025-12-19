@@ -300,6 +300,6 @@ jobs:
 
 ## See Also
 
-- [CI/CD Quickstart](../../quickstarts/cicd/1-intro.md) — Full CI setup
+- [CI/CD Guide](../../getting-started/cicd/1-intro.md) — Full CI setup
 - [Schema-Only Mode](../validation/schema-only.md) — Fast validation
 - [Strict Mode](../validation/strict-mode.md) — Production standards

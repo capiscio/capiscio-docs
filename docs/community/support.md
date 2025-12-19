@@ -13,7 +13,7 @@ Start with the documentation for your specific product:
 
 ### Getting Started
 
-- [Python SDK Quick Start](../quickstarts/secure/1-intro.md)
+- [Python SDK Quick Start](../getting-started/secure/1-intro.md)
 - [CLI Getting Started](../reference/cli/index.md)
 - [A2A Protocol Specification](https://github.com/a2aproject/A2A){:target="_blank"}
 
@@ -21,7 +21,7 @@ Start with the documentation for your specific product:
 
 **For Python SDK:**
 
-- [Installation & Setup](../quickstarts/secure/2-sdk.md)
+- [Installation & Setup](../getting-started/secure/2-sdk.md)
 - [Configuration Guide](../reference/configuration.md)
 - [Core Concepts](../concepts/validation.md)
 

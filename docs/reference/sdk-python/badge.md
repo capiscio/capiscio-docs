@@ -405,6 +405,6 @@ if require_trust_level(token, TrustLevel.LEVEL_2):
 
 ## See Also
 
-- [Trust Badges Recipe](../../recipes/security/badges.md) - CLI usage
-- [Badge Keeper](../../recipes/security/badge-keeper.md) - Auto-renewal
+- [Trust Badges Guide](../../how-to/security/badges.md) - CLI usage
+- [Badge Keeper](../../how-to/security/badge-keeper.md) - Auto-renewal
 - [Trust Model](../../concepts/trust-model.md) - Identity concepts

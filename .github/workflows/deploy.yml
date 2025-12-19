@@ -110,6 +110,10 @@ jobs:
           ENABLE_MONOREPO: 'true'
           ENABLE_GIT_DATES: 'true'
       
+      - name: Copy _redirects to site root
+        run: |
+          cp capiscio-docs/docs/_redirects capiscio-docs/site/_redirects
+      
       - name: Create _headers file for Cloudflare
         run: |
           cd capiscio-docs/site

@@ -1,0 +1,96 @@
+# CapiscIO Documentation Redirects
+# 301 redirects from old URL structure (December 2025 restructure)
+# Format: /old-path /new-path 301
+
+# =============================================================================
+# Quickstarts → Getting Started (wildcard catches most)
+# =============================================================================
+/quickstarts/* /getting-started/:splat 301
+
+# Explicit paths (MkDocs generates both /path/ and /path.html)
+/quickstarts/ /getting-started/ 301
+/quickstarts/index.html /getting-started/ 301
+
+# Validate track
+/quickstarts/validate/1-intro/ /getting-started/validate/1-intro/ 301
+/quickstarts/validate/2-install/ /getting-started/validate/2-install/ 301
+/quickstarts/validate/3-validate/ /getting-started/validate/3-validate/ 301
+/quickstarts/validate/4-reports/ /getting-started/validate/4-reports/ 301
+/quickstarts/validate/5-next/ /getting-started/validate/5-next/ 301
+
+# Secure track
+/quickstarts/secure/1-intro/ /getting-started/secure/1-intro/ 301
+/quickstarts/secure/2-sdk/ /getting-started/secure/2-sdk/ 301
+/quickstarts/secure/3-guard/ /getting-started/secure/3-guard/ 301
+/quickstarts/secure/4-test/ /getting-started/secure/4-test/ 301
+/quickstarts/secure/5-production/ /getting-started/secure/5-production/ 301
+
+# CI/CD track
+/quickstarts/cicd/1-intro/ /getting-started/cicd/1-intro/ 301
+/quickstarts/cicd/2-action/ /getting-started/cicd/2-action/ 301
+/quickstarts/cicd/3-thresholds/ /getting-started/cicd/3-thresholds/ 301
+/quickstarts/cicd/4-comments/ /getting-started/cicd/4-comments/ 301
+/quickstarts/cicd/5-matrix/ /getting-started/cicd/5-matrix/ 301
+
+# =============================================================================
+# Recipes → How-To Guides (wildcard catches most)
+# =============================================================================
+/recipes/* /how-to/:splat 301
+
+# Explicit paths
+/recipes/ /how-to/ 301
+/recipes/index.html /how-to/ 301
+
+# Validation recipes
+/recipes/validation/custom-timeout/ /how-to/validation/custom-timeout/ 301
+/recipes/validation/bulk-validate/ /how-to/validation/bulk-validate/ 301
+/recipes/validation/strict-mode/ /how-to/validation/strict-mode/ 301
+/recipes/validation/schema-only/ /how-to/validation/schema-only/ 301
+/recipes/validation/validate-url/ /how-to/validation/validate-url/ 301
+
+# Security recipes
+/recipes/security/badges/ /how-to/security/badges/ 301
+/recipes/security/badge-keeper/ /how-to/security/badge-keeper/ 301
+/recipes/security/gateway-setup/ /how-to/security/gateway-setup/ 301
+/recipes/security/sign-outbound/ /how-to/security/sign-outbound/ 301
+/recipes/security/trust-store/ /how-to/security/trust-store/ 301
+/recipes/security/dev-mode/ /how-to/security/dev-mode/ 301
+/recipes/security/key-rotation/ /how-to/security/key-rotation/ 301
+/recipes/security/verify-inbound/ /how-to/security/verify-inbound/ 301
+
+# Integration recipes
+/recipes/integrations/langchain/ /how-to/integrations/langchain/ 301
+/recipes/integrations/fastapi/ /how-to/integrations/fastapi/ 301
+/recipes/integrations/flask/ /how-to/integrations/flask/ 301
+/recipes/integrations/express/ /how-to/integrations/express/ 301
+
+# CI/CD recipes
+/recipes/cicd/pre-commit/ /how-to/cicd/pre-commit/ 301
+/recipes/cicd/gitlab-ci/ /how-to/cicd/gitlab-ci/ 301
+/recipes/cicd/jenkins/ /how-to/cicd/jenkins/ 301
+
+# =============================================================================
+# Guides → Concepts (merged/moved content)
+# =============================================================================
+/guides/scoring-system/ /concepts/scoring/ 301
+/guides/scoring-system.html /concepts/scoring/ 301
+/guides/enforcement-first/ /concepts/enforcement/ 301
+/guides/enforcement-first.html /concepts/enforcement/ 301
+/guides/ /concepts/ 301
+
+# =============================================================================
+# Tutorials → Getting Started (merged content)
+# =============================================================================
+/tutorials/* /getting-started/:splat 301
+/tutorials/ /getting-started/ 301
+/tutorials/index.html /getting-started/ 301
+/tutorials/end-to-end/ /getting-started/complete-workflow/ 301
+/tutorials/end-to-end.html /getting-started/complete-workflow/ 301
+
+# =============================================================================
+# Legacy paths that might be bookmarked
+# =============================================================================
+/getting-started.html /getting-started/ 301
+/quick-start.html /getting-started/ 301
+/quickstart.html /getting-started/ 301
+/quickstart/ /getting-started/ 301

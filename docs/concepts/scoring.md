@@ -3,7 +3,7 @@ title: Three-Dimensional Scoring System - CapiscIO Documentation
 description: Complete guide to Compliance, Trust, and Availability scoring for A2A protocol agents with breakdowns, thresholds, and production criteria.
 keywords: A2A scoring, agent compliance, trust scoring, availability testing, protocol validation, agent rating, production readiness, JWS signatures
 og:image: https://docs.capisc.io/assets/social-card-scoring.png
-canonical_url: https://docs.capisc.io/guides/scoring-system/
+canonical_url: https://docs.capisc.io/concepts/scoring/
 ---
 
 # 🎯 Three-Dimensional Scoring System
@@ -352,15 +352,18 @@ Agents meeting all thresholds receive a **"✅ Production ready"** recommendatio
 ### CLI Validation
 
 ```bash
-# Get detailed scores
-capiscio validate agent-card.json --detailed-scores
+# Basic validation with scoring
+capiscio validate agent-card.json
 
 # Include availability testing
-capiscio validate https://agent.example.com --detailed-scores --test-live
+capiscio validate https://agent.example.com --test-live
 
-# JSON output for CI/CD
-capiscio validate agent.json --detailed-scores --json > scores.json
+# JSON output for CI/CD (includes all scores)
+capiscio validate agent.json --json > results.json
 ```
+
+!!! note "JSON Output"
+    Use `--json` to get structured output including `complianceScore`, `trustScore`, and availability results.
 
 [**See full CLI usage guide →**](../reference/cli/index.md)
 

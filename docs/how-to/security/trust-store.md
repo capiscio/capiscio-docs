@@ -296,4 +296,4 @@ except VerificationError as e:
 
 - [Key Rotation](key-rotation.md) — Rotate your own keys
 - [Verify Inbound Requests](verify-inbound.md) — How verification works
-- [Security Quickstart](../../quickstarts/secure/1-intro.md) — Full setup guide
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full setup guide

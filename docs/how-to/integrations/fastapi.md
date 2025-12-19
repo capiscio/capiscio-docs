@@ -307,5 +307,5 @@ Test your integration with these examples:
 ## See Also
 
 - [Flask Integration](flask.md) — Flask equivalent
-- [Security Quickstart](../../quickstarts/secure/1-intro.md) — Full walkthrough
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full walkthrough
 - [Sign Outbound Requests](../security/sign-outbound.md) — Signing details

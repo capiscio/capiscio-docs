@@ -22,6 +22,22 @@ Complete reference documentation for all CapiscIO APIs, CLIs, and configuration 
 
     [:octicons-arrow-right-24: SDK Reference](sdk-python/index.md)
 
+-   :material-server:{ .lg .middle } **Server API**
+
+    ---
+
+    capiscio-server REST API for agent registry and badge CA operations.
+
+    [:octicons-arrow-right-24: Server Reference](server/index.md)
+
+-   :material-api:{ .lg .middle } **gRPC Services**
+
+    ---
+
+    gRPC API for validation, scoring, and badge operations.
+
+    [:octicons-arrow-right-24: gRPC Reference](grpc.md)
+
 -   :material-cog:{ .lg .middle } **Configuration**
 
     ---

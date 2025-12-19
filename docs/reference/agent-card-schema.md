@@ -408,6 +408,6 @@ capiscio validate ./agent-card.json --schema-only
 
 ## See Also
 
-- [Validate Your First Agent](../quickstarts/validate/1-intro.md)
+- [Validate Your First Agent](../getting-started/validate/1-intro.md)
 - [CLI Reference](cli/index.md)
 - [A2A Specification](https://a2a-protocol.org/latest/specification/)

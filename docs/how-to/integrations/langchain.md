@@ -412,4 +412,4 @@ orchestrator = initialize_agent(
 
 - [FastAPI Integration](fastapi.md) — FastAPI setup details
 - [Sign Outbound Requests](../security/sign-outbound.md) — Signing details
-- [Security Quickstart](../../quickstarts/secure/1-intro.md) — Full security setup
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full security setup

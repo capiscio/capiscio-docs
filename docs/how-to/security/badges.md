@@ -126,20 +126,59 @@ You need to:
 
 ## Trust Levels
 
-| Level | Name | Description |
-|-------|------|-------------|
-| 1 | Domain Validated (DV) | Basic domain ownership verification |
-| 2 | Organization Validated (OV) | Business identity verification |
-| 3 | Extended Validation (EV) | Rigorous vetting process |
+CapiscIO implements 5 trust levels (0-4) indicating the validation rigor applied during badge issuance:
+
+| Level | Name | Validation | Issuer | Use Case |
+|-------|------|------------|--------|----------|
+| **0** | Self-Signed (SS) | None | Agent itself (`did:key`) | Development, testing, demos |
+| **1** | Registered (REG) | Account verified | CapiscIO CA | Internal agents, early development |
+| **2** | Domain Validated (DV) | DNS TXT or HTTP challenge | CapiscIO CA | Production B2B agents |
+| **3** | Organization Validated (OV) | DV + legal entity verification | CapiscIO CA | High-trust production |
+| **4** | Extended Validated (EV) | OV + manual security audit | CapiscIO CA | Regulated industries |
+
+### Self-Signed Badges (Level 0)
+
+For development and testing, issue self-signed badges:
+
+=== "CLI"
+
+    ```bash
+    # Issue a self-signed badge (Level 0)
+    capiscio badge issue --self-sign > badge.jwt
+    
+    # Verify with explicit self-signed acceptance
+    capiscio badge verify --accept-self-signed < badge.jwt
+    ```
+
+=== "Python SDK"
+
+    ```python
+    from capiscio_sdk import verify_badge, TrustLevel
+
+    # Development: Accept self-signed badges
+    result = verify_badge(
+        token,
+        accept_self_signed=True,  # Required for Level 0
+    )
+    ```
+
+!!! warning "Level 0 in Production"
+    Self-signed badges are for **development only**. In production, verifiers should reject Level 0 badges by default.
+
+### CA-Issued Badges (Levels 1-4)
+
+For production use, obtain badges from the CapiscIO Registry:
 
 ```python
 from capiscio_sdk import TrustLevel
 
-# Check trust level
-if result.claims.trust_level == TrustLevel.LEVEL_3:
-    print("High assurance agent - full access granted")
-elif result.claims.trust_level == TrustLevel.LEVEL_2:
-    print("Business verified - standard access")
+# Check trust level thresholds
+if result.claims.trust_level >= TrustLevel.LEVEL_2:
+    print("Domain verified - standard access")
+elif result.claims.trust_level >= TrustLevel.LEVEL_3:
+    print("Organization verified - elevated access")
+elif result.claims.trust_level == TrustLevel.LEVEL_4:
+    print("Extended validation - full access granted")
 else:
     print("Basic verification - limited access")
 ```

@@ -180,6 +180,6 @@ jobs:
 
 ## See Also
 
-- [CI/CD Matrix Testing](../../quickstarts/cicd/5-matrix.md) — Full matrix setup
+- [CI/CD Matrix Testing](../../getting-started/cicd/5-matrix.md) — Full matrix setup
 - [Schema-Only Mode](schema-only.md) — Speed up bulk validation
 - [Validate from URL](validate-url.md) — Validate remote agents

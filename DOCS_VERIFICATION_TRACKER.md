@@ -256,6 +256,20 @@ capiscio-python/
 - **Updated:** index.md, commands.md with accurate info
 - **ALL PRODUCTS NOW VERIFIED ✅**
 
+### 2025-12-11 Session 5 (Documentation Gap Analysis)
+- **Fixed:** Trust levels in trust-model.md (now 0-4 instead of 1-3)
+- **Fixed:** Trust levels in badges.md recipe
+- **Created:** capiscio-server documentation (reference/server/)
+  - index.md — Overview and architecture
+  - api.md — Full API reference
+  - deployment.md — Docker and Kubernetes deployment
+  - badge-ca.md — Certificate Authority operations
+- **Created:** End-to-end tutorial (tutorials/end-to-end.md)
+- **Created:** gRPC services documentation (reference/grpc.md)
+- **Updated:** CLI reference with `rpc` command section
+- **Updated:** Reference index with server and gRPC links
+- **Fixed:** Removed fabricated `--detailed-scores` flag from scoring docs
+
 ---
 
 ## Next Steps
@@ -273,8 +287,13 @@ capiscio-python/
 11. [x] Verify capiscio-node docs (CLI wrapper only)
 12. [x] Verify validate-a2a GitHub Action docs
 13. [x] Verify capiscio-python docs
-14. [ ] Fix broken links
-15. [ ] Build and test docs site
+14. [x] Fix trust levels (0-4)
+15. [x] Create capiscio-server docs
+16. [x] Create end-to-end tutorial
+17. [x] Document gRPC services
+18. [ ] Fix broken links
+19. [ ] Build and test docs site
+20. [ ] Update mkdocs.yml nav with new pages
 
 ---
 

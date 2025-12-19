@@ -166,4 +166,4 @@ If you're hitting timeouts, check:
 
 - [Validate from URL](validate-url.md) — Remote validation
 - [Schema-Only Mode](schema-only.md) — Skip network tests
-- [CI/CD Quickstart](../../quickstarts/cicd/1-intro.md) — GitHub Action setup
+- [CI/CD Guide](../../getting-started/cicd/1-intro.md) — GitHub Action setup

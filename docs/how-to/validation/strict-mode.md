@@ -123,5 +123,5 @@ Strict mode elevates the validation rules:
 ## See Also
 
 - [Schema-Only Mode](schema-only.md) — Quick syntax check
-- [CI/CD Quickstart](../../quickstarts/cicd/1-intro.md) — Set up automated validation
+- [CI/CD Guide](../../getting-started/cicd/1-intro.md) — Set up automated validation
 - [Scoring System](../../concepts/scoring.md) — Understand the scores

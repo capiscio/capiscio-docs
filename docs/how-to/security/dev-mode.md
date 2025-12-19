@@ -240,6 +240,6 @@ def test_verification(guard, signed_request):
 
 ## See Also
 
-- [Security Quickstart](../../quickstarts/secure/1-intro.md) — Full walkthrough
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full walkthrough
 - [Key Rotation](key-rotation.md) — Manage production keys
 - [Trust Store Setup](trust-store.md) — Configure trust relationships

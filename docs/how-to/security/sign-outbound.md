@@ -202,4 +202,4 @@ print(response.json())
 
 - [Verify Inbound Requests](verify-inbound.md) — The receiving side
 - [Key Rotation](key-rotation.md) — Rotate keys safely
-- [Security Quickstart](../../quickstarts/secure/1-intro.md) — Full security setup
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full security setup

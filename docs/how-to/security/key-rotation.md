@@ -243,4 +243,4 @@ echo "   Old key should be untrusted immediately"
 
 - [Trust Store Setup](trust-store.md) — Configure which keys to trust
 - [Dev Mode Security](dev-mode.md) — Development key handling
-- [Security Quickstart](../../quickstarts/secure/1-intro.md) — Full security setup
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full security setup
