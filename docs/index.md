@@ -72,8 +72,8 @@ Like Let's Encrypt revolutionized HTTPS, CapiscIO brings verifiable identity and
 </p>
 
 <div class="hero-buttons">
-<a href="identity/" class="md-button md-button--primary">:material-identifier: Get Your Agent's Identity</a>
-<a href="getting-started/" class="md-button">:material-rocket-launch: Quick Start</a>
+<a href="identity/" class="md-button md-button--primary">Get Your Agent's Identity</a>
+<a href="getting-started/" class="md-button">Quick Start</a>
 </div>
 
 ---
@@ -372,9 +372,9 @@ Our core specifications are published as RFCs (Request for Comments):
 
 ---
 
-## Open Source
+## Open Source Components
 
-CapiscIO is open source under the Apache 2.0 license.
+CapiscIO core tools are open source under the Apache 2.0 license.
 
 <div class="grid cards" markdown>
 
@@ -398,9 +398,9 @@ CapiscIO is open source under the Apache 2.0 license.
 
     ---
 
-    Registry and Badge CA server.
+    Commercial registry and Badge CA server.
 
-    [:octicons-arrow-right-24: GitHub](https://github.com/capiscio/capiscio-server)
+    [:octicons-arrow-right-24: Contact Sales](mailto:sales@capisc.io)
 
 -   :material-file-document:{ .lg .middle } **capiscio-docs**
 
@@ -417,9 +417,9 @@ CapiscIO is open source under the Apache 2.0 license.
 ## Get Started Now
 
 <div class="hero-buttons">
-<a href="identity/" class="md-button md-button--primary">:material-identifier: Get Your Agent's DID</a>
-<a href="trust/" class="md-button">:material-certificate: Request a Badge</a>
-<a href="registry/" class="md-button">:material-database-search: Browse Registry</a>
+<a href="identity/" class="md-button md-button--primary">Generate Your DID</a>
+<a href="trust/" class="md-button">Sign a Badge</a>
+<a href="reference/cli/" class="md-button">Validate Agent Cards</a>
 </div>
 
 Questions? [Open an issue](https://github.com/capiscio/capiscio-core/issues) or [join the discussion](https://github.com/orgs/capiscio/discussions).

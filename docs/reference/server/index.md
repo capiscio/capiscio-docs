@@ -5,7 +5,10 @@
   Source: capiscio-server/internal/api/, capiscio-server/docs/swagger.json
 -->
 
-The **capiscio-server** is the backend API server that powers the CapiscIO Registry. It provides agent management, badge issuance (CA-signed), and trust verification services.
+The **capiscio-server** is a commercial backend API server that powers the CapiscIO Registry. It provides agent management, badge issuance (CA-signed), and trust verification services.
+
+!!! info "Enterprise Product"
+    capiscio-server is a commercial product available to enterprise customers. [Contact Sales](mailto:sales@capisc.io) for licensing options.
 
 !!! info "Version"
     Current version: **v0.1.0** (pre-release)
@@ -168,8 +171,11 @@ Trust level is specified in badge requests:
 
 ### Local Development
 
+!!! note "Enterprise License Required"
+    Access to the capiscio-server repository requires an enterprise license. [Contact Sales](mailto:sales@capisc.io) for access.
+
 ```bash
-# Clone the repo
+# Clone the repo (enterprise customers only)
 git clone https://github.com/capiscio/capiscio-server
 cd capiscio-server
 

@@ -51,14 +51,24 @@
 /* -----------------------------------------
    2. TYPOGRAPHY — Stripe-level polish
    
-   Base: 0.875rem = 14px (root is 16px)
+   Base: 15px
    Material default is 0.8rem = 12.8px
-   We use rem for consistency with root.
+   Using px for precise control.
    ----------------------------------------- */
 
 .md-typeset {
-  font-size: 0.875rem;  /* 14px - override Material's 0.8rem */
+  font-size: 15px !important;  /* 15px - force override */
   line-height: 1.6;
+}
+
+/* Also ensure content area respects this */
+.md-content__inner {
+  font-size: 15px !important;  /* 15px */
+}
+
+/* Paragraphs specifically */
+.md-typeset p {
+  font-size: 15px !important;  /* 15px */
 }
 
 /* Headings scale from 14px base */

@@ -156,17 +156,6 @@ extra_css:
 nav:
   - Home: index.md
   
-  # Strategic pillars - lead with value proposition
-  - Identity:
-      - identity/index.md
-  
-  - Trust:
-      - trust/index.md
-  
-  - Registry:
-      - registry/index.md
-  
-  # Learning paths
   - Getting Started:
       - getting-started/index.md
       - Validate Your Agent:
@@ -191,6 +180,9 @@ nav:
 
   - Concepts:
       - concepts/index.md
+      - Identity & DIDs: identity/index.md
+      - Trust Badges: trust/index.md
+      - Agent Registry: registry/index.md
       - Validation Process: concepts/validation.md
       - Scoring System: concepts/scoring.md
       - Trust Model: concepts/trust-model.md

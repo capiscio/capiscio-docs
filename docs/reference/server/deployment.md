@@ -257,8 +257,11 @@ spec:
 
 ## Building from Source
 
+!!! note "Enterprise License Required"
+    Access to the capiscio-server repository requires an enterprise license. [Contact Sales](mailto:sales@capisc.io) for access.
+
 ```bash
-# Clone repository
+# Clone repository (enterprise customers only)
 git clone https://github.com/capiscio/capiscio-server
 cd capiscio-server
 

@@ -115,25 +115,23 @@ POST /v1/agents/{did}/badge/pop
 
 ---
 
-## Self-Hosting
+## Enterprise Deployment
 
-Run your own registry:
+For enterprise customers, capiscio-server is available for on-premises deployment with commercial licensing.
 
-```bash
-docker run -d \
-  -p 8080:8080 \
-  -e DATABASE_URL=postgres://... \
-  -e CA_PRIVATE_KEY_JWK='{"kty":"OKP",...}' \
-  -e CLERK_SECRET_KEY=sk_... \
-  ghcr.io/capiscio/capiscio-server:latest
-```
+**Features:**
+
+- Private agent registry
+- Self-managed Badge CA  
+- Custom trust policies
+- Air-gapped environments
 
 Your agents get DIDs like:
 ```
 did:web:your-company.com:agents:internal-bot
 ```
 
-See [Server Deployment Guide](../reference/server/deployment.md) for full setup.
+[:octicons-arrow-right-24: Contact Sales](mailto:sales@capisc.io){ .md-button .md-button--primary }
 
 ---
 
@@ -157,13 +155,13 @@ See [Server Deployment Guide](../reference/server/deployment.md) for full setup.
 
     [:octicons-arrow-right-24: Server API](../reference/server/api.md)
 
--   :material-server:{ .lg .middle } **Self-Host**
+-   :material-server:{ .lg .middle } **Enterprise Deployment**
 
     ---
 
-    Run your own enterprise registry.
+    On-premises deployment for enterprise customers.
 
-    [:octicons-arrow-right-24: Deployment Guide](../reference/server/deployment.md)
+    [:octicons-arrow-right-24: Contact Sales](mailto:sales@capisc.io)
 
 -   :material-web:{ .lg .middle } **DID Resolution**
 
