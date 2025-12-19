@@ -63,22 +63,23 @@ This DID:
 
 === "Option 2: Registered (Verified)"
 
-    Register with CapiscIO for a `did:web` identity:
+    Use `did:key` for development and self-signed badges:
     
     ```bash
-    capiscio register --name "my-weather-agent"
+    capiscio keygen
     ```
     
     ```
-    ✅ Agent registered!
+    ✅ Keys generated!
     
-    Your Agent DID: did:web:registry.capisc.io:agents:my-weather-agent
-    Dashboard: https://registry.capisc.io/agents/my-weather-agent
+    DID: did:key:z6Mk...
+    Private key: capiscio_keys/private.pem
+    Public key: capiscio_keys/public.pem
     
-    Next: Request a trust badge to increase your trust level.
+    Next: Use this DID in your agent card.
     ```
     
-    **Trust Level:** 1+ (registered) — Production-ready with badge verification.
+    **Trust Level:** 0 (self-signed) — Use for development and testing.
 
 ---
 

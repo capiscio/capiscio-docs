@@ -114,47 +114,45 @@ Like Let's Encrypt revolutionized HTTPS, CapiscIO brings verifiable identity and
 
     [:octicons-arrow-right-24: Get a Trust Badge](trust/index.md)
 
--   :material-database-search:{ .lg .middle } **Agent Registry**
+-   :material-api:{ .lg .middle } **Registry API**
 
     ---
 
-    The **public directory** of trusted AI agents. Register once, be discovered everywhere.
+    REST API for managing agents, issuing badges, and resolving DIDs.
 
-    - Search by capability
-    - Filter by trust level
-    - Verify before connecting
+    - Agent CRUD operations
+    - Badge issuance and verification
+    - DID resolution
+    - Public status endpoints
 
-    ```bash
-    capiscio search "weather forecast" --min-trust 2
-    ```
-
-    [:octicons-arrow-right-24: Browse Registry](registry/index.md)
+    [:octicons-arrow-right-24: Registry API](registry/index.md)
 
 </div>
 
 ---
 
-## Zero to Verified in 60 Seconds
+## Quick Start
 
 <div class="install-box">
 
 ```bash
-# 1. Install
+# 1. Install CLI
 npm install -g capiscio       # or: pip install capiscio
 
 # 2. Initialize your agent
 capiscio init
 
-# 3. Register and get your DID
-capiscio register
+# 3. Validate your agent card
+capiscio validate
 ```
 
 ```
-✅ Agent registered!
+✅ Validation passed!
 
-Your Agent DID: did:web:registry.capisc.io:agents:my-agent-7x2k
-Trust Level: 1 (Registered)
-Dashboard: https://registry.capisc.io/dashboard
+Compliance: 95/100 (A+)
+Trust: 78/100 (Good)
+
+Agent card is valid and ready to use.
 ```
 
 </div>
@@ -174,7 +172,7 @@ AI agents are proliferating. But there's no standard way to:
 
 - **Verify identity** — Is this really the agent it claims to be?
 - **Establish trust** — Can I trust this agent with my data?
-- **Discover agents** — How do I find an agent that can do X?
+- **Validate compliance** — Does this agent card meet standards?
 
 API keys prove you paid. OAuth tokens expire. Self-descriptions can be forged.
 
@@ -186,7 +184,7 @@ CapiscIO provides the **trust infrastructure** for the agent economy:
 |-----------|---------------|
 | **DID Identity** | Permanent, verifiable, portable agent identity |
 | **Trust Badges** | Tiered verification like SSL certificates |
-| **Registry** | Discovery + verification in one place |
+| **Validation Engine** | Multi-dimensional agent card scoring |
 | **SDK/CLI** | Frictionless integration for developers |
 
 **Result:** Agents can prove who they are, establish trust, and find each other.
@@ -206,18 +204,18 @@ We obsess over developer experience. Every feature works in **three commands or 
     # ✅ did:key:z6Mk... generated
     ```
 
-=== "Register Agent"
+=== "Validate Agent Card"
 
     ```bash
-    capiscio register --name "my-agent"
-    # ✅ did:web:registry.capisc.io:agents:my-agent
+    capiscio validate agent-card.json
+    # ✅ Validation passed: 95/100 (A+)
     ```
 
-=== "Request Badge"
+=== "Issue Badge"
 
     ```bash
-    capiscio badge request --level 2
-    # ✅ Domain validation started
+    capiscio badge sign --trust-level 2
+    # ✅ Badge signed with private key
     ```
 
 === "Add to Your App"

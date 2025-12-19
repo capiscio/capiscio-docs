@@ -74,14 +74,15 @@ capiscio keygen
 
 No registration needed. You immediately get a `did:key` identity at Trust Level 0.
 
-### Level 1: Registered
+### Level 1: Domain Validated
 
 ```bash
-capiscio register --email you@example.com
-# Check your email for verification link
+capiscio badge sign --trust-level 1 --domain example.com
 ```
 
-### Level 2: Domain Validated
+For production trust, you'll need domain validation (coming soon).
+
+### Level 2: Organization Validated
 
 ```bash
 capiscio badge request --level 2 --domain example.com

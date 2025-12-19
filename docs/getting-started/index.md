@@ -29,7 +29,6 @@ npm install -g capiscio       # or: pip install capiscio
 
     ```bash
     capiscio keygen
-    capiscio register
     ```
 
     [:octicons-arrow-right-24: Identity Guide](../identity/index.md)
