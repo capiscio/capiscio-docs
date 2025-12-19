@@ -94,6 +94,20 @@ Understand how CapiscIO works under the hood. These docs explain the **why** and
 
 ---
 
+## Specifications (RFCs)
+
+For the formal technical specifications, see the CapiscIO RFCs:
+
+| RFC | Title | Status |
+|-----|-------|--------|
+| **[RFC-001](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/001-agcp.md)** | Agent Governance Control Plane (AGCP) | ✅ Approved |
+| **[RFC-002](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md)** | Trust Badge Specification | ✅ Approved |
+| **[RFC-003](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/003-key-ownership-proof.md)** | Key Ownership Proof Protocol | ✅ Approved |
+
+[:octicons-arrow-right-24: Browse All RFCs](https://github.com/capiscio/capiscio-rfcs){ .md-button }
+
+---
+
 ## Next Steps
 
 <div class="grid cards" markdown>
