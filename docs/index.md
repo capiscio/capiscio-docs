@@ -200,7 +200,7 @@ We obsess over developer experience. Every feature works in **three commands or 
 === "Generate Identity"
 
     ```bash
-    capiscio keygen
+    capiscio key gen
     # ✅ did:key:z6Mk... generated
     ```
 
@@ -214,8 +214,8 @@ We obsess over developer experience. Every feature works in **three commands or 
 === "Issue Badge"
 
     ```bash
-    capiscio badge sign --trust-level 2
-    # ✅ Badge signed with private key
+    capiscio badge issue --self-sign
+    # ✅ Badge issued with did:key identity
     ```
 
 === "Add to Your App"

@@ -184,7 +184,7 @@ Trust levels indicate the validation rigor applied during badge issuance:
 | **4** | Extended Validated (EV) | OV + manual security audit | CapiscIO CA | Regulated industries |
 
 !!! warning "Level 0 in Production"
-    Self-signed (Level 0) badges are for **development only**. In production, verifiers should reject Level 0 badges by default. Use `--accept-self-signed` (CLI) or `accept_self_signed=True` (SDK) to explicitly opt in during development.
+    Self-signed (Level 0) badges are for **development only**. In production, verifiers should reject Level 0 badges by default. Use `--offline` (CLI) for trust store verification, or `accept_self_signed=True` (SDK) to explicitly opt in during development.
 
 ### DID Methods by Level
 

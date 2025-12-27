@@ -215,11 +215,11 @@ capiscio badge issue [flags]
 ### Examples
 
 ```bash
-# Self-signed badge for development
-capiscio badge issue --self-sign --sub did:web:example.com:agents:my-agent
+# Self-signed badge for development (auto-generates did:key)
+capiscio badge issue --self-sign
 
-# With specific trust level
-capiscio badge issue --self-sign --level 2 --domain example.com
+# Self-signed badge with explicit subject
+capiscio badge issue --self-sign --sub did:web:example.com:agents:my-agent
 
 # With audience restriction
 capiscio badge issue --self-sign --aud "https://api.example.com,https://backup.example.com"
