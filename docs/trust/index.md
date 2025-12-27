@@ -69,7 +69,7 @@ Trust Level    What It Proves              Effort      Use Case
 ### Level 0: Self-Signed (Instant)
 
 ```bash
-capiscio keygen
+capiscio key gen
 ```
 
 No registration needed. You immediately get a `did:key` identity at Trust Level 0.
@@ -77,10 +77,11 @@ No registration needed. You immediately get a `did:key` identity at Trust Level 
 ### Level 1: Domain Validated
 
 ```bash
-capiscio badge sign --trust-level 1 --domain example.com
+# Domain Validated badges require registration with CapiscIO Registry
+capiscio badge request --did did:web:example.com:agents:myagent --key ./private.jwk --ca https://registry.capisc.io --api-key YOUR_API_KEY
 ```
 
-For production trust, you'll need domain validation (coming soon).
+For production trust, you'll need domain validation.
 
 ### Level 2: Organization Validated
 
@@ -239,10 +240,12 @@ capiscio badge renew
 
 ### Revocation
 
-If a key is compromised, revoke immediately:
+If a key is compromised, revoke immediately via the CapiscIO Registry API:
 
 ```bash
-capiscio badge revoke --reason key_compromise
+curl -X POST "https://registry.capisc.io/v1/badges/revoke" \
+  -H "X-Capiscio-Registry-Key: YOUR_API_KEY" \
+  -d '{"jti": "BADGE_JTI", "reason": "key_compromise"}'
 ```
 
 Revoked badges are published to a revocation list checked during verification.
@@ -351,8 +354,8 @@ async def handle_task(request: A2ARequest):
 
 ??? question "What if my key is compromised?"
     
-    1. Immediately revoke: `capiscio badge revoke --reason key_compromise`
-    2. Generate new keypair: `capiscio keygen`
+    1. Immediately revoke via Registry API
+    2. Generate new keypair: `capiscio key gen`
     3. Request new badge: `capiscio badge request`
     
     Revoked badges are rejected within minutes.

@@ -56,10 +56,10 @@ capiscio validate https://agent.example.com --test-live
 capiscio validate agent-card.json --strict
 
 # Issue a self-signed badge (development)
-capiscio badge issue --self-sign
+capiscio badge issue --self-sign --sub did:web:example.com:agents:my-agent
 
-# Verify a badge
-capiscio badge verify "eyJhbGciOiJFZERTQSJ9..." --accept-self-signed
+# Verify a badge offline (uses trust store)
+capiscio badge verify "eyJhbGciOiJFZERTQSJ9..." --offline
 ```
 
 All CLI flags are identical to the core binary. See [:octicons-arrow-right-24: CLI Reference](../cli/index.md) for the complete command reference.

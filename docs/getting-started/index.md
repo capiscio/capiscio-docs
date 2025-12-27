@@ -28,7 +28,7 @@ npm install -g capiscio       # or: pip install capiscio
     Generate a DID for your agent in 60 seconds.
 
     ```bash
-    capiscio keygen
+    capiscio key gen
     ```
 
     [:octicons-arrow-right-24: Identity Guide](../identity/index.md)
@@ -101,7 +101,7 @@ EOF
 capiscio validate agent-card.json
 
 # 4. Generate identity
-capiscio keygen --output ./capiscio_keys
+mkdir -p capiscio_keys && cd capiscio_keys && capiscio key gen && cd ..
 ```
 
 **Done!** You have a validated agent card and a cryptographic identity.
@@ -112,7 +112,7 @@ capiscio keygen --output ./capiscio_keys
 
 | Path | Requirements |
 |------|--------------|
-| CLI (validate, keygen) | Node.js 18+ or Python 3.10+ |
+| CLI (validate, key gen) | Node.js 18+ or Python 3.10+ |
 | Python SDK (SimpleGuard) | Python 3.10+, FastAPI or similar |
 | CI/CD | GitHub repository |
 

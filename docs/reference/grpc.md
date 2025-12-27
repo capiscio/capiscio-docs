@@ -1,15 +1,14 @@
 # gRPC Services
 
 <!-- 
-  VERIFIED: 2025-12-11
+  VERIFIED: 2025-12-26
   Source: capiscio-core/proto/capiscio/v1/*.proto
 -->
 
-`capiscio-core` exposes gRPC services for validation, scoring, and badge operations. Start the gRPC server with:
+`capiscio-core` exposes gRPC services for validation, scoring, and badge operations. The gRPC server is **automatically started and managed by the SDK** when using the Python or Node.js SDKs.
 
-```bash
-capiscio rpc --address :50051
-```
+!!! note "No Manual Server Start Required"
+    There is no `capiscio rpc` CLI command. The SDKs include a **process manager** that automatically spawns the `capiscio-core` binary and connects via gRPC. You don't need to start the server manually.
 
 ## Overview
 
@@ -282,23 +281,6 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 # Generate Go code
 cd capiscio-core/proto
 buf generate
-```
-
----
-
-## CLI Usage
-
-Start the gRPC server:
-
-```bash
-# Default port (50051)
-capiscio rpc
-
-# Custom address
-capiscio rpc --address localhost:9090
-
-# With TLS
-capiscio rpc --tls --cert ./cert.pem --key ./key.pem
 ```
 
 ---
