@@ -144,10 +144,10 @@ For development and testing, issue self-signed badges:
 
     ```bash
     # Issue a self-signed badge (Level 0)
-    capiscio badge issue --self-sign > badge.jwt
+    capiscio badge issue --self-sign --sub did:web:example.com:agents:test > badge.jwt
     
-    # Verify with explicit self-signed acceptance
-    capiscio badge verify --accept-self-signed < badge.jwt
+    # Verify offline (uses trust store)
+    capiscio badge verify --offline < badge.jwt
     ```
 
 === "Python SDK"

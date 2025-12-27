@@ -46,7 +46,7 @@ This DID:
     No registration needed. Generate a `did:key` identity locally:
     
     ```bash
-    capiscio keygen --output ./capiscio_keys
+    mkdir -p capiscio_keys && cd capiscio_keys && capiscio key gen && cd ..
     ```
     
     ```
@@ -55,8 +55,8 @@ This DID:
     Your Agent DID: did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK
     
     Files created:
-      ./capiscio_keys/private.pem (keep secret!)
-      ./capiscio_keys/public.pem
+      ./capiscio_keys/private.jwk (keep secret!)
+      ./capiscio_keys/public.jwk
     ```
     
     **Trust Level:** 0 (self-signed) — Great for development and testing.
@@ -66,15 +66,15 @@ This DID:
     Use `did:key` for development and self-signed badges:
     
     ```bash
-    capiscio keygen
+    capiscio key gen
     ```
     
     ```
     ✅ Keys generated!
     
     DID: did:key:z6Mk...
-    Private key: capiscio_keys/private.pem
-    Public key: capiscio_keys/public.pem
+    Private key: private.jwk
+    Public key: public.jwk
     
     Next: Use this DID in your agent card.
     ```
