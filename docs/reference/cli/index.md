@@ -1,9 +1,9 @@
 # CLI Reference
 
 <!-- 
-  VERIFIED: 2025-12-01
+  VERIFIED: 2025-12-26
   Source: capiscio-core/cmd/capiscio/*.go
-  All flags verified against Go source code.
+  All flags verified against actual CLI --help output.
 -->
 
 The `capiscio` CLI provides commands for validating Agent Cards, managing cryptographic keys, issuing trust badges, and running the security gateway.
@@ -63,8 +63,8 @@ The `capiscio` CLI provides commands for validating Agent Cards, managing crypto
 | [`badge issue`](#badge-issue) | Issue a trust badge |
 | [`badge verify`](#badge-verify) | Verify a trust badge |
 | [`badge keep`](#badge-keep) | Daemon to auto-renew badges |
+| [`trust`](#trust) | Manage the local trust store |
 | [`gateway start`](#gateway-start) | Start the security gateway |
-| [`rpc`](#rpc) | Start gRPC server |
 
 ---
 
@@ -191,7 +191,7 @@ Keys are saved in JWK (JSON Web Key) format:
 
 ## badge issue
 
-Issue a new trust badge for an agent. Trust badges are JWTs that attest to an agent's identity.
+Issue a new trust badge for an agent. Trust badges are JWTs that attest to an agent's identity per RFC-002.
 
 ### Usage
 
@@ -203,30 +203,33 @@ capiscio badge issue [flags]
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
-| `--sub` | `string` | `did:capiscio:agent:test` | Subject DID (agent identifier) |
+| `--self-sign` | `bool` | `false` | Self-sign for development (explicit flag required) |
+| `--sub` | `string` | `did:web:registry.capisc.io:agents:test` | Subject DID (did:web format) |
 | `--iss` | `string` | `https://registry.capisc.io` | Issuer URL |
 | `--domain` | `string` | `example.com` | Agent domain |
-| `--exp` | `duration` | `1h` | Expiration duration |
-| `--key` | `string` | *(none)* | Path to private key file (JWK). If omitted, generates ephemeral key. |
+| `--level` | `string` | `1` | Trust level: 1 (DV), 2 (OV), or 3 (EV) |
+| `--exp` | `duration` | `5m` | Expiration duration (default 5m per RFC-002) |
+| `--aud` | `string` | *(none)* | Audience (comma-separated URLs) |
+| `--key` | `string` | *(none)* | Path to private key file (JWK) |
 
 ### Examples
 
 ```bash
-# Issue badge with ephemeral key (prints public key to stderr)
-capiscio badge issue --sub "did:capiscio:agent:my-agent" --domain "my-agent.example.com"
+# Self-signed badge for development
+capiscio badge issue --self-sign --sub did:web:example.com:agents:my-agent
 
-# Issue badge with your private key
-capiscio badge issue \
-  --sub "did:capiscio:agent:my-agent" \
-  --domain "my-agent.example.com" \
-  --exp 24h \
-  --key ./private.jwk
+# With specific trust level
+capiscio badge issue --self-sign --level 2 --domain example.com
 
-# Custom issuer
+# With audience restriction
+capiscio badge issue --self-sign --aud "https://api.example.com,https://backup.example.com"
+
+# Production: Issue badge with your private key
 capiscio badge issue \
-  --sub "did:capiscio:agent:my-agent" \
-  --iss "https://my-registry.example.com" \
-  --key ./private.jwk
+  --key ./private.jwk \
+  --sub "did:web:mycompany.com:agents:my-agent" \
+  --domain "mycompany.com" \
+  --level 2
 ```
 
 ### Output
@@ -234,14 +237,14 @@ capiscio badge issue \
 The command outputs the signed JWT token to stdout:
 
 ```
-eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6Y2FwaXNjaW86YWdlbnQ6bXktYWdlbnQiLC...
+eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6d2ViOmV4YW1wbGUuY29tOmFnZW50czpteS1hZ2VudCIs...
 ```
 
 ---
 
 ## badge verify
 
-Verify a trust badge's signature and expiration.
+Verify a trust badge's signature, expiration, and claims per RFC-002 §8.1.
 
 ### Usage
 
@@ -253,20 +256,44 @@ capiscio badge verify [token] [flags]
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
-| `--key` | `string` | *(required)* | Path to public key file (JWK) |
+| `--key` | `string` | *(none)* | Path to public key file (JWK) |
+| `--offline` | `bool` | `false` | Offline mode (uses local trust store) |
+| `--audience` | `string` | *(none)* | Verifier's identity for audience validation |
+| `--skip-revocation` | `bool` | `false` | Skip revocation check (testing only) |
+| `--skip-agent-status` | `bool` | `false` | Skip agent status check (testing only) |
+| `--trusted-issuers` | `string` | *(none)* | Comma-separated list of trusted issuer URLs |
 
-### Example
+### Examples
 
 ```bash
-capiscio badge verify "eyJhbGciOiJFZERTQSI..." --key ./public.jwk
+# Online verification with local key
+capiscio badge verify "$TOKEN" --key ca-public.jwk
+
+# Offline verification (uses trust store)
+capiscio badge verify "$TOKEN" --offline
+
+# With audience check
+capiscio badge verify "$TOKEN" --key ca.jwk --audience https://api.example.com
+
+# With trusted issuers list
+capiscio badge verify "$TOKEN" --key ca.jwk --trusted-issuers "https://registry.capisc.io"
 ```
+
+### Verification Steps (per RFC-002 §8.1)
+
+1. Parse and validate JWS structure
+2. Verify signature against CA key
+3. Validate claims (exp, iat, iss, aud)
+4. Check revocation status (online mode)
+5. Check agent status (online mode)
 
 ### Output
 
 ```
 ✅ Badge Valid!
-Subject: did:capiscio:agent:my-agent
+Subject: did:web:example.com:agents:my-agent
 Issuer: https://registry.capisc.io
+Trust Level: 2 (OV)
 Expires: 2025-12-02T19:48:00Z
 ```
 
@@ -274,7 +301,7 @@ Expires: 2025-12-02T19:48:00Z
 
 ## badge keep
 
-Run a daemon that automatically renews badges before expiration. Useful for long-running agents that need continuous authorization.
+Run a daemon that automatically renews badges before expiration. Useful for long-running agents that need continuous authorization per RFC-002 §7.3.
 
 ### Usage
 
@@ -286,25 +313,36 @@ capiscio badge keep [flags]
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
-| `--sub` | `string` | `did:capiscio:agent:test` | Subject DID |
+| `--self-sign` | `bool` | `false` | Self-sign instead of requesting from CA |
+| `--key` | `string` | *(required for self-sign)* | Path to private key file (JWK) |
+| `--sub` | `string` | `did:web:registry.capisc.io:agents:test` | Subject DID |
 | `--iss` | `string` | `https://registry.capisc.io` | Issuer URL |
 | `--domain` | `string` | `example.com` | Agent domain |
-| `--exp` | `duration` | `1h` | Expiration duration for each badge |
-| `--key` | `string` | *(required)* | Path to private key file |
+| `--level` | `string` | `1` | Trust level (default "1") |
+| `--exp` | `duration` | `5m` | Expiration duration for each badge |
 | `--out` | `string` | `badge.jwt` | Output file path for the badge |
-| `--renew-before` | `duration` | `10m` | Time before expiry to renew |
-| `--check-interval` | `duration` | `1m` | Interval to check for renewal |
+| `--renew-before` | `duration` | `1m` | Time before expiry to renew |
+| `--check-interval` | `duration` | `30s` | Interval to check for renewal |
+| `--ca` | `string` | `https://registry.capisc.io` | CA URL for badge requests (future) |
+| `--api-key` | `string` | *(none)* | API key for CA authentication (future) |
 
-### Example
+### Examples
 
 ```bash
+# Self-signed mode for development
+capiscio badge keep --self-sign --key private.jwk --out badge.jwt
+
+# With custom expiration and renewal timing
 capiscio badge keep \
-  --sub "did:capiscio:agent:my-agent" \
-  --domain "my-agent.example.com" \
+  --self-sign \
   --key ./private.jwk \
+  --sub "did:web:example.com:agents:my-agent" \
   --out ./current-badge.jwt \
-  --exp 1h \
-  --renew-before 10m
+  --exp 5m \
+  --renew-before 1m
+
+# CA mode (future)
+capiscio badge keep --ca https://registry.capisc.io --api-key $API_KEY
 ```
 
 ### Behavior
@@ -313,8 +351,62 @@ The daemon will:
 
 1. Issue an initial badge immediately
 2. Write it to the output file
-3. Check periodically if renewal is needed
+3. Check periodically (every `--check-interval`) if renewal is needed
 4. Renew the badge when it's within `--renew-before` of expiry
+5. Write the new badge to the output file
+
+---
+
+## trust
+
+Manage the local trust store for offline badge verification. The trust store contains CA public keys that are trusted for badge verification, enabling offline and air-gapped deployments.
+
+**Location:** `~/.capiscio/trust/` (or `$CAPISCIO_TRUST_PATH`)
+
+See RFC-002 §13.1 for details.
+
+### trust add
+
+Add a CA public key to the trust store.
+
+```bash
+capiscio trust add [jwk-file] [flags]
+```
+
+**Flags:**
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--from-jwks` | `string` | Fetch from JWKS URL or '-' for stdin |
+
+**Examples:**
+
+```bash
+# Add from a JWK file
+capiscio trust add ca-public.jwk
+
+# Add from JWKS URL (production CA)
+capiscio trust add --from-jwks https://registry.capisc.io/.well-known/jwks.json
+
+# Add from stdin (pipe from curl)
+curl -s https://registry.capisc.io/.well-known/jwks.json | capiscio trust add --from-jwks -
+```
+
+### trust list
+
+List trusted CA keys.
+
+```bash
+capiscio trust list
+```
+
+### trust remove
+
+Remove a CA key from the trust store.
+
+```bash
+capiscio trust remove [key-id]
+```
 
 ---
 
@@ -373,55 +465,40 @@ capiscio gateway start \
 
 ---
 
-## rpc
+## gRPC Server (SDK Integration)
 
-Start the gRPC server for programmatic access to validation, scoring, and badge services.
+The gRPC server provides programmatic access to all CapiscIO functionality for SDKs in Python, Node.js, and other languages. 
 
-### Usage
+!!! info "Auto-Start Behavior"
+    The SDKs automatically manage the gRPC server process. You don't need to manually start it. The server runs on a Unix socket by default (`~/.capiscio/rpc.sock`).
 
-```bash
-capiscio rpc [flags]
-```
-
-### Flags
-
-| Flag | Type | Default | Description |
-|------|------|---------|-------------|
-| `--address` | `string` | `:50051` | Address to listen on (host:port) |
-
-### Example
-
-```bash
-# Start on default port
-capiscio rpc
-
-# Start on custom port
-capiscio rpc --address localhost:9090
-```
-
-### Exposed Services
-
-The gRPC server exposes three services:
+### Exposed Services (7 total)
 
 | Service | Description |
 |---------|-------------|
-| `ScoringService` | Validate and score agent cards |
-| `BadgeService` | Issue, verify, and manage badges |
-| `ValidationService` | Schema validation |
+| `BadgeService` | Sign, verify, parse, request badges; start badge keeper |
+| `DIDService` | Parse did:web identifiers |
+| `TrustStoreService` | Add trusted CA keys |
+| `RevocationService` | Check revocation status |
+| `ScoringService` | Score agent cards, validate rules |
+| `SimpleGuardService` | Sign/verify payloads with JWS |
+| `RegistryService` | Fetch agent cards |
 
 ### Python SDK Usage
 
 ```python
 from capiscio_sdk._rpc.client import CapiscioRPCClient
 
-# Connect to running server
-client = CapiscioRPCClient(address='localhost:50051', auto_start=False)
-
-# Verify a badge
-result = client.verify_badge(
-    token="eyJhbGciOiJFZERTQSI...",
-    accept_self_signed=True,  # Dev mode only
-)
+# Auto-starts gRPC server via process manager
+with CapiscioRPCClient() as client:
+    # Verify a badge
+    valid, claims, warnings, err = client.badge.verify_badge_with_options(
+        token="eyJhbGciOiJFZERTQSI...",
+        accept_self_signed=True,  # SDK flag for development only
+    )
+    if valid:
+        print(f"Subject: {claims['sub']}")
+        print(f"Trust Level: {claims['trust_level']}")
 ```
 
 For full gRPC documentation, see [gRPC Services Reference](../grpc.md).
@@ -435,7 +512,7 @@ These flags are available for all commands:
 | Flag | Description |
 |------|-------------|
 | `-h, --help` | Show help for any command |
-| `--version` | Show version information |
+| `-v, --version` | Show version information |
 
 ---
 
@@ -443,7 +520,12 @@ These flags are available for all commands:
 
 ### npm (capiscio-node)
 
-The npm distribution is a pass-through wrapper. All commands work identically.
+The npm distribution is a pass-through wrapper. All commands work identically, plus:
+
+| Command | Description |
+|---------|-------------|
+| `capiscio --wrapper-version` | Show the Node.js wrapper version |
+| `capiscio --wrapper-clean` | Remove cached binary (forces re-download) |
 
 ### pip (capiscio-python)
 
