@@ -97,10 +97,13 @@ jobs:
       
       - name: Install dependencies
         run: |
+          # Install capiscio-sdk-python with all its dependencies (pydantic, etc.)
+          # The [dev] extra ensures all optional deps are available for mkdocstrings
+          pip install -e "capiscio-sdk-python[dev]"
+          
+          # Now install docs requirements
           cd capiscio-docs
           pip install -r requirements-docs.txt
-          # Install capiscio-sdk-python in editable mode for mkdocstrings to resolve types
-          pip install -e ../capiscio-sdk-python
       
       - name: Build documentation
         run: |

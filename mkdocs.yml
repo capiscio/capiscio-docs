@@ -79,6 +79,10 @@ plugins:
       handlers:
         python:
           paths: ["../capiscio-sdk-python"]
+          import:
+            # Enable cross-references to Python stdlib and pydantic
+            - https://docs.python.org/3/objects.inv
+            - https://docs.pydantic.dev/latest/objects.inv
           options:
             show_source: false
             show_root_heading: true
@@ -86,12 +90,10 @@ plugins:
             separate_signature: true
             docstring_style: google
             members_order: source
-            # Allow unresolved references for external types (Exception, pydantic.BaseModel, etc.)
             show_if_no_docstring: false
-          inventories:
-            # Enable cross-references to Python stdlib and pydantic
-            - https://docs.python.org/3/objects.inv
-            - https://docs.pydantic.dev/latest/objects.inv
+            # Preload pydantic to resolve base classes
+            preload_modules:
+              - pydantic
 
 markdown_extensions:
   - admonition
