@@ -329,4 +329,4 @@ error: signature verification failed
 
 - [API Reference](api.md) — Full API documentation
 - [Badge CA](badge-ca.md) — CA operations
-- [Enterprise Deployment](../../../enterprise/) — Air-gapped and on-prem guides
+- [Contact Sales](mailto:sales@capisc.io) — Enterprise deployment options (air-gapped, on-prem)
