@@ -97,9 +97,9 @@ jobs:
       
       - name: Install dependencies
         run: |
-          # Install capiscio-sdk-python dependencies first (pydantic, etc.)
-          # This allows mkdocstrings/griffe to resolve base classes
-          pip install -e capiscio-sdk-python
+          # Install capiscio-sdk-python with all its dependencies (pydantic, etc.)
+          # The [dev] extra ensures all optional deps are available for mkdocstrings
+          pip install -e "capiscio-sdk-python[dev]"
           
           # Now install docs requirements
           cd capiscio-docs
