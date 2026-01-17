@@ -78,7 +78,7 @@ plugins:
       default_handler: python
       handlers:
         python:
-          paths: ["../capiscio-sdk-python"]
+          paths: ["../capiscio-sdk-python", "../capiscio-mcp-python"]
           import:
             # Enable cross-references to Python stdlib and pydantic
             - https://docs.python.org/3/objects.inv
@@ -157,6 +157,7 @@ extra_css:
 
 nav:
   - Home: index.md
+  - Overview: overview/index.md
   
   - Getting Started:
       - getting-started/index.md
@@ -172,6 +173,9 @@ nav:
           - getting-started/secure/3-guard.md
           - getting-started/secure/4-test.md
           - getting-started/secure/5-production.md
+      - Protect MCP Tools:
+          - mcp-guard/getting-started/installation.md
+          - mcp-guard/getting-started/quickstart.md
       - CI/CD Integration:
           - getting-started/cicd/1-intro.md
           - getting-started/cicd/2-action.md
@@ -184,11 +188,14 @@ nav:
       - concepts/index.md
       - Identity & DIDs: identity/index.md
       - Trust Badges: trust/index.md
+      - Trust Levels: concepts/trust-model.md
       - Agent Registry: registry/index.md
-      - Validation Process: concepts/validation.md
-      - Scoring System: concepts/scoring.md
-      - Trust Model: concepts/trust-model.md
+      - Validation & Scoring:
+          - concepts/validation.md
+          - concepts/scoring.md
       - Enforcement: concepts/enforcement.md
+      - MCP Security:
+          - Overview: concepts/mcp-security.md
 
   - How-To Guides:
       - how-to/index.md
@@ -207,6 +214,12 @@ nav:
           - Dev Mode: how-to/security/dev-mode.md
           - Key Rotation: how-to/security/key-rotation.md
           - Trust Store: how-to/security/trust-store.md
+      - MCP Security:
+          - Protect MCP Tools: mcp-guard/guides/server-side.md
+          - Verify MCP Servers: mcp-guard/guides/client-side.md
+          - Server Registration: mcp-guard/guides/server-registration.md
+          - Evidence Logging: mcp-guard/guides/evidence.md
+          - MCP SDK Integration: mcp-guard/guides/mcp-integration.md
       - Integrations:
           - FastAPI: how-to/integrations/fastapi.md
           - Flask: how-to/integrations/flask.md
@@ -221,22 +234,25 @@ nav:
 
   - Reference:
       - reference/index.md
-      - CLI Reference: reference/cli/index.md
-      - gRPC Services: reference/grpc.md
-      - Python SDK:
+      - CapiscIO Core:
+          - CLI Reference: reference/cli/index.md
+          - Go API: reference/go-api.md
+          - gRPC Services: reference/grpc.md
+      - CapiscIO SDK:
           - reference/sdk-python/index.md
           - Badge: reference/sdk-python/badge.md
           - SecurityConfig: reference/sdk-python/config.md
           - CapiscioSecurityExecutor: reference/sdk-python/executor.md
           - SimpleGuard: reference/sdk-python/simple-guard.md
+          - MCP: reference/sdk-python/mcp.md
           - Types: reference/sdk-python/types.md
           - Errors: reference/sdk-python/errors.md
+      - MCP Guard: '!include ../capiscio-mcp-python/mkdocs.yml'
       - Server API:
           - reference/server/index.md
           - API Reference: reference/server/api.md
           - Deployment: reference/server/deployment.md
           - Badge CA: reference/server/badge-ca.md
-      - Go API: reference/go-api.md
       - Configuration: reference/configuration.md
       - Agent Card Schema: reference/agent-card-schema.md
       - Installation:

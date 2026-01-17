@@ -1,42 +1,58 @@
 # API Reference
 
-Complete reference documentation for all CapiscIO APIs, CLIs, and configuration options.
+Complete reference documentation for all CapiscIO products.
 
-## Quick Links
+## Products
 
 <div class="grid cards" markdown>
 
--   :material-console:{ .lg .middle } **CLI Reference**
+-   :material-console:{ .lg .middle } **CapiscIO Core**
 
     ---
 
-    Command-line interface for validation, key management, badges, and gateway.
+    CLI and Go library for validation, key management, and badge operations.
 
-    [:octicons-arrow-right-24: CLI Commands](cli/index.md)
+    - [CLI Reference](cli/index.md)
+    - [Go API](go-api.md)
+    - [gRPC Services](grpc.md)
 
--   :material-language-python:{ .lg .middle } **Python SDK**
+-   :material-language-python:{ .lg .middle } **CapiscIO SDK**
 
     ---
 
-    Security middleware for Python applications with SimpleGuard and Executor.
+    Python SDK for runtime security—signing, verification, and trust enforcement.
 
-    [:octicons-arrow-right-24: SDK Reference](sdk-python/index.md)
+    - [Overview](sdk-python/index.md)
+    - [SimpleGuard](sdk-python/simple-guard.md)
+    - [Badge](sdk-python/badge.md)
+    - [Types](sdk-python/types.md)
+
+-   :material-shield-check:{ .lg .middle } **MCP Guard**
+
+    ---
+
+    Tool-level authorization for Model Context Protocol servers.
+
+    - [MCP Guard Reference](../mcp-guard/api-reference.md)
+    - [Guard Config](sdk-python/mcp.md)
 
 -   :material-server:{ .lg .middle } **Server API**
 
     ---
 
-    capiscio-server REST API for agent registry and badge CA operations.
+    capiscio-server REST API for agent registry and badge CA.
 
-    [:octicons-arrow-right-24: Server Reference](server/index.md)
+    - [Server Reference](server/index.md)
+    - [Badge CA](server/badge-ca.md)
+    - [Deployment](server/deployment.md)
 
--   :material-api:{ .lg .middle } **gRPC Services**
+</div>
 
-    ---
+---
 
-    gRPC API for validation, scoring, and badge operations.
+## Quick Reference
 
-    [:octicons-arrow-right-24: gRPC Reference](grpc.md)
+<div class="grid cards" markdown>
 
 -   :material-cog:{ .lg .middle } **Configuration**
 
@@ -54,28 +70,39 @@ Complete reference documentation for all CapiscIO APIs, CLIs, and configuration 
 
     [:octicons-arrow-right-24: Schema Reference](agent-card-schema.md)
 
+-   :material-download:{ .lg .middle } **Installation**
+
+    ---
+
+    Package installation across all platforms and package managers.
+
+    [:octicons-arrow-right-24: Installation Options](wrappers/index.md)
+
 </div>
 
 ---
 
 ## Package Installation
 
-=== "npm"
+=== "CapiscIO Core (CLI)"
 
     ```bash
-    npm install capiscio
+    npm install -g capiscio    # Node.js wrapper
+    # or
+    pip install capiscio       # Python wrapper
     ```
 
-=== "pip"
-
-    ```bash
-    pip install capiscio
-    ```
-
-=== "pip (SDK)"
+=== "CapiscIO SDK"
 
     ```bash
     pip install capiscio-sdk
+    ```
+
+=== "MCP Guard"
+
+    ```bash
+    pip install capiscio-mcp          # Standalone
+    pip install capiscio-mcp[mcp]     # With MCP SDK integration
     ```
 
 === "Docker"
@@ -88,10 +115,11 @@ Complete reference documentation for all CapiscIO APIs, CLIs, and configuration 
 
 ## Version Compatibility
 
-| Package | Version | Node.js | Python | Go |
-|---------|---------|---------|--------|----|
-| `capiscio` (npm) | 1.0.x | ≥18.0 | - | - |
-| `capiscio` (pip) | 1.0.x | - | ≥3.10 | - |
-| `capiscio-sdk` | 0.3.x | - | ≥3.10 | - |
-| `capiscio-core` | 1.0.x | - | - | ≥1.21 |
+| Package | Version | Platform | Requirements |
+|---------|---------|----------|--------------|
+| `capiscio` (npm) | 2.x | Node.js | ≥18.0 |
+| `capiscio` (pip) | 2.x | Python | ≥3.10 |
+| `capiscio-sdk` | 0.3.x | Python | ≥3.10 |
+| `capiscio-mcp` | 0.1.x | Python | ≥3.10 |
+| `capiscio-core` (Go) | 2.x | Go | ≥1.21 |
 

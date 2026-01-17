@@ -58,6 +58,10 @@ from capiscio_sdk.errors import (
 
 # Types
 from capiscio_sdk import ValidationResult, ValidationIssue, ValidationSeverity
+
+# MCP API (Model Context Protocol security)
+from capiscio_sdk._rpc.client import CapiscioRPCClient
+# Access MCP via: client.mcp.evaluate_tool_access(...)
 ```
 
 ---
@@ -118,6 +122,15 @@ from capiscio_sdk import ValidationResult, ValidationIssue, ValidationSeverity
     Data types for validation results, issues, and severity levels.
 
     [:octicons-arrow-right-24: Types API](types.md)
+
+-   :material-server-security: **MCP API**
+
+    ---
+
+    Model Context Protocol security enforcement. Tool access control
+    (RFC-006) and server identity verification (RFC-007).
+
+    [:octicons-arrow-right-24: MCP API](mcp.md)
 
 </div>
 

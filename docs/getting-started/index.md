@@ -53,6 +53,16 @@ npm install -g capiscio       # or: pip install capiscio
 
     [:octicons-arrow-right-24: Add Security](secure/1-intro.md)
 
+-   :material-tools:{ .lg .middle } **Protect MCP Tools**
+
+    ---
+
+    Add tool-level authorization to Model Context Protocol servers.
+
+    **10 minutes** · Intermediate
+
+    [:octicons-arrow-right-24: MCP Guard Quickstart](../mcp-guard/getting-started/quickstart.md)
+
 -   :material-pipe:{ .lg .middle } **CI/CD Integration**
 
     ---
