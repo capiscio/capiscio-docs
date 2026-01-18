@@ -12,12 +12,13 @@
 
 ## Overview
 
-The gRPC API provides three core services:
+The gRPC API provides four core services:
 
 | Service | Description |
-|---------|-------------|
+|---------|-----------|
 | `ScoringService` | Validate and score agent cards |
 | `BadgeService` | Issue, verify, and manage trust badges |
+| `MCPService` | MCP tool access control and server identity (RFC-006/007) |
 | `ValidationService` | Schema validation for agent cards |
 
 ---
@@ -240,6 +241,120 @@ for event in client.start_keeper(
 
 ---
 
+## MCPService
+
+Model Context Protocol security enforcement implementing RFC-006 (Tool Authority) and RFC-007 (Server Identity).
+
+### EvaluateToolAccess
+
+Evaluate whether a caller is authorized to invoke an MCP tool.
+
+```protobuf
+rpc EvaluateToolAccess(EvaluateToolAccessRequest) returns (EvaluateToolAccessResponse);
+```
+
+**Request:**
+
+```python
+result = client.mcp.evaluate_tool_access(
+    tool_name="write_file",
+    params_hash="sha256:abc123...",
+    server_origin="https://files.example.com",
+    badge_jws=caller_badge,
+    min_trust_level=2,  # Require OV
+    trusted_issuers=["https://registry.capisc.io"],
+)
+```
+
+**Response:**
+
+```json
+{
+  "decision": "allow",
+  "agent_did": "did:web:example.com:agents:alice",
+  "auth_level": "badge",
+  "trust_level": 2,
+  "evidence_id": "ev_abc123",
+  "timestamp": "2025-01-15T12:00:00Z"
+}
+```
+
+### VerifyServerIdentity
+
+Verify an MCP server's identity before trusting responses.
+
+```protobuf
+rpc VerifyServerIdentity(VerifyServerIdentityRequest) returns (VerifyServerIdentityResponse);
+```
+
+**Request:**
+
+```python
+result = client.mcp.verify_server_identity(
+    server_did="did:web:files.example.com:mcp:files",
+    server_badge=server_badge_token,
+    transport_origin="https://files.example.com",
+    min_trust_level=1,
+)
+```
+
+**Response:**
+
+```json
+{
+  "state": "verified_principal",
+  "trust_level": 2,
+  "server_did": "did:web:files.example.com:mcp:files",
+  "badge_jti": "badge_xyz789"
+}
+```
+
+### ParseServerIdentity
+
+Extract server identity from HTTP headers or JSON-RPC `_meta`.
+
+```protobuf
+rpc ParseServerIdentity(ParseServerIdentityRequest) returns (ParseServerIdentityResponse);
+```
+
+**HTTP Headers:**
+
+```python
+identity = client.mcp.parse_server_identity_http(
+    capiscio_server_did=response.headers.get("Capiscio-Server-DID", ""),
+    capiscio_server_badge=response.headers.get("Capiscio-Server-Badge", ""),
+)
+```
+
+**JSON-RPC `_meta`:**
+
+```python
+identity = client.mcp.parse_server_identity_jsonrpc(
+    meta_json=json.dumps(response.get("_meta", {}))
+)
+```
+
+### Server States
+
+| State | Description | Action |
+|-------|-------------|--------|
+| `verified_principal` | DID verified, badge valid, origin matches | Trust responses |
+| `declared_principal` | DID provided but not fully verified | Prompt user |
+| `unverified_origin` | Origin doesn't match DID | Reject or warn |
+
+### Deny Reasons
+
+| Reason | Description |
+|--------|-------------|
+| `badge_missing` | No credential provided |
+| `badge_invalid` | Signature verification failed |
+| `badge_expired` | Badge has expired |
+| `trust_insufficient` | Trust level below minimum |
+| `tool_not_allowed` | Tool not in allowlist |
+| `issuer_untrusted` | Badge issuer not trusted |
+
+---
+
 ## Trust Levels
 
 The `TrustLevel` enum maps to badge trust levels:
@@ -262,6 +377,7 @@ The protobuf definitions are located at:
 ```
 capiscio-core/proto/capiscio/v1/
 ├── badge.proto      # BadgeService
+├── mcp.proto        # MCPService (RFC-006/007)
 ├── scoring.proto    # ScoringService
 ├── common.proto     # Shared types
 ├── did.proto        # DID operations
@@ -318,5 +434,8 @@ except RpcError as e:
 
 - [CLI Reference](cli/index.md) — Command-line interface
 - [Python SDK](sdk-python/index.md) — `CapiscioRPCClient` wrapper
+- [MCP API](sdk-python/mcp.md) — MCP tool access control
 - [Badge CA](server/badge-ca.md) — CA operations
 - [RFC-002: Trust Badge](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
+- [RFC-006: MCP Tool Authority](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority.md) — Tool access spec
+- [RFC-007: MCP Server Identity](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity.md) — Server identity spec

@@ -47,6 +47,17 @@ Task-oriented guides for specific problems. Each guide is self-contained with co
 
 ---
 
+## :material-tools: MCP Guard
+
+| Guide | What You'll Do | Time |
+|-------|----------------|------|
+| [Protect MCP Tools](../mcp-guard/guides/server-side.md) | Add `@guard` decorator to MCP tools | 5 min |
+| [Verify MCP Servers](../mcp-guard/guides/client-side.md) | Verify server identity before connecting | 5 min |
+| [Evidence Logging](../mcp-guard/guides/evidence.md) | Log tool calls for compliance | 5 min |
+| [MCP SDK Integration](../mcp-guard/guides/mcp-integration.md) | Integrate with official MCP SDK | 10 min |
+
+---
+
 ## :material-pipe: CI/CD
 
 | Guide | What You'll Do | Time |
