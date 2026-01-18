@@ -39,7 +39,7 @@ async def write_database(table: str, data: dict):
 - **Parameter hashing** — PII-safe evidence records
 - **Async and sync** — Both decorator styles supported
 
-[:octicons-arrow-right-24: RFC-006 Full Specification](../../rfcs/006-mcp-tool-authority-evidence/)
+[:octicons-arrow-right-24: RFC-006 Full Specification](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority-evidence.md)
 
 ---
 
@@ -69,7 +69,7 @@ else:
 - **Trust level inspection** — Check server's verification level
 - **Three states** — VERIFIED_PRINCIPAL, DECLARED_PRINCIPAL, UNVERIFIED_ORIGIN
 
-[:octicons-arrow-right-24: RFC-007 Full Specification](../../rfcs/007-mcp-server-identity-discovery/)
+[:octicons-arrow-right-24: RFC-007 Full Specification](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity-discovery.md)
 
 ---
 

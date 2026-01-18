@@ -160,8 +160,8 @@ For the formal technical specifications, see the CapiscIO RFCs:
 | **[RFC-001](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/001-agcp.md)** | Agent Governance Control Plane (AGCP) | ✅ Approved |
 | **[RFC-002](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md)** | Trust Badge Specification | ✅ Approved |
 | **[RFC-003](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/003-key-ownership-proof.md)** | Key Ownership Proof Protocol | ✅ Approved |
-| **[RFC-006](../rfcs/006-mcp-tool-authority-evidence.md)** | MCP Tool Authority Evidence | ✅ Approved |
-| **[RFC-007](../rfcs/007-mcp-server-identity-discovery.md)** | MCP Server Identity Discovery | ✅ Approved |
+| **[RFC-006](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority-evidence.md)** | MCP Tool Authority Evidence | ✅ Approved |
+| **[RFC-007](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity-discovery.md)** | MCP Server Identity Discovery | ✅ Approved |
 
 [:octicons-arrow-right-24: Browse All RFCs](https://github.com/capiscio/capiscio-rfcs){ .md-button }
 
