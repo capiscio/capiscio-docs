@@ -89,12 +89,30 @@ If the hashes do not match, `SimpleGuard` raises a `VerificationError` and retur
 
 Even with valid identity and integrity, an attacker could capture a legitimate request and replay it.
 
-CapiscIO enforces **Freshness** using timestamp claims:
+CapiscIO enforces **Freshness** using timestamp claims per RFC-002 §8.1:
 
-*   `iat` (issued at): When the request was signed
-*   `exp` (expires): When the signature expires
+*   `iat` (issued at): When the badge was issued
+*   `exp` (expires): When the badge expires
 
-Guard rejects requests outside a 60-second window (with 5s clock skew tolerance).
+Guard rejects requests outside a **60-second clock skew tolerance** window. Both `iat` and `exp` are validated with this tolerance applied, allowing for clock drift in distributed systems.
+
+### Badge Verification Algorithm (RFC-002 §8.1)
+
+When verifying a Trust Badge, the Guard performs these checks in order:
+
+1. **Decode JWS** — Parse the badge as a signed JSON Web Signature
+2. **Validate signature** — Verify using the issuer's public key
+3. **Check `iat`** — Reject if `iat` is in the future (minus clock tolerance)
+4. **Check `exp`** — Reject if current time is past `exp` (plus clock tolerance)
+5. **Validate `iss`** — Confirm issuer is in trusted issuers list
+6. **Validate `sub`** — Confirm subject DID format is valid
+7. **Check `ial`** — Validate IAL claim is `"0"` or `"1"`
+8. **Validate `key`** — Confirm public key JWK is well-formed
+9. **If IAL-1, validate `cnf`** — Check confirmation key binding (RFC 7800)
+10. **Trust level policy** — Check if `vc.credentialSubject.level` meets minimum required level
+
+!!! tip "Error Codes (RFC-002 §8.5)"
+    When verification fails, the Guard returns specific error codes: `BADGE_EXPIRED`, `BADGE_NOT_YET_VALID`, `INVALID_SIGNATURE`, `UNTRUSTED_ISSUER`, `INVALID_DID`, `TRUST_LEVEL_INSUFFICIENT`. See [RFC-002 §8.5](../rfcs/index.md) for the complete error code reference.
 
 ## 4. Performance Telemetry
 

@@ -21,15 +21,87 @@ Complete API reference for capiscio-server. Interactive documentation is availab
 
 ---
 
+## API Route Architecture
+
+The server provides three distinct route groups with different authentication patterns:
+
+| Path Pattern | Auth Method | Purpose | Consumers |
+|--------------|-------------|---------|-----------|
+| `/v1/*` | Clerk JWT | Dashboard/UI operations | Web dashboard |
+| `/v1/sdk/*` | Registry API Key | Programmatic access | CLI, SDK, CI/CD |
+| `/v1/agents/{did}/badge/*` | Registry Key OR Badge | Badge minting (RFC-003) | Agents |
+| No auth | None | Public verification | Anyone |
+
+!!! note "Dual-Path Pattern"
+    Many endpoints exist under both `/v1/*` (Clerk auth) and `/v1/sdk/*` (API key auth) to support both interactive and programmatic workflows. For SDK/CLI integration, always use the `/v1/sdk/*` routes.
+
+### Route Groups Summary
+
+```
+Public (no auth):
+├── /.well-known/jwks.json         # CA public keys
+├── /agents/{id}/did.json          # Agent DID documents
+├── /servers/{id}/did.json         # MCP Server DID documents
+├── /v1/badges/{jti}/status        # Badge revocation status
+├── /v1/agents/{id}/status         # Agent status
+├── /v1/servers/{id}/status        # MCP Server status
+├── /v1/validate                   # Badge validation
+└── /v1/badges/mint                # DV badge minting (grant + PoP auth)
+
+SDK/CLI Routes (X-Capiscio-Registry-Key):
+├── /v1/sdk/agents                 # CRUD agents
+├── /v1/sdk/agents/{did}/badge/*   # PoP badge flow (RFC-003)
+├── /v1/sdk/servers                # CRUD MCP servers (RFC-007)
+└── /v1/badges/dv/*                # Domain Validation flow
+
+Dashboard Routes (Clerk JWT):
+├── /v1/agents                     # CRUD agents
+├── /v1/servers                    # CRUD MCP servers
+├── /v1/orgs                       # Organization management
+├── /v1/api-keys                   # API key management
+├── /v1/events                     # Event logs
+└── /v1/metrics/*                  # Dashboard metrics
+```
+
+---
+
 ## Authentication
 
-All `/v1/*` endpoints require authentication via API key:
+Authentication varies by endpoint type:
+
+### User Dashboard Routes (`/v1/*`)
+
+For dashboard/UI operations (creating agents, managing API keys), use Clerk JWT:
 
 ```
-Authorization: Bearer YOUR_API_KEY
+Authorization: Bearer YOUR_CLERK_JWT
 ```
 
-Public endpoints (JWKS, DID resolution) do not require authentication.
+### SDK/CLI Routes (`/v1/sdk/*`)
+
+For programmatic access from CLI, SDK, or CI/CD pipelines, use Registry API Key:
+
+```
+X-Capiscio-Registry-Key: YOUR_API_KEY
+```
+
+### Agent Operations (Badge Minting)
+
+For badge minting operations, you can use either Registry API Key OR a valid Trust Badge:
+
+```
+X-Capiscio-Registry-Key: YOUR_API_KEY
+# OR
+X-Capiscio-Badge: YOUR_BADGE_JWT
+```
+
+### Public Endpoints
+
+These endpoints do not require authentication:
+- JWKS (`/.well-known/jwks.json`)
+- Badge validation (`/v1/validate`)
+- DID resolution (`/agents/{id}/did.json`, `/servers/{id}/did.json`)
+- Badge/Agent/Server status (`/v1/badges/{jti}/status`, `/v1/agents/{id}/status`, `/v1/servers/{id}/status`)
 
 ---
 
@@ -196,12 +268,12 @@ Content-Type: application/json
 | 403 | Agent is disabled |
 | 404 | Agent not found |
 
-### Verify Badge
+### Validate Badge
 
-Verify a trust badge token.
+Validate a trust badge token. This endpoint is **public** (no auth required).
 
 ```http
-POST /v1/badges/verify
+POST /v1/validate
 Content-Type: application/json
 ```
 
@@ -308,7 +380,7 @@ GET /agents/{id}/did.json
 List all API keys for the authenticated user.
 
 ```http
-GET /v1/keys
+GET /v1/api-keys
 ```
 
 ### Create API Key
@@ -316,7 +388,7 @@ GET /v1/keys
 Create a new API key.
 
 ```http
-POST /v1/keys
+POST /v1/api-keys
 Content-Type: application/json
 ```
 
@@ -351,7 +423,7 @@ Content-Type: application/json
 Delete an API key.
 
 ```http
-DELETE /v1/keys/{id}
+DELETE /v1/api-keys/{id}
 ```
 
 ---

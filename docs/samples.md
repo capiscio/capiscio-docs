@@ -216,17 +216,17 @@ async def get_agent_card():
 
 @app.post("/a2a")
 async def handle_a2a(request: Request):
-    """Handle A2A requests with signature verification."""
-    signature = request.headers.get("X-Capiscio-Signature")
+    """Handle A2A requests with badge verification."""
+    badge = request.headers.get("X-Capiscio-Badge")
     body = await request.body()
     
-    # Verify signature if present
-    if signature:
+    # Verify badge if present
+    if badge:
         try:
-            claims = guard.verify_inbound(signature, body)
+            claims = guard.verify_inbound(badge, body)
             print(f"Verified request from: {claims.get('iss')}")
         except VerificationError:
-            raise HTTPException(401, "Invalid signature")
+            raise HTTPException(401, "Invalid badge")
     
     # Process request
     data = await request.json()

@@ -176,7 +176,7 @@ For local development, the server auto-creates a test account.
 
 ```bash
 # Via API (local)
-curl -X POST http://localhost:8080/v1/keys \
+curl -X POST http://localhost:8080/v1/api-keys \
   -H "Content-Type: application/json" \
   -d '{"name": "Development Key"}'
 ```
@@ -191,7 +191,7 @@ export CAPISCIO_API_KEY="cpsc_live_xxx"
 
 ```bash
 curl -X POST http://localhost:8080/v1/agents \
-  -H "Authorization: Bearer $CAPISCIO_API_KEY" \
+  -H "X-Capiscio-Registry-Key: $CAPISCIO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My Assistant Agent",
@@ -231,7 +231,7 @@ _capiscio.my-agent.example.com TXT "capiscio-verification=550e8400-e29b-41d4-a71
 
 ```bash
 curl -X POST "http://localhost:8080/v1/agents/$AGENT_ID/badge" \
-  -H "Authorization: Bearer $CAPISCIO_API_KEY" \
+  -H "X-Capiscio-Registry-Key: $CAPISCIO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "domain": "my-agent.example.com",

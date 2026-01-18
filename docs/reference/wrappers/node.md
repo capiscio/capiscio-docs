@@ -87,7 +87,7 @@ Add validation to your `package.json`:
     "validate:json": "capiscio validate agent-card.json --json"
   },
   "devDependencies": {
-    "capiscio": "^0.3.0"
+    "capiscio": "^2.3.1"
   }
 }
 ```

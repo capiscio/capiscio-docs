@@ -65,8 +65,8 @@ capiscio-server provides:
 │   Handlers  │   Service   │   (Postgres)│   Endpoint          │
 ├─────────────┼─────────────┼─────────────┼─────────────────────┤
 │ /v1/agents  │ Issue badge │ agents      │ /.well-known/       │
-│ /v1/badges  │ Verify      │ badges      │   jwks.json         │
-│ /v1/keys    │ Sign JWS    │ api_keys    │                     │
+│ /v1/validate│ Verify      │ badges      │   jwks.json         │
+│ /v1/api-keys│ Auth        │ api_keys    │                     │
 └─────────────┴─────────────┴─────────────┴─────────────────────┘
 ```
 
@@ -91,7 +91,7 @@ capiscio-server provides:
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/v1/agents/{id}/badge` | Issue badge for agent |
-| `POST` | `/v1/badges/verify` | Verify a badge token |
+| `POST` | `/v1/validate` | Verify a badge token |
 | `GET` | `/.well-known/jwks.json` | Get CA public keys (JWKS) |
 
 ### DID Resolution
@@ -104,9 +104,9 @@ capiscio-server provides:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/v1/keys` | List API keys |
-| `POST` | `/v1/keys` | Create new API key |
-| `DELETE` | `/v1/keys/{id}` | Delete API key |
+| `GET` | `/v1/api-keys` | List API keys |
+| `POST` | `/v1/api-keys` | Create new API key |
+| `DELETE` | `/v1/api-keys/{id}` | Delete API key |
 
 ---
 
@@ -116,14 +116,17 @@ capiscio-server supports two authentication methods:
 
 ### API Key Authentication
 
-For programmatic access (agents, CI/CD):
+For programmatic access (agents, CI/CD), use the `X-Capiscio-Registry-Key` header:
 
 ```bash
 curl -X POST https://registry.capisc.io/v1/agents/{id}/badge \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "X-Capiscio-Registry-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"domain": "my-agent.example.com", "trustLevel": "2"}'
 ```
+
+!!! note "Header Name"
+    Use `X-Capiscio-Registry-Key` for API key authentication, not `Authorization: Bearer`. The `X-Capiscio-Badge` header is used for agent-to-agent badge transport (RFC-002 §9.1).
 
 ### Clerk Authentication
 

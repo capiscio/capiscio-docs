@@ -408,7 +408,7 @@ To rotate the CA key:
 ```bash
 # Register agent
 curl -X POST https://registry.capisc.io/v1/agents \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "X-Capiscio-Registry-Key: $API_KEY" \
   -d '{"name": "My Agent", "domain": "my-agent.example.com"}'
 ```
 
@@ -429,7 +429,7 @@ Disabling an agent immediately prevents new badge issuance:
 
 ```bash
 curl -X POST https://registry.capisc.io/v1/agents/{id}/disable \
-  -H "Authorization: Bearer $API_KEY"
+  -H "X-Capiscio-Registry-Key: $API_KEY"
 ```
 
 Existing badges remain valid until expiry, but no new badges can be issued.

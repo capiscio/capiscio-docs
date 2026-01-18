@@ -58,12 +58,10 @@ app.add_middleware(CapiscioMiddleware, guard=SimpleGuard(dev_mode=True))
 @app.post("/a2a")
 async def handle_a2a(request: Request):
     # Access verified claims
-    claims = request.state.capiscio_claims
+    agent = request.state.agent       # Full payload dict with claims
+    agent_id = request.state.agent_id # Shortcut to issuer (iss claim)
     
-    caller_id = claims["iss"]
-    issued_at = claims["iat"]
-    
-    return {"message": f"Hello {caller_id}!"}
+    return {"message": f"Hello {agent_id}!"}
 ```
 
 ---
@@ -136,11 +134,11 @@ async def health():
 # A2A endpoint (protected)
 @app.post("/a2a")
 async def handle_a2a(request: Request):
-    claims = request.state.capiscio_claims
+    agent_id = request.state.agent_id  # Issuer from verified claims
     body = await request.json()
     
     # Log the caller
-    print(f"Request from: {claims['iss']}")
+    print(f"Request from: {agent_id}")
     
     # Process the A2A request
     return {
@@ -245,20 +243,20 @@ Test your integration with these examples:
 
     ```json
     {
-      "error": "Invalid signature",
-      "detail": "Missing X-Capiscio-Signature header"
+      "error": "Invalid badge",
+      "detail": "Missing X-Capiscio-Badge header"
     }
     ```
 
-=== "curl (With Signature)"
+=== "curl (With Badge)"
 
     ```bash
-    # Generate signature headers
-    HEADERS=$(capiscio sign-request --body '{"jsonrpc":"2.0","method":"tasks/send","id":"test-1"}')
+    # Generate badge headers using SimpleGuard
+    BADGE=$(capiscio badge issue --self-sign)
     
     curl -X POST http://localhost:8000/a2a \
       -H "Content-Type: application/json" \
-      -H "X-Capiscio-Signature: $HEADERS" \
+      -H "X-Capiscio-Badge: $BADGE" \
       -d '{"jsonrpc":"2.0","method":"tasks/send","id":"test-1"}'
     ```
 

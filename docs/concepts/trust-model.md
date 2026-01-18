@@ -167,24 +167,59 @@ result = verify_badge(
 )
 
 if result.valid:
-    print(f"Agent: {result.claims.agent_id}")
-    print(f"Trust Level: {result.claims.trust_level}")
+    print(f"Agent: {result.claims.sub}")  # Agent DID
+    print(f"Trust Level: {result.claims.level}")  # String: "0" to "4"
 ```
 
 ### Trust Levels (0-4)
 
-Trust levels indicate the validation rigor applied during badge issuance:
+Trust levels indicate the validation rigor applied during badge issuance (RFC-002 §5):
 
 | Level | Name | Validation | Issuer | Use Case |
 |-------|------|------------|--------|----------|
-| **0** | Self-Signed (SS) | None | Agent itself (`did:key`) | Development, testing, demos |
+| **0** | Self-Signed (SS) | None | Agent itself (`did:key`, `iss` = `sub`) | Development, testing, demos |
 | **1** | Registered (REG) | Account verified | CapiscIO CA | Internal agents, early development |
 | **2** | Domain Validated (DV) | DNS TXT or HTTP challenge | CapiscIO CA | Production B2B agents |
 | **3** | Organization Validated (OV) | DV + legal entity verification | CapiscIO CA | High-trust production |
 | **4** | Extended Validated (EV) | OV + manual security audit | CapiscIO CA | Regulated industries |
 
 !!! warning "Level 0 in Production"
-    Self-signed (Level 0) badges are for **development only**. In production, verifiers should reject Level 0 badges by default. Use `--offline` (CLI) for trust store verification, or `accept_self_signed=True` (SDK) to explicitly opt in during development.
+    Self-signed (Level 0) badges are for **development only**. In production, verifiers should reject Level 0 badges by default. Use `--accept-self-signed` (CLI) or `accept_self_signed=True` (SDK) to explicitly opt in during development.
+
+!!! note "Trust Levels are Strings"
+    Per RFC-002 §3, trust levels MUST be treated as strings (`"0"` through `"4"`), not integers. This avoids bugs where `0` might be falsy in some languages.
+
+### Identity Assurance Levels (IAL)
+
+**Separate from Trust Levels**, badges also have an **Identity Assurance Level** that indicates the key binding assurance (RFC-002 §7.2.1):
+
+| IAL | Name | What It Proves |
+|-----|------|----------------|
+| **IAL-0** | Account-Attested | "Account X requested a badge for agent DID Y" |
+| **IAL-1** | Proof of Possession (PoP) | "Requester cryptographically proved they control the private key for DID Y at issuance time" |
+
+The `ial` claim is REQUIRED in all badges. Key points:
+
+- **Level 0 badges are always IAL-0** — Self-signed badges cannot have issuer-verified key binding
+- **Levels 1-4 can be IAL-0 or IAL-1** — IAL-1 requires the PoP protocol (RFC-003)
+- **IAL-1 badges include a `cnf` claim** — This binds the badge to a specific key holder
+
+### Badge Claims (RFC-002 §4.3)
+
+A Trust Badge contains these claims:
+
+| Claim | Required | Description |
+|-------|----------|-------------|
+| `jti` | ✅ | Badge ID (UUID) for revocation and audit |
+| `iss` | ✅ | Issuer identifier (CA URL for levels 1-4, `did:key` for level 0) |
+| `sub` | ✅ | Subject DID (the agent's identity) |
+| `iat` | ✅ | Issued At (Unix timestamp) |
+| `exp` | ✅ | Expiration (Unix timestamp, default 5 minutes) |
+| `ial` | ✅ | Identity Assurance Level (`"0"` or `"1"`) |
+| `key` | ✅ | Agent's public key (JWK) |
+| `vc` | ✅ | Verifiable Credential object containing `credentialSubject.level` |
+| `aud` | ❌ | Audience (array of trust domains where badge is valid) |
+| `cnf` | If IAL-1 | Confirmation key binding (RFC 7800) |
 
 ### DID Methods by Level
 
@@ -193,14 +228,7 @@ Trust levels indicate the validation rigor applied during badge issuance:
 | 0 | `did:key` | Self-describing, derived from public key |
 | 1-4 | `did:web` | Registry or domain-hosted identity |
 
-Trust badges include:
-
-- **Agent DID** — Decentralized identifier for the agent
-- **Trust Level** — 0-4 indicating validation rigor
-- **Issuer** — `did:key` for Level 0, CapiscIO CA for Levels 1-4
-- **Expiration** — When the badge expires (default: 5 minutes per RFC-002)
-
-See [RFC-002: Trust Badge System](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) for full specification details.
+See [RFC-002: Trust Badge Specification](../rfcs/index.md) for complete details, including the PoP protocol (RFC-003).
 
 ## See Also
 
