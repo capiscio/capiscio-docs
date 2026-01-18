@@ -357,16 +357,16 @@ identity = client.mcp.parse_server_identity_jsonrpc(
 
 ## Trust Levels
 
-The `TrustLevel` enum maps to badge trust levels:
+The `TrustLevel` enum maps to badge trust levels (RFC-002 §5):
 
-| Enum Value | Level | Description |
-|------------|-------|-------------|
-| `TRUST_LEVEL_UNSPECIFIED` | - | Not specified |
-| `TRUST_LEVEL_SELF_SIGNED` | 0 | Self-signed (`did:key`) |
-| `TRUST_LEVEL_DV` | 1 | Domain Validated |
-| `TRUST_LEVEL_OV` | 2 | Organization Validated |
-| `TRUST_LEVEL_EV` | 3 | Extended Validated |
-| `TRUST_LEVEL_CV` | 4 | Community Vouched |
+| Enum Value | Level | Name | Description |
+|------------|-------|------|-------------|
+| `TRUST_LEVEL_UNSPECIFIED` | - | - | Not specified |
+| `TRUST_LEVEL_SS` | 0 | Self-Signed (SS) | Self-signed (`did:key`), `iss` = `sub` |
+| `TRUST_LEVEL_REG` | 1 | Registered (REG) | Account registration with CapiscIO CA |
+| `TRUST_LEVEL_DV` | 2 | Domain Validated (DV) | DNS TXT or HTTP challenge |
+| `TRUST_LEVEL_OV` | 3 | Organization Validated (OV) | DV + legal entity verification |
+| `TRUST_LEVEL_EV` | 4 | Extended Validated (EV) | OV + manual security audit |
 
 ---
 

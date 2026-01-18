@@ -324,17 +324,14 @@ class VerifyMode(Enum):
 
 Trust level as defined in RFC-002 §5.
 
-!!! warning "Current SDK Implementation"
-    The SDK badge.py currently defines only LEVEL_1, LEVEL_2, LEVEL_3. The full RFC-002 §5 specification requires levels 0-4. Check for SDK updates that add LEVEL_0 and LEVEL_4.
-
 ```python
 class TrustLevel(Enum):
-    # Full RFC-002 §5 specification:
-    # LEVEL_0 = "0"  # Self-Signed (SS) - Development only (pending SDK update)
-    LEVEL_1 = "1"  # Domain Validated (DV) - Basic verification
-    LEVEL_2 = "2"  # Organization Validated (OV) - Business verification
-    LEVEL_3 = "3"  # Extended Validation (EV) - Rigorous vetting
-    # LEVEL_4 = "4"  # Community Vouched (CV) (pending SDK update)
+    # RFC-002 §5 Trust Levels
+    LEVEL_0 = "0"  # Self-Signed (SS) - Development only
+    LEVEL_1 = "1"  # Registered (REG) - Account registration
+    LEVEL_2 = "2"  # Domain Validated (DV) - DNS/HTTP challenge
+    LEVEL_3 = "3"  # Organization Validated (OV) - Legal entity
+    LEVEL_4 = "4"  # Extended Validated (EV) - Security audit
 ```
 
 | Level | Name | Description |

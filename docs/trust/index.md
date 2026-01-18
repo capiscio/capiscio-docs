@@ -81,16 +81,16 @@ capiscio key gen
 
 No registration needed. You immediately get a `did:key` identity at Trust Level 0.
 
-### Level 1: Domain Validated
+### Level 1: Registered (REG)
 
 ```bash
-# Domain Validated badges require registration with CapiscIO Registry
+# Registered badges require account registration with CapiscIO Registry
 capiscio badge request --did did:web:example.com:agents:myagent --key ./private.jwk --ca https://registry.capisc.io --api-key YOUR_API_KEY
 ```
 
-For production trust, you'll need domain validation.
+For internal agents and early development.
 
-### Level 2: Organization Validated
+### Level 2: Domain Validated (DV)
 
 ```bash
 capiscio badge request --level 2 --domain example.com
