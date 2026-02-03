@@ -131,19 +131,19 @@ else:
 
 <div class="grid cards" markdown>
 
--   [:material-shield-check: **Protect Your Tools**](../../mcp-guard/guides/server-side/)
+-   [:material-shield-check: **Protect Your Tools**](../mcp-guard/guides/server-side.md)
 
     Add `@guard` to your MCP server tools
 
--   [:material-check-decagram: **Verify Servers**](../../mcp-guard/guides/client-side/)
+-   [:material-check-decagram: **Verify Servers**](../mcp-guard/guides/client-side.md)
 
     Implement server verification in your MCP client
 
--   [:material-file-document: **Evidence Logging**](../../mcp-guard/guides/evidence/)
+-   [:material-file-document: **Evidence Logging**](../mcp-guard/guides/evidence.md)
 
     Set up cryptographic audit trails
 
--   [:material-api: **API Reference**](../../reference/sdk-python/mcp/)
+-   [:material-api: **API Reference**](../reference/sdk-python/mcp.md)
 
     Complete MCP Guard API documentation
 
