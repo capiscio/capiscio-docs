@@ -94,7 +94,6 @@ jobs:
         with:
           repository: capiscio/capiscio-mcp-python
           path: capiscio-mcp-python
-          ref: fix/rfc-links  # TODO: Remove after capiscio/capiscio-mcp-python#4 is merged
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
