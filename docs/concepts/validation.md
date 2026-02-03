@@ -87,7 +87,7 @@ If only a domain is provided, CapiscIO will attempt discovery:
   method: 'GET',
   headers: {
     'Accept': 'application/json',
-    'User-Agent': 'capiscio-cli/1.0.0'
+    'User-Agent': 'capiscio/2.0.0'
   },
   timeout: 10000 // configurable
 }
@@ -444,11 +444,11 @@ Version: 0.3.0 (Strictness: progressive)
 - **[Python SDK](../reference/sdk-python/index.md)** - Runtime protection for production agents
 
 !!! tip "Production Deployment"
-    capiscio-cli validates agent cards during development and CI/CD. For runtime protection, use [CapiscIO Python SDK](../reference/sdk-python/index.md).
+  The CapiscIO CLI (`capiscio`) validates agent cards during development and CI/CD. For runtime protection, use [CapiscIO Python SDK](../reference/sdk-python/index.md).
 
 ## Contributing to Validation
 
-See the [GitHub repository](https://github.com/capiscio/capiscio-cli) for information on extending the validation system.
+See the core implementation repository (Go) at https://github.com/capiscio/capiscio-core for information on extending the validation system.
 
 ## Related Documentation
 

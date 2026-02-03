@@ -38,7 +38,7 @@ Start with the documentation for your specific product:
 Report bugs or request features in the relevant repository:
 
 - [Python SDK Issues](https://github.com/capiscio/capiscio-sdk-python/issues){:target="_blank"}
-- [CapiscIO CLI Issues](https://github.com/capiscio/capiscio-cli/issues){:target="_blank"}
+- [CapiscIO CLI Issues](https://github.com/capiscio/capiscio-core/issues){:target="_blank"}
 - [Documentation Issues](https://github.com/capiscio/capiscio-docs/issues){:target="_blank"}
 
 When reporting issues, please include:
@@ -68,8 +68,8 @@ Want to contribute? See our [Contributing Guide](contributing.md) for details on
 
 ### Node.js (CapiscIO CLI)
 
-- **npm**: [capiscio-cli package](https://www.npmjs.com/package/capiscio-cli){:target="_blank"}
-- **Installation**: `npm install -g capiscio-cli`
+- **npm**: [capiscio package](https://www.npmjs.com/package/capiscio){:target="_blank"}
+- **Installation**: `npm install -g capiscio`
 - **Requirements**: Node.js 18+
 
 ## A2A Protocol
@@ -132,7 +132,7 @@ npm config get prefix
 
 **Q: How do I validate agent cards?**
 
-A: Use capiscio-cli:
+A: Use the CapiscIO CLI (`capiscio`):
 ```bash
 capiscio validate path/to/agent-card.json
 ```
@@ -146,7 +146,7 @@ result = validate_message(message_data)
 
 **Q: Where can I find example agent cards?**
 
-A: Check the [CLI repository examples](https://github.com/capiscio/capiscio-cli/tree/main/examples)
+A: Check the [core examples](https://github.com/capiscio/capiscio-core/tree/main/examples)
 
 ### Development Questions
 
@@ -163,7 +163,15 @@ pytest
 
 **CLI**:
 ```bash
-cd capiscio-cli
+cd capiscio-core
+npm install -g capiscio
+capiscio --help
+```
+
+Or for the Node.js wrapper itself:
+
+```bash
+cd capiscio-node
 npm install
 npm test
 ```
