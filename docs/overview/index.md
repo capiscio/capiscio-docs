@@ -137,15 +137,15 @@ Here's how trust flows through a typical interaction:
 
 ## Trust Levels
 
-CapiscIO uses a 5-level trust hierarchy (like SSL certificates):
+CapiscIO uses a 5-level trust hierarchy (RFC-002 §5):
 
 | Level | Name | What's Verified | Use Case |
 |:-----:|------|-----------------|----------|
-| **0** | Self-Signed | Cryptographic identity only | Development, testing |
-| **1** | Registered | Email verification | Personal projects |
-| **2** | Domain Validated | Domain ownership (DNS) | Production APIs |
-| **3** | Org Validated | Legal entity verification | Enterprise |
-| **4** | Extended Validation | Enhanced due diligence | Regulated industries |
+| **0** | Self-Signed (SS) | Cryptographic identity only | Development, testing |
+| **1** | Registered (REG) | Account registration | Internal agents, early dev |
+| **2** | Domain Validated (DV) | Domain ownership (DNS/HTTP) | Production APIs |
+| **3** | Org Validated (OV) | Legal entity verification | Enterprise |
+| **4** | Extended Validated (EV) | OV + manual security audit | Regulated industries |
 
 **The key insight:** Higher levels require more verification but enable more sensitive operations.
 

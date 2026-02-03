@@ -86,7 +86,8 @@ app.add_middleware(CapiscioMiddleware, guard=guard)
 async def handle_a2a(request: Request):
     # Request is already verified when it reaches here
     # The verified claims are available in request.state
-    caller = request.state.capiscio_claims["iss"]
+    caller = request.state.agent_id  # Shortcut to issuer
+    agent_data = request.state.agent  # Full payload with all claims
     return {"message": f"Hello {caller}!"}
 ```
 

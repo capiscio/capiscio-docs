@@ -244,7 +244,7 @@ type CredentialSubject struct {
     // Domain is the security domain of the agent (e.g., "finance.internal").
     Domain string `json:"domain,omitempty"`
 
-    // Level indicates the trust level (e.g., "1" = Domain Validated).
+    // Level indicates the trust level (RFC-002 §5): "0"=SS, "1"=REG, "2"=DV, "3"=OV, "4"=EV.
     Level string `json:"level,omitempty"`
 }
 ```

@@ -25,11 +25,13 @@ result = verify_badge(
 )
 
 if result.valid:
-    print(f"✅ Agent {result.claims.agent_id} verified")
-    print(f"   Trust Level: {result.claims.trust_level}")
+    print(f"✅ Agent {result.claims.subject} verified")  # Agent DID
+    print(f"   Trust Level: {result.claims.trust_level.value}")  # "0" to "4"
     print(f"   Domain: {result.claims.domain}")
+    print(f"   IAL: {result.claims.ial}")  # Identity Assurance Level
 else:
     print(f"❌ Verification failed: {result.error}")
+```
 ```
 
 ---
@@ -214,19 +216,31 @@ token = request_badge_sync(
 
 Parsed badge claims from a Trust Badge token.
 
+!!! warning "SDK vs RFC-002 Implementation Gap"
+    The current SDK `badge.py` dataclass has limited fields. RFC-002 §4.3 specifies additional required claims (`ial`, `key`, `cnf`) that may be added in future SDK versions.
+
 ```python
 @dataclass
 class BadgeClaims:
+    # Currently implemented in SDK v2.3.1:
     jti: str                    # Unique badge identifier (UUID)
-    issuer: str                 # Badge issuer URL (CA)
-    subject: str                # Agent DID (did:web format)
-    issued_at: datetime         # When issued
-    expires_at: datetime        # When expires
-    trust_level: TrustLevel     # Trust level (1=DV, 2=OV, 3=EV)
+    issuer: str                 # Badge issuer URL (CA) - maps to `iss`
+    subject: str                # Agent DID (did:key or did:web) - maps to `sub`
+    issued_at: datetime         # When issued - maps to `iat`
+    expires_at: datetime        # When expires - maps to `exp`
+    trust_level: TrustLevel     # From `vc.credentialSubject.level`
     domain: str                 # Agent's verified domain
     agent_name: str             # Human-readable name
-    audience: List[str]         # Intended audience URLs
+    audience: List[str]         # Intended audience URLs - maps to `aud`
+    
+    # RFC-002 §4.3 required (check for SDK updates):
+    # ial: str                  # Identity Assurance Level ("0" or "1")
+    # key: dict                 # Agent's public key (JWK)
+    # cnf: dict                 # Confirmation claim (required for IAL-1)
 ```
+
+!!! note "RFC-002 §4.3 Required Claims"
+    Per RFC-002 §4.3, these claims are REQUIRED: `jti`, `iss`, `sub`, `iat`, `exp`, `ial`, `key`, `vc`. The `cnf` claim is required only for IAL-1 badges (proof of possession).
 
 **Properties:**
 
@@ -308,20 +322,28 @@ class VerifyMode(Enum):
 
 ### TrustLevel
 
-Trust level as defined in RFC-002.
+Trust level as defined in RFC-002 §5.
 
 ```python
 class TrustLevel(Enum):
-    LEVEL_1 = "1"  # Domain Validated (DV)
-    LEVEL_2 = "2"  # Organization Validated (OV)
-    LEVEL_3 = "3"  # Extended Validation (EV)
+    # RFC-002 §5 Trust Levels
+    LEVEL_0 = "0"  # Self-Signed (SS) - Development only
+    LEVEL_1 = "1"  # Registered (REG) - Account registration
+    LEVEL_2 = "2"  # Domain Validated (DV) - DNS/HTTP challenge
+    LEVEL_3 = "3"  # Organization Validated (OV) - Legal entity
+    LEVEL_4 = "4"  # Extended Validated (EV) - Security audit
 ```
 
 | Level | Name | Description |
 |-------|------|-------------|
-| 1 | Domain Validated (DV) | Basic domain ownership verification |
-| 2 | Organization Validated (OV) | Business identity verification |
-| 3 | Extended Validation (EV) | Rigorous vetting process |
+| 0 | Self-Signed (SS) | Development only, `did:key` issuer, `iss` = `sub` |
+| 1 | Registered (REG) | Account registration with CapiscIO CA |
+| 2 | Domain Validated (DV) | DNS TXT or HTTP challenge, domain ownership |
+| 3 | Organization Validated (OV) | DV + legal entity verification |
+| 4 | Extended Validated (EV) | OV + manual security audit |
+
+!!! warning "Level 0 (Self-Signed)"
+    Level 0 badges are for **development only**. In production, verifiers MUST reject Level 0 badges by default. Use `--accept-self-signed` (CLI) to explicitly opt in during development.
 
 ---
 
@@ -374,10 +396,15 @@ async def verify_badge_middleware(request: Request, call_next):
     if not result.valid:
         raise HTTPException(401, f"Invalid badge: {result.error}")
     
-    # Attach claims to request state
-    request.state.agent_claims = result.claims
+    # Attach claims to request state (matches SDK middleware pattern)
+    request.state.agent = result.claims
+    request.state.agent_id = result.claims.issuer
     return await call_next(request)
 ```
+
+!!! tip "Use Built-in Middleware"
+    For production, consider using the SDK's built-in `CapiscioMiddleware` which handles
+    body integrity verification and proper error responses per RFC-002 §9.1.
 
 ### Trust Level Gate
 
@@ -385,19 +412,26 @@ async def verify_badge_middleware(request: Request, call_next):
 from capiscio_sdk import verify_badge, TrustLevel
 
 def require_trust_level(token: str, min_level: TrustLevel) -> bool:
-    """Require minimum trust level for sensitive operations."""
+    """Require minimum trust level for sensitive operations.
+    
+    RFC-002 §5 Trust Levels:
+    - LEVEL_0: Self-Signed (SS) - development only
+    - LEVEL_1: Registered (REG) - account registration
+    - LEVEL_2: Domain Validated (DV) - DNS/HTTP proof
+    - LEVEL_3: Organization Validated (OV) - legal entity
+    - LEVEL_4: Extended Validated (EV) - security audit
+    """
     result = verify_badge(token)
     
     if not result.valid:
         return False
     
-    # Compare trust levels
-    level_order = {TrustLevel.LEVEL_1: 1, TrustLevel.LEVEL_2: 2, TrustLevel.LEVEL_3: 3}
-    return level_order[result.claims.trust_level] >= level_order[min_level]
+    # TrustLevel enum values are integers 0-4, can compare directly
+    return result.claims.trust_level.value >= min_level.value
 
 # Usage
 if require_trust_level(token, TrustLevel.LEVEL_2):
-    # Allow sensitive operation
+    # Allow sensitive operation (DV or higher)
     pass
 ```
 

@@ -89,7 +89,7 @@ your-project/
     POST /a2a HTTP/1.1
     Host: partner-agent.example.com
     Content-Type: application/json
-    X-Capiscio-Signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImxvY2FsLWRl...
+    X-Capiscio-Badge: eyJhbGciOiJFZERTQSIsImtpZCI6ImxvY2FsLWRl...
     
     {"jsonrpc": "2.0", "method": "hello"}
     ```
@@ -107,11 +107,11 @@ your-project/
     guard = SimpleGuard(dev_mode=True)
     
     # Incoming request data
-    signature = request.headers.get("X-Capiscio-Signature")
+    badge = request.headers.get("X-Capiscio-Badge")
     body = request.body
     
     try:
-        claims = guard.verify_inbound(jws=signature, body=body)
+        claims = guard.verify_inbound(jws=badge, body=body)
         print(f"✓ Valid request from: {claims['iss']}")
         print(f"  Issued at: {claims['iat']}")
         print(f"  Expires: {claims['exp']}")
@@ -183,14 +183,14 @@ guard = SimpleGuard()
 
 @app.post("/a2a")
 async def handle_a2a(request: Request):
-    signature = request.headers.get("X-Capiscio-Signature")
+    badge = request.headers.get("X-Capiscio-Badge")
     body = await request.body()
     
     # Verify the request
     try:
-        claims = guard.verify_inbound(jws=signature, body=body)
+        claims = guard.verify_inbound(jws=badge, body=body)
     except VerificationError:
-        raise HTTPException(401, "Invalid signature")
+        raise HTTPException(401, "Invalid badge")
     
     # Process the request
     data = await request.json()

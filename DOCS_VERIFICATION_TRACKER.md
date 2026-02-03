@@ -270,6 +270,23 @@ capiscio-python/
 - **Updated:** Reference index with server and gRPC links
 - **Fixed:** Removed fabricated `--detailed-scores` flag from scoring docs
 
+### 2025-01-XX Session 6 (Comprehensive Docs Audit - RFC Alignment)
+- **Scope:** Full audit of all docs against RFCs and actual implementations
+- **CRITICAL FIXES:**
+  - **concepts/trust-model.md:** Added IAL documentation (IAL-0 vs IAL-1), complete badge claims per RFC-002 §4.3
+  - **concepts/enforcement.md:** Fixed clock skew (5s → 60s per RFC-002 §8.1), added 10-step verification algorithm
+  - **reference/sdk-python/index.md:** Fixed clock tolerance (5s → 60s), added REVOCATION_CACHE_MAX_STALENESS
+  - **reference/sdk-python/badge.md:** Added Level 0 and 4 to TrustLevel, fixed BadgeClaims to include `ial` and `key`, fixed code examples to use correct claim names
+  - **reference/cli/index.md:** Fixed trust levels (0-4 per RFC-002 §5), clarified Level 0 = Self-Signed
+  - **reference/server/api.md:** Fixed auth docs (Clerk JWT vs X-Capiscio-Registry-Key), fixed `/v1/badges/verify` → `/v1/validate`, fixed `/v1/keys` → `/v1/api-keys`
+  - **reference/wrappers/python.md:** Fixed version (0.3.0 → 2.3.1), fixed BINARY_PATH → get_binary_path()
+  - **reference/wrappers/node.md:** Fixed version (0.3.0 → 2.3.1)
+- **HEADER NAME FIXES (X-Capiscio-Signature → X-Capiscio-Badge per RFC-002 §9.1):**
+  - getting-started/secure/3-guard.md
+  - samples.md  
+  - how-to/integrations/fastapi.md
+- **Total issues fixed:** 25+ CRITICAL and MAJOR issues
+
 ---
 
 ## Next Steps

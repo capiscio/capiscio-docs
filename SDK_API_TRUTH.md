@@ -227,4 +227,4 @@ project_root/
 
 From `simple_guard.py`:
 - `MAX_TOKEN_AGE = 60` seconds
-- `CLOCK_SKEW_LEEWAY = 5` seconds
+- `CLOCK_SKEW_LEEWAY = 60` seconds (per RFC-002 §8.1)

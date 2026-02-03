@@ -29,7 +29,7 @@ from capiscio_sdk import CapiscioSecurityExecutor, SecurityConfig
 
 # Wrap your existing executor
 secured_executor = CapiscioSecurityExecutor(
-    wrapped_executor=my_agent_executor,
+    delegate=my_agent_executor,  # Must implement AgentExecutor interface
     config=SecurityConfig.production()
 )
 

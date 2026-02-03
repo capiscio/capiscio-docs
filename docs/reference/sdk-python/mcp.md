@@ -391,7 +391,7 @@ sensitive_tools = ["execute_shell", "delete_file", "modify_system"]
 if tool_name in sensitive_tools:
     min_level = 3  # Require OV for dangerous tools
 else:
-    min_level = 1  # DV sufficient for normal tools
+    min_level = 2  # DV sufficient for normal tools (Level 2)
 
 result = client.mcp.evaluate_tool_access(
     tool_name=tool_name,

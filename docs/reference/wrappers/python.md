@@ -15,7 +15,7 @@ pip install capiscio
 Or with a specific version:
 
 ```bash
-pip install capiscio==0.3.0
+pip install capiscio==2.3.1
 ```
 
 ---
@@ -134,7 +134,8 @@ pip install capiscio
 On Unix systems, ensure the binary is executable:
 
 ```bash
-chmod +x $(python -c "import capiscio; print(capiscio.BINARY_PATH)")
+# Find and fix binary permissions
+chmod +x $(python -c "from capiscio.manager import get_binary_path, CORE_VERSION; print(get_binary_path(CORE_VERSION))")
 ```
 
 ### Platform Not Supported

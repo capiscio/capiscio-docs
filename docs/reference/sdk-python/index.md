@@ -168,8 +168,9 @@ In `dev_mode=True`, SimpleGuard auto-generates all missing files.
 
 | Constant | Value | Description |
 |----------|-------|-------------|
-| `MAX_TOKEN_AGE` | 60 seconds | Token expiration time |
-| `CLOCK_SKEW_LEEWAY` | 5 seconds | Allowed clock drift |
+| `MAX_TOKEN_AGE` | 300 seconds | Default badge TTL (5 minutes per RFC-002) |
+| `CLOCK_SKEW_LEEWAY` | 60 seconds | Allowed clock drift (RFC-002 §8.1) |
+| `REVOCATION_CACHE_MAX_STALENESS` | 300 seconds | Max cache staleness (RFC-002 §7.5) |
 
 ---
 
