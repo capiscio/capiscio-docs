@@ -186,7 +186,7 @@ capiscio key gen --out-priv private.jwk --out-pub public.jwk
 capiscio key did --in public.jwk
 ```
 
-See the [CLI Reference](../reference/cli.md) for all options.
+See the [CLI Reference](../reference/cli/index.md) for all options.
 
 ---
 
