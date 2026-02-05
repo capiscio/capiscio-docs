@@ -5,7 +5,7 @@ description: Get your agent identity, trust badge, and validation in minutes. Ze
 
 # Getting Started
 
-Get up and running with CapiscIO in minutes. Choose your path based on what you want to accomplish.
+Get up and running with CapiscIO in minutes. **One command** gives your AI agent a cryptographic identity, just like Let's Encrypt did for HTTPS.
 
 ---
 
@@ -17,21 +17,108 @@ npm install -g capiscio       # or: pip install capiscio
 
 ---
 
-## Choose Your Path
+## The Fastest Path: One Command Setup
+
+Get a complete agent identity in **under 60 seconds**:
+
+=== "CLI"
+
+    ```bash
+    # Set your API key (get one free at app.capisc.io)
+    export CAPISCIO_API_KEY=sk_live_...
+    
+    # That's it! One command does everything:
+    capiscio init
+    ```
+
+=== "Python"
+
+    ```python
+    from capiscio_sdk import CapiscIO
+    
+    # One line - handles everything automatically
+    agent = CapiscIO.connect(api_key="sk_live_...")
+    
+    print(agent.did)    # did:key:z6Mk...
+    print(agent.badge)  # Your trust badge
+    ```
+
+=== "Environment Variables"
+
+    ```python
+    # Set CAPISCIO_API_KEY in your environment
+    agent = CapiscIO.from_env()
+    ```
+
+**What happens automatically:**
+
+1. ✅ Ed25519 key pair generated
+2. ✅ `did:key` identity derived (RFC-002 compliant)
+3. ✅ DID registered with CapiscIO registry
+4. ✅ Agent card created with `x-capiscio` extension
+5. ✅ Trust badge requested and stored
+
+---
+
+## Choose Your Setup Path
 
 <div class="grid cards" markdown>
 
--   :material-identifier:{ .lg .middle } **Get Agent Identity**
+-   :material-rocket-launch:{ .lg .middle } **Path 1: Quick Start (Recommended)**
 
     ---
 
-    Generate a DID for your agent in 60 seconds.
+    Just use your API key. We auto-discover your agent.
 
     ```bash
-    capiscio key gen
+    export CAPISCIO_API_KEY=sk_live_...
+    capiscio init
     ```
 
-    [:octicons-arrow-right-24: Identity Guide](../identity/index.md)
+    **Best for:** Getting started fast, single-agent setups, demos.
+
+-   :material-view-dashboard:{ .lg .middle } **Path 2: UI-First**
+
+    ---
+
+    Create your agent in the dashboard first, then initialize.
+
+    ```bash
+    # 1. Create agent at app.capisc.io → get agent ID
+    # 2. Initialize with specific agent
+    capiscio init --agent-id agt_abc123
+    ```
+
+    **Best for:** Teams, production, multiple agents per org.
+
+</div>
+
+---
+
+## What You Get
+
+After running `capiscio init`, your `.capiscio/` directory contains:
+
+```
+.capiscio/
+├── private.jwk      # Ed25519 private key (keep secret!)
+├── public.jwk       # Public key
+├── did.txt          # Your agent's did:key identifier
+└── agent-card.json  # A2A-compliant agent card
+```
+
+Your agent now has:
+
+- **Cryptographic identity** - A globally unique `did:key` that proves who you are
+- **Verifiable credentials** - Sign messages and prove authenticity
+- **Trust badge** - Registered with CapiscIO for discovery and verification
+- **A2A compliance** - Ready to interact with other A2A agents
+
+---
+
+## Choose Your Next Step
+
+<div class="grid cards" markdown>
 
 -   :material-check-decagram:{ .lg .middle } **Validate Your Agent**
 
@@ -47,7 +134,7 @@ npm install -g capiscio       # or: pip install capiscio
 
     ---
 
-    Add cryptographic identity and request verification.
+    Add request signing and verification.
 
     **15 minutes** · Intermediate
 
@@ -87,34 +174,19 @@ npm install -g capiscio       # or: pip install capiscio
 
 ---
 
-## The Fast Path
+## Manual Setup (Advanced)
 
-If you just want to try CapiscIO quickly:
+If you need more control, you can still do things step-by-step:
 
 ```bash
-# 1. Install
-npm install -g capiscio
+# Generate keys only (no server registration)
+capiscio key gen --out-priv private.jwk --out-pub public.jwk
 
-# 2. Create a sample agent card
-cat > agent-card.json << 'EOF'
-{
-  "name": "My Test Agent",
-  "description": "Testing CapiscIO validation",
-  "url": "https://example.com/agent",
-  "version": "1.0.0",
-  "protocolVersion": "0.2.0",
-  "skills": [{ "id": "test", "name": "Test Skill", "description": "A test skill" }]
-}
-EOF
-
-# 3. Validate
-capiscio validate agent-card.json
-
-# 4. Generate identity
-mkdir -p capiscio_keys && cd capiscio_keys && capiscio key gen && cd ..
+# Derive DID from existing key
+capiscio key did --in public.jwk
 ```
 
-**Done!** You have a validated agent card and a cryptographic identity.
+See the [CLI Reference](../reference/cli/index.md) for all options.
 
 ---
 
@@ -122,9 +194,58 @@ mkdir -p capiscio_keys && cd capiscio_keys && capiscio key gen && cd ..
 
 | Path | Requirements |
 |------|--------------|
-| CLI (validate, key gen) | Node.js 18+ or Python 3.10+ |
-| Python SDK (SimpleGuard) | Python 3.10+, FastAPI or similar |
+| CLI (`capiscio init`) | Node.js 18+ or Python 3.10+ |
+| Python SDK (`CapiscIO.connect()`) | Python 3.10+ |
 | CI/CD | GitHub repository |
+
+---
+
+## SDK Quick Reference
+
+=== "Python"
+
+    ```python
+    from capiscio_sdk import CapiscIO
+    
+    # Connect and get full identity
+    agent = CapiscIO.connect(api_key="sk_live_...")
+    
+    # Or from environment
+    agent = CapiscIO.from_env()  # Uses CAPISCIO_API_KEY
+    
+    # Use the agent
+    print(agent.did)           # did:key:z6Mk...
+    print(agent.badge)         # Current trust badge
+    print(agent.status())      # Full status dict
+    
+    # Emit events for observability
+    agent.emit("task_started", {"task_id": "123"})
+    ```
+
+=== "Node.js / TypeScript"
+
+    ```typescript
+    import { CapiscIO } from 'capiscio';
+    
+    // Connect and get full identity
+    const agent = await CapiscIO.connect({ apiKey: 'sk_live_...' });
+    
+    console.log(agent.did);    // did:key:z6Mk...
+    console.log(agent.badge);  // Current trust badge
+    ```
+
+=== "CLI"
+
+    ```bash
+    # Initialize agent identity
+    capiscio init --api-key $CAPISCIO_API_KEY
+    
+    # Or with explicit agent ID
+    capiscio init --agent-id agt_abc123
+    
+    # View your identity
+    cat .capiscio/did.txt
+    ```
 
 ---
 

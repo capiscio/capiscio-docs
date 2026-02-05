@@ -5,7 +5,7 @@ description: Give your AI agent a verifiable, portable identity using W3C DIDs. 
 
 # 🆔 Agent Identity
 
-> **Give your agent a verifiable identity in under 60 seconds.**
+> **Give your agent a verifiable identity in under 60 seconds — just like Let's Encrypt did for HTTPS.**
 
 ## The Problem
 
@@ -20,17 +20,42 @@ AI agents today have an identity crisis:
 
 ---
 
-## The Solution: Decentralized Identifiers (DIDs)
+## The Solution: One Command Setup
 
 CapiscIO gives every agent a **DID** — a globally unique, cryptographically verifiable identifier:
 
 ```
-did:web:registry.capisc.io:agents:weather-bot-prod
-└─────────────────────────────────────────────────┘
+did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK
+└───────────────────────────────────────────────────────────┘
               Your agent's permanent identity
 ```
 
-This DID:
+**Get it with one command:**
+
+=== "CLI"
+
+    ```bash
+    export CAPISCIO_API_KEY=sk_live_...
+    capiscio init
+    ```
+
+=== "Python SDK"
+
+    ```python
+    from capiscio_sdk import CapiscIO
+    
+    agent = CapiscIO.connect(api_key="sk_live_...")
+    print(agent.did)  # did:key:z6Mk...
+    ```
+
+=== "Environment Variables"
+
+    ```python
+    # Set CAPISCIO_API_KEY in your environment
+    agent = CapiscIO.from_env()
+    ```
+
+This identity:
 
 - ✅ **Proves identity** — Cryptographically signed, unforgeable
 - ✅ **Stays with you** — Move providers, keep your identity
@@ -39,47 +64,65 @@ This DID:
 
 ---
 
-## Get Your Agent's Identity in 60 Seconds
+## Choose Your Setup Path
 
-=== "Option 1: Self-Signed (Instant)"
+<div class="grid cards" markdown>
 
-    No registration needed. Generate a `did:key` identity locally:
+-   :material-rocket-launch:{ .lg .middle } **Path 1: Quick Start (Recommended)**
+
+    ---
+
+    Just use your API key. We handle everything.
     
     ```bash
-    mkdir -p capiscio_keys && cd capiscio_keys && capiscio key gen && cd ..
+    export CAPISCIO_API_KEY=sk_live_...
+    capiscio init
     ```
     
-    ```
-    ✅ Generated Ed25519 keypair
-    
-    Your Agent DID: did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK
-    
-    Files created:
-      ./capiscio_keys/private.jwk (keep secret!)
-      ./capiscio_keys/public.jwk
-    ```
-    
-    **Trust Level:** 0 (self-signed) — Great for development and testing.
+    **Best for:** Getting started fast, single-agent setups.
 
-=== "Option 2: Registered (Verified)"
+-   :material-view-dashboard:{ .lg .middle } **Path 2: UI-First**
 
-    Use `did:key` for development and self-signed badges:
+    ---
+
+    Create your agent in the dashboard first.
     
     ```bash
-    capiscio key gen
+    # 1. Create agent at app.capisc.io
+    # 2. Initialize with specific ID
+    capiscio init --agent-id agt_abc123
     ```
     
+    **Best for:** Teams, production, multiple agents.
+
+-   :material-laptop:{ .lg .middle } **Path 3: Local Only**
+
+    ---
+
+    Generate keys without server registration.
+    
+    ```bash
+    capiscio init --output-dir .capiscio
+    # No API key needed
     ```
-    ✅ Keys generated!
     
-    DID: did:key:z6Mk...
-    Private key: private.jwk
-    Public key: public.jwk
-    
-    Next: Use this DID in your agent card.
-    ```
-    
-    **Trust Level:** 0 (self-signed) — Use for development and testing.
+    **Best for:** Offline dev, testing, self-hosted.
+
+</div>
+
+---
+
+## What You Get
+
+After running `capiscio init`, your `.capiscio/` directory contains:
+
+```
+.capiscio/
+├── private.jwk      # Ed25519 private key (0600 permissions - keep secret!)
+├── public.jwk       # Public key for verification
+├── did.txt          # Your agent's did:key identifier
+└── agent-card.json  # A2A-compliant agent card with x-capiscio extension
+```
 
 ---
 
@@ -91,9 +134,9 @@ sequenceDiagram
     participant R as CapiscIO Registry
     participant B as Other Agent
     
-    Note over A: Generate keypair locally
-    A->>R: Register public key
-    R-->>A: did:web:registry.capisc.io:agents:you
+    Note over A: capiscio init generates keypair
+    A->>R: Register DID + public key
+    R-->>A: ✅ Identity registered
     
     Note over A,B: Later, when communicating...
     A->>B: Request + JWS signature
@@ -110,19 +153,19 @@ When someone resolves your DID, they get a **DID Document** containing your publ
 ```json
 {
   "@context": ["https://www.w3.org/ns/did/v1"],
-  "id": "did:web:registry.capisc.io:agents:my-weather-agent",
+  "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
   "verificationMethod": [{
-    "id": "did:web:registry.capisc.io:agents:my-weather-agent#key-1",
+    "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#keys-1",
     "type": "JsonWebKey2020",
-    "controller": "did:web:registry.capisc.io:agents:my-weather-agent",
+    "controller": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
     "publicKeyJwk": {
       "kty": "OKP",
       "crv": "Ed25519",
       "x": "..."
     }
   }],
-  "authentication": ["...#key-1"],
-  "assertionMethod": ["...#key-1"]
+  "authentication": ["...#keys-1"],
+  "assertionMethod": ["...#keys-1"]
 }
 ```
 
@@ -134,17 +177,16 @@ This lets anyone verify signatures from your agent **without trusting a central 
 
 | Method | Example | Trust Level | Best For |
 |--------|---------|-------------|----------|
-| `did:key` | `did:key:z6Mk...` | 0 (self-signed) | Development, testing, demos |
-| `did:web` | `did:web:registry.capisc.io:agents:you` | 1-4 (verified) | Production, enterprise |
-| `did:web` (self-hosted) | `did:web:yourdomain.com:agent` | 1+ | Self-sovereign hosting |
+| `did:key` | `did:key:z6Mk...` | 0-4 (depends on badge) | All use cases |
+| `did:web` | `did:web:yourdomain.com:agent` | 1+ | Self-sovereign hosting |
 
-### When to Use Each
+### Trust Levels
 
 ```
 Development          Production            Enterprise
 ───────────          ──────────            ──────────
-did:key              did:web               did:web
-(instant, local)     (registered)          (with OV/EV badge)
+did:key              did:key               did:key
++ self-signed        + DV badge            + OV/EV badge
      │                    │                      │
      ▼                    ▼                      ▼
 Trust Level 0        Trust Level 1-2       Trust Level 3-4
@@ -152,58 +194,34 @@ Trust Level 0        Trust Level 1-2       Trust Level 3-4
 
 ---
 
-## Add Identity to Your Agent Card
-
-Once you have a DID, add it to your agent card:
-
-```json title="agent-card.json" hl_lines="7-14"
-{
-  "name": "Weather Agent",
-  "description": "Provides weather forecasts",
-  "url": "https://weather.example.com/agent",
-  "version": "1.0.0",
-  "protocolVersion": "0.2.0",
-  "authentication": {
-    "schemes": ["jws"],
-    "credentials": [{
-      "type": "JsonWebKey2020",
-      "id": "did:web:registry.capisc.io:agents:weather#key-1",
-      "publicKeyJwk": { "..." }
-    }]
-  }
-}
-```
-
----
-
-## Developer Experience: Zero Friction
+## Using Your Identity
 
 ### Python SDK
 
 ```python
-from capiscio_sdk import SimpleGuard
+from capiscio_sdk import CapiscIO, secure
 
-# Auto-generates did:key identity in dev mode
-guard = SimpleGuard(dev_mode=True)
+# Get your identity
+agent = CapiscIO.connect(api_key="sk_live_...")
 
-# Or use your registered identity
-guard = SimpleGuard(
-    did="did:web:registry.capisc.io:agents:my-agent",
-    private_key_path="./capiscio_keys/private.pem"
-)
+# Use it to secure your agent
+secured_agent = secure(MyAgentExecutor())
+
+# Emit events with your identity
+agent.emit("task_started", {"task_id": "123"})
 ```
 
 ### CLI
 
 ```bash
+# View your identity
+cat .capiscio/did.txt
+
 # Validate that identity is properly configured
 capiscio validate agent-card.json
 
-# Show identity info
-capiscio identity show
-
 # Resolve any DID
-capiscio identity resolve did:web:registry.capisc.io:agents:some-agent
+capiscio identity resolve did:key:z6Mk...
 ```
 
 ---
@@ -228,7 +246,7 @@ capiscio identity resolve did:web:registry.capisc.io:agents:some-agent
 
     [:octicons-arrow-right-24: Agent Registry](../registry/index.md)
 
--   :material-rocket-launch:{ .lg .middle } **Quick Start**
+-   :material-rocket-launch:{ .lg .middle } **Getting Started**
 
     ---
 
