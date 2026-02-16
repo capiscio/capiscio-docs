@@ -79,6 +79,15 @@ from capiscio_sdk._rpc.client import CapiscioRPCClient
 
     [:octicons-arrow-right-24: Badge API](badge.md)
 
+-   :material-key: **CapiscIO.connect()**
+
+    ---
+
+    "Let's Encrypt" style agent setup. One-liner to get a fully
+    configured agent with DID, keys, and badges.
+
+    [:octicons-arrow-right-24: Connect API](#capiscioconnect)
+
 -   :material-shield-check: **SimpleGuard**
 
     ---

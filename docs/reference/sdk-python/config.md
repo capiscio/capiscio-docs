@@ -57,6 +57,29 @@ Maximum security:
 - Verbose logging
 - No fallbacks
 
+### From Environment Variables
+
+```python
+config = SecurityConfig.from_env()
+```
+
+Reads configuration from environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|--------|
+| `CAPISCIO_REQUIRE_SIGNATURES` | Require badge on requests | `true` |
+| `CAPISCIO_FAIL_MODE` | `block`, `monitor`, or `log` | `block` |
+| `CAPISCIO_MIN_TRUST_LEVEL` | Minimum trust level (0-4) | `0` |
+| `CAPISCIO_RATE_LIMIT_RPM` | Rate limit (requests/min) | `1000` |
+
+**Example `.env` file:**
+
+```bash
+CAPISCIO_REQUIRE_SIGNATURES=true
+CAPISCIO_FAIL_MODE=block
+CAPISCIO_MIN_TRUST_LEVEL=0
+```
+
 ---
 
 ## API Reference
