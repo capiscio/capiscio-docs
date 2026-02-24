@@ -350,7 +350,10 @@ Note: `capiscio` is the CLI, `capiscio-sdk` is the Python SDK.
 
 **Problem:** The Go binary isn't accessible.
 
-**Solution:**
+!!! info "Automatic Download (Python SDK)"
+    As of SDK v2.4.1+, the Python SDK **automatically downloads** the capiscio-core binary if not found. No manual installation needed!
+
+**Solution for manual installation:**
 
 ```bash
 # Verify Go binary exists
@@ -359,6 +362,12 @@ which capiscio-core
 # Or download directly
 curl -L https://github.com/capiscio/capiscio-core/releases/latest/download/capiscio-$(uname -s)-$(uname -m) -o /usr/local/bin/capiscio
 chmod +x /usr/local/bin/capiscio
+```
+
+**Custom binary location:**
+```bash
+# Override automatic detection
+export CAPISCIO_BINARY=/path/to/capiscio-core
 ```
 
 ---
