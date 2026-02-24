@@ -46,6 +46,9 @@ from capiscio_sdk import (
 # Configuration
 from capiscio_sdk import SecurityConfig, DownstreamConfig, UpstreamConfig
 
+# Events & Observability
+from capiscio_sdk.events import EventEmitter
+
 # Errors
 from capiscio_sdk.errors import (
     ConfigurationError,
@@ -105,6 +108,15 @@ from capiscio_sdk._rpc.client import CapiscioRPCClient
     Includes `secure()` and `secure_agent()` decorators.
 
     [:octicons-arrow-right-24: Executor API](executor.md)
+
+-   :material-chart-timeline-variant: **Events**
+
+    ---
+
+    Event emission for agent observability. Includes `EventEmitter`
+    for manual and automatic (middleware) event reporting.
+
+    [:octicons-arrow-right-24: Events API](../../how-to/integrations/fastapi.md#observability-auto-events)
 
 -   :material-alert-circle: **Errors**
 

@@ -201,6 +201,49 @@ async def query_weather(request: Request):
 
 ---
 
+## Observability (Auto-Events)
+
+Enable automatic event emission to get visibility into request patterns, verification outcomes, and latency without adding code to each route.
+
+```python
+from capiscio_sdk.events import EventEmitter
+from capiscio_sdk.integrations.fastapi import CapiscioMiddleware
+
+emitter = EventEmitter(
+    agent_id="your-agent-id",
+    api_key="sk_live_...",
+    registry_url="https://registry.capisc.io"
+)
+
+app.add_middleware(
+    CapiscioMiddleware,
+    guard=guard,
+    emitter=emitter,
+    exclude_paths=["/health", "/.well-known/agent-card.json"]
+)
+```
+
+When an `emitter` is provided, the middleware automatically emits:
+
+| Event | When | Key Fields |
+|-------|------|------------|
+| `request.received` | Every inbound request | `method`, `path` |
+| `verification.success` | Badge verified | `caller_did`, `duration_ms` |
+| `verification.failed` | Badge missing/invalid | `reason`, `duration_ms` |
+| `request.completed` | Response sent | `status_code`, `duration_ms` |
+
+!!! note "Opt-in only"
+    Auto-events are strictly opt-in. Without an `emitter` parameter, the middleware emits nothing. Event data may include request paths and caller identities — the developer must explicitly enable telemetry.
+
+!!! tip "With CapiscIO.connect()"
+    If you're using `CapiscIO.connect()`, pass the agent's emitter directly:
+    ```python
+    agent = CapiscIO.connect(api_key="sk_live_...")
+    app.add_middleware(CapiscioMiddleware, guard=guard, emitter=agent.emitter)
+    ```
+
+---
+
 ## Production Configuration
 
 For production, disable dev_mode. SimpleGuard finds keys via convention:
