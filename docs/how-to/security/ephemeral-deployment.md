@@ -22,16 +22,16 @@ sequenceDiagram
     C->>SDK: connect()
     Note over SDK: No keys on disk
     SDK->>SDK: Generate new keypair
-    SDK->>SDK: Derive new DID
-    SDK->>R: Register DID
-    R-->>SDK: OK
+    SDK->>R: Register public key
+    R-->>SDK: did:web assigned
     Note over SDK: Badge issued to DID-A
     
     C->>C: Container restarts
     C->>SDK: connect()
     Note over SDK: No keys on disk (wiped)
     SDK->>SDK: Generate DIFFERENT keypair
-    SDK->>SDK: Derive DIFFERENT DID
+    SDK->>R: Register DIFFERENT key
+    R-->>SDK: DIFFERENT did:web
     Note over SDK: Old badge invalid!
 ```
 
