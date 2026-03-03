@@ -211,6 +211,7 @@ nav:
           - Trust Badges: how-to/security/badges.md
           - Badge Keeper: how-to/security/badge-keeper.md
           - Security Gateway: how-to/security/gateway-setup.md
+          - Ephemeral Deployment: how-to/security/ephemeral-deployment.md
           - Dev Mode: how-to/security/dev-mode.md
           - Key Rotation: how-to/security/key-rotation.md
           - Trust Store: how-to/security/trust-store.md
