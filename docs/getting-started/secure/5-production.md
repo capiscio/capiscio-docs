@@ -192,6 +192,12 @@ RUN pip install -r requirements.txt
 CMD ["python", "main.py"]
 ```
 
+!!! tip "Using `CapiscIO.connect()` in containers?"
+    If you're using the "Let's Encrypt" style `CapiscIO.connect()` or `MCPServerIdentity.connect()`
+    in Docker, Lambda, or other ephemeral environments, see the
+    [Ephemeral Deployment Guide](../../how-to/security/ephemeral-deployment.md) for
+    environment variable key injection.
+
 ---
 
 ## Production Architecture
