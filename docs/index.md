@@ -90,18 +90,18 @@ Three products that work together to secure the agent economy:
 
     [:octicons-arrow-right-24: CLI Reference](reference/cli/index.md)
 
--   :material-language-python:{ .lg .middle } **CapiscIO SDK**
+-   :material-language-python:{ .lg .middle } **Agent Guard**
 
     ---
 
-    **Runtime security** — Sign requests, verify badges, enforce trust in your code.
+    **Runtime security** — Sign requests, verify badges, enforce trust in your A2A agents.
 
     ```python
     from capiscio_sdk import SimpleGuard
     guard = SimpleGuard(dev_mode=True)
     ```
 
-    [:octicons-arrow-right-24: Python SDK](reference/sdk-python/index.md)
+    [:octicons-arrow-right-24: Agent Guard](reference/sdk-python/index.md)
 
 -   :material-shield-check:{ .lg .middle } **MCP Guard**
 

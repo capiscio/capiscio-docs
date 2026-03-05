@@ -1,11 +1,11 @@
 ---
-title: Python SDK Reference
-description: Complete API reference for capiscio-sdk (auto-generated from source)
+title: Agent Guard — Python SDK Reference
+description: Complete API reference for capiscio-sdk (Agent Guard) — runtime identity and trust enforcement for A2A agents.
 ---
 
-# Python SDK Reference
+# Agent Guard — Python SDK Reference
 
-Complete API reference for the `capiscio-sdk` Python package.
+Complete API reference for the `capiscio-sdk` Python package (Agent Guard).
 
 !!! info "Auto-Generated Documentation"
     This reference is automatically generated from the SDK source code docstrings.
