@@ -239,7 +239,7 @@ nav:
           - CLI Reference: reference/cli/index.md
           - Go API: reference/go-api.md
           - gRPC Services: reference/grpc.md
-      - CapiscIO SDK:
+      - Agent Guard:
           - reference/sdk-python/index.md
           - Badge: reference/sdk-python/badge.md
           - SecurityConfig: reference/sdk-python/config.md
