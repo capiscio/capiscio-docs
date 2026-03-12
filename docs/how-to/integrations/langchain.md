@@ -1,415 +1,301 @@
 ---
 title: LangChain Integration
-description: Secure LangChain agents with CapiscIO
+description: Secure LangChain and LangGraph agents with langchain-capiscio
 ---
 
 # LangChain Integration
 
-Build secure AI agents using LangChain with CapiscIO request signing.
+Add trust enforcement to LangChain agents in 1–3 lines using the
+[`langchain-capiscio`](https://pypi.org/project/langchain-capiscio/) package.
 
 ---
 
 ## Problem
 
-You're building a LangChain-based agent and need to:
+You're building a LangChain or LangGraph agent and need to:
 
-- Expose it as an A2A-compliant endpoint
-- Sign all outgoing tool calls to other agents
-- Verify incoming requests from calling agents
-- Integrate with LangChain's callback system
-
----
-
-## Solution: LangChain + CapiscIO
-
-```python
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool
-from langchain_openai import ChatOpenAI
-from capiscio_sdk.simple_guard import SimpleGuard
-import httpx
-import json
-
-# Initialize CapiscIO guard (uses convention-based key discovery)
-guard = SimpleGuard(dev_mode=True)  # Use dev_mode=False in production
-
-def make_secure_request(url: str, body: dict) -> dict:
-    """Make a signed request to another A2A agent."""
-    body_bytes = json.dumps(body).encode()
-    headers = guard.make_headers({}, body=body_bytes)
-    
-    response = httpx.post(url, json=body, headers=headers)
-    return response.json()
-
-# Create a secure tool
-external_agent_tool = Tool(
-    name="external_agent",
-    description="Call an external A2A agent securely",
-    func=lambda query: make_secure_request(
-        "https://other-agent.example.com/a2a/tasks",
-        {"method": "tasks/send", "params": {"message": query}}
-    )
-)
-
-# Initialize the agent
-llm = ChatOpenAI(model="gpt-4")
-agent = initialize_agent(
-    tools=[external_agent_tool],
-    llm=llm,
-    agent=AgentType.OPENAI_FUNCTIONS
-)
-```
+- Verify incoming caller trust badges before execution
+- Enforce security policies (block / monitor / log)
+- Emit structured audit events to the CapiscIO dashboard
+- Compose trust checks with LangChain's LCEL pipe (`|`) operator
 
 ---
 
-## Full Implementation
-
-### Step 1: Project Setup
+## Install
 
 ```bash
-pip install langchain langchain-openai capiscio-sdk httpx fastapi uvicorn
-capiscio key gen --out capiscio_keys/
-mkdir -p capiscio_keys/trusted/
+pip install langchain-capiscio
 ```
 
-### Step 2: Create the Agent
+This installs `langchain-capiscio` along with `capiscio-sdk` and `langchain-core`.
+
+---
+
+## Quick Start: Zero-Config Guard
+
+Set your API key in the environment and create a guard with **zero arguments**:
+
+```bash
+export CAPISCIO_API_KEY="cap_..."
+```
 
 ```python
-# agent.py
-import json
-from typing import Any
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool, StructuredTool
+from langchain_capiscio import CapiscioGuard
+
+secured = CapiscioGuard() | my_chain
+result = secured.invoke({"input": "Summarize this ticket"})
+```
+
+`CapiscioGuard` reads `CAPISCIO_API_KEY` (and optionally `CAPISCIO_SERVER_URL`,
+`CAPISCIO_AGENT_NAME`, `CAPISCIO_DEV_MODE`) from the environment. Connection
+to the CapiscIO registry happens lazily on first `invoke()`.
+
+---
+
+## Enforcement Modes
+
+```python
+guard = CapiscioGuard(mode="block")    # Fail closed (production default)
+guard = CapiscioGuard(mode="monitor")  # Warn but continue
+guard = CapiscioGuard(mode="log")      # Log only — good for development
+```
+
+| Mode | On missing/invalid badge |
+|------|--------------------------|
+| `block` | Raises `CapiscioTrustError` |
+| `monitor` | Logs warning, adds `capiscio_warnings` to input, continues |
+| `log` | Logs info, adds `capiscio_warnings` to input, continues |
+
+---
+
+## LCEL Pipe Composition
+
+`CapiscioGuard` is a LangChain `Runnable`, so it composes with any chain or
+agent via the `|` operator:
+
+```python
+from langchain_capiscio import CapiscioGuard
+from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
-from langchain.callbacks.base import BaseCallbackHandler
-from capiscio_sdk.simple_guard import SimpleGuard
-import httpx
 
-# Security setup - SimpleGuard uses convention (capiscio_keys/ directory)
-guard = SimpleGuard(dev_mode=True)  # Use dev_mode=False in production
+llm = ChatOpenAI(model="gpt-4o")
+agent = create_react_agent(llm, tools)
 
-class SecureA2AClient:
-    """Client for making secure A2A requests."""
-    
-    def __init__(self, guard: SimpleGuard):
-        self.guard = guard
-        self.client = httpx.Client(timeout=30.0)
-    
-    def call_agent(self, url: str, message: str, task_id: str = None) -> dict:
-        """Send a signed request to another A2A agent."""
-        body = {
-            "jsonrpc": "2.0",
-            "method": "tasks/send",
-            "params": {
-                "message": {
-                    "role": "user",
-                    "parts": [{"type": "text", "text": message}]
-                }
-            },
-            "id": task_id or "1"
-        }
-        
-        body_bytes = json.dumps(body).encode()
-        headers = self.guard.make_headers({}, body=body_bytes)
-        headers["Content-Type"] = "application/json"
-        
-        response = self.client.post(url, content=body_bytes, headers=headers)
-        response.raise_for_status()
-        return response.json()
-
-# Create secure client
-secure_client = SecureA2AClient(guard)
-
-# Define tools that call other agents
-def call_validator_agent(agent_card_url: str) -> str:
-    """Validate an agent card using the validator service."""
-    result = secure_client.call_agent(
-        "https://validator.capiscio.dev/a2a/tasks",
-        f"Validate the agent card at: {agent_card_url}"
-    )
-    return json.dumps(result, indent=2)
-
-def call_analytics_agent(query: str) -> str:
-    """Get analytics data from the analytics agent."""
-    result = secure_client.call_agent(
-        "https://analytics.example.com/a2a/tasks",
-        query
-    )
-    return json.dumps(result, indent=2)
-
-# Create LangChain tools
-tools = [
-    Tool(
-        name="validate_agent",
-        description="Validate an A2A agent card URL. Use when asked to check if an agent is compliant.",
-        func=call_validator_agent
-    ),
-    Tool(
-        name="get_analytics",
-        description="Query the analytics agent for usage data and metrics.",
-        func=call_analytics_agent
-    )
-]
-
-# Initialize the LangChain agent
-llm = ChatOpenAI(model="gpt-4o", temperature=0)
-agent_executor = initialize_agent(
-    tools=tools,
-    llm=llm,
-    agent=AgentType.OPENAI_FUNCTIONS,
-    verbose=True
-)
-
-def run_agent(user_message: str) -> str:
-    """Run the agent with a user message."""
-    return agent_executor.invoke({"input": user_message})["output"]
-```
-
-### Step 3: Expose as A2A Endpoint
-
-```python
-# server.py
-from fastapi import FastAPI, Request, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-import json
-
-from agent import guard, run_agent
-
-app = FastAPI()
-
-class TextPart(BaseModel):
-    type: str = "text"
-    text: str
-
-class Message(BaseModel):
-    role: str
-    parts: List[TextPart]
-
-class TaskParams(BaseModel):
-    message: Message
-
-class JsonRpcRequest(BaseModel):
-    jsonrpc: str = "2.0"
-    method: str
-    params: Optional[Dict[str, Any]] = None
-    id: Optional[str] = None
-
-@app.post("/a2a/tasks")
-async def handle_task(request: Request):
-    # Get raw body for signature verification
-    body = await request.body()
-    
-    # Verify signature
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Missing Authorization header")
-    
-    try:
-        claims = guard.verify_inbound(auth_header[7:], body)
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Verification failed: {e}")
-    
-    # Parse request
-    data = json.loads(body)
-    method = data.get("method")
-    params = data.get("params", {})
-    request_id = data.get("id")
-    
-    if method != "tasks/send":
-        raise HTTPException(status_code=400, detail=f"Unknown method: {method}")
-    
-    # Extract message
-    message = params.get("message", {})
-    parts = message.get("parts", [])
-    text = parts[0].get("text", "") if parts else ""
-    
-    # Run the agent
-    result = run_agent(text)
-    
-    # Build response
-    response_data = {
-        "jsonrpc": "2.0",
-        "result": {
-            "status": "completed",
-            "response": {
-                "role": "assistant",
-                "parts": [{"type": "text", "text": result}]
-            }
-        },
-        "id": request_id
-    }
-    
-    # Sign response
-    response_body = json.dumps(response_data).encode()
-    signature = guard.sign_outbound({}, body=response_body)
-    
-    return Response(
-        content=response_body,
-        media_type="application/json",
-        headers={"X-A2A-Signature": signature}
-    )
-
-@app.get("/.well-known/agent-card.json")
-@app.get("/.well-known/agent-card.json")
-async def agent_card():
-    # Load from agent-card.json (created by SimpleGuard in dev_mode)
-    import json
-    with open("agent-card.json") as f:
-        return json.load(f)
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# Trust check runs before the agent on every invocation
+secured = CapiscioGuard(mode="log") | agent
+result = secured.invoke({"input": "What's 42 * 17?"})
 ```
 
 ---
 
-## Custom Callback Handler
+## Configuration
 
-Log all secure agent-to-agent calls:
+### Environment variables (zero-config)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CAPISCIO_API_KEY` | Registry API key (**required** if not passed explicitly) | — |
+| `CAPISCIO_SERVER_URL` | Registry URL override | `https://registry.capisc.io` |
+| `CAPISCIO_AGENT_NAME` | Agent name for registration | — |
+| `CAPISCIO_DEV_MODE` | Enable dev mode (`true` / `1` / `yes`) | `false` |
+
+### Explicit parameters
 
 ```python
-from langchain.callbacks.base import BaseCallbackHandler
-from typing import Any, Dict, List
-import logging
+guard = CapiscioGuard(
+    mode="block",
+    api_key="cap_...",
+    name="my-agent",
+    server_url="https://dev.registry.capisc.io",
+)
+```
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("a2a")
+### `from_env()` class method
 
-class A2ACallbackHandler(BaseCallbackHandler):
-    """Log A2A interactions."""
-    
-    def on_tool_start(
-        self,
-        serialized: Dict[str, Any],
-        input_str: str,
-        **kwargs
-    ):
-        tool_name = serialized.get("name", "unknown")
-        logger.info(f"🔧 Tool call: {tool_name}")
-        logger.info(f"   Input: {input_str[:100]}...")
-    
-    def on_tool_end(self, output: str, **kwargs):
-        logger.info(f"✅ Tool response: {output[:100]}...")
-    
-    def on_tool_error(self, error: Exception, **kwargs):
-        logger.error(f"❌ Tool error: {error}")
+Mirrors `CapiscIO.from_env()` and `MCPServerIdentity.from_env()`:
 
-# Use the callback
-agent_executor = initialize_agent(
-    tools=tools,
-    llm=llm,
-    agent=AgentType.OPENAI_FUNCTIONS,
-    callbacks=[A2ACallbackHandler()],
-    verbose=True
+```python
+guard = CapiscioGuard.from_env(mode="log")
+```
+
+### Extra connection options via `connect_kwargs`
+
+Pass additional keyword arguments through to `CapiscIO.connect()`:
+
+```python
+guard = CapiscioGuard(
+    mode="log",
+    connect_kwargs={
+        "dev_mode": True,
+        "keys_dir": "capiscio_keys/",
+        "agent_card": agent_card_dict,
+    },
+)
+```
+
+Priority: explicit constructor args > `connect_kwargs` > env vars > SDK defaults.
+
+---
+
+## Callback Handler: Audit Events
+
+`CapiscioCallbackHandler` wires LangChain lifecycle callbacks to the CapiscIO
+EventEmitter for dashboard visibility and audit trails:
+
+```python
+from langchain_capiscio import CapiscioCallbackHandler
+
+handler = CapiscioCallbackHandler(emitter=my_event_emitter)
+result = chain.invoke(
+    {"input": "..."},
+    config={"callbacks": [handler]},
+)
+```
+
+Events emitted:
+
+| Event | Trigger |
+|-------|---------|
+| `task_started` | Chain starts |
+| `task_completed` | Chain finishes successfully |
+| `task_failed` | Chain or tool raises an exception |
+| `tool_call` | Tool invocation begins |
+| `tool_result` | Tool invocation completes |
+
+---
+
+## LangGraph Nodes
+
+### Runnable as node
+
+```python
+from langchain_capiscio import CapiscioGuard
+
+graph.add_node("verify", CapiscioGuard())
+graph.add_edge("verify", "agent")
+```
+
+### Decorator
+
+```python
+from langchain_capiscio import capiscio_guard
+
+@capiscio_guard(mode="block")
+def call_external_agent(state: dict) -> dict:
+    ...
+```
+
+Works with both sync and async functions.
+
+---
+
+## Badge Token Extraction
+
+`CapiscioGuard` extracts the caller's badge JWT from (in priority order):
+
+1. **Context variable** — set by A2A server perimeter middleware
+2. **RunnableConfig** — `config={"configurable": {"capiscio_badge": token}}`
+3. **Input dict** — `{"capiscio_badge": token, ...}`
+
+For A2A endpoints, set context at the HTTP boundary:
+
+```python
+from langchain_capiscio import CapiscioRequestContext, set_capiscio_context
+
+set_capiscio_context(CapiscioRequestContext(
+    badge_token=badge_jwt,
+    caller_did="did:web:caller.example.com",
+))
+```
+
+---
+
+## Full Example: A2A Agent with Trust + Events
+
+```python
+from langchain_capiscio import CapiscioGuard, CapiscioCallbackHandler
+from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent
+
+# 1. Guard — zero-config, reads CAPISCIO_API_KEY from env
+guard = CapiscioGuard(mode="log")
+
+# 2. Agent
+llm = ChatOpenAI(model="gpt-4o")
+agent = create_react_agent(llm, tools=[...])
+
+# 3. Compose — guard verifies trust before agent runs
+secured = guard | agent
+
+# 4. Callbacks — audit events to CapiscIO dashboard
+handler = CapiscioCallbackHandler(identity=guard.identity)
+
+result = secured.invoke(
+    {"input": "Validate the agent at https://example.com"},
+    config={"callbacks": [handler]},
 )
 ```
 
 ---
 
-## Async Support
+## Tool-Level Enforcement
+
+For fine-grained control, wrap individual tools:
 
 ```python
-import asyncio
-import httpx
-from langchain.tools import Tool
+from langchain_capiscio import CapiscioTool
 
-class AsyncSecureA2AClient:
-    """Async client for A2A requests."""
-    
-    def __init__(self, guard: SimpleGuard):
-        self.guard = guard
-        self.client = httpx.AsyncClient(timeout=30.0)
-    
-    async def call_agent(self, url: str, message: str) -> dict:
-        body = {
-            "jsonrpc": "2.0",
-            "method": "tasks/send",
-            "params": {
-                "message": {
-                    "role": "user",
-                    "parts": [{"type": "text", "text": message}]
-                }
-            },
-            "id": "1"
-        }
-        
-        body_bytes = json.dumps(body).encode()
-        headers = self.guard.make_headers({}, body=body_bytes)
-        headers["Content-Type"] = "application/json"
-        
-        response = await self.client.post(url, content=body_bytes, headers=headers)
-        return response.json()
-
-# For async tools, use asyncio.run() wrapper or async agent
-async_client = AsyncSecureA2AClient(guard)
-
-def call_agent_sync(url: str, message: str) -> str:
-    """Sync wrapper for async client."""
-    result = asyncio.run(async_client.call_agent(url, message))
-    return json.dumps(result)
+secured_tool = CapiscioTool(
+    my_dangerous_tool,
+    mode="block",
+    identity=guard.identity,
+)
 ```
 
 ---
 
-## Multi-Agent Orchestration
+## API Reference
+
+### `CapiscioGuard`
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `mode` | `str` | `"block"` | `"block"` \| `"monitor"` \| `"log"` |
+| `api_key` | `str \| None` | `None` | Falls back to `CAPISCIO_API_KEY` env |
+| `name` | `str \| None` | `None` | Falls back to `CAPISCIO_AGENT_NAME` env |
+| `server_url` | `str \| None` | `None` | Falls back to `CAPISCIO_SERVER_URL` env |
+| `connect_kwargs` | `dict \| None` | `None` | Extra kwargs for `CapiscIO.connect()` |
+| `identity` | `AgentIdentity \| None` | `None` | Pre-existing identity (skips connect) |
+
+**Methods:** `invoke()`, `ainvoke()`, `from_env()`
+
+### `CapiscioCallbackHandler`
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `emitter` | `EventEmitter \| None` | Event emitter instance |
+| `identity` | `AgentIdentity \| None` | Used to obtain emitter if none provided |
+
+### `@capiscio_guard`
 
 ```python
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool
-
-# Define multiple agent endpoints
-AGENTS = {
-    "validator": "https://validator.capiscio.dev/a2a/tasks",
-    "summarizer": "https://summarizer.example.com/a2a/tasks",
-    "translator": "https://translator.example.com/a2a/tasks",
-}
-
-def create_agent_tool(name: str, url: str, description: str) -> Tool:
-    """Factory for creating secure agent tools."""
-    
-    def call_fn(message: str) -> str:
-        result = secure_client.call_agent(url, message)
-        return json.dumps(result, indent=2)
-    
-    return Tool(
-        name=f"call_{name}",
-        description=description,
-        func=call_fn
-    )
-
-# Create tools for each agent
-tools = [
-    create_agent_tool(
-        "validator",
-        AGENTS["validator"],
-        "Validate A2A agent cards for compliance"
-    ),
-    create_agent_tool(
-        "summarizer",
-        AGENTS["summarizer"],
-        "Summarize long documents or conversations"
-    ),
-    create_agent_tool(
-        "translator",
-        AGENTS["translator"],
-        "Translate text between languages"
-    ),
-]
-
-# The LLM decides which agents to call
-orchestrator = initialize_agent(
-    tools=tools,
-    llm=ChatOpenAI(model="gpt-4o"),
-    agent=AgentType.OPENAI_FUNCTIONS
-)
+@capiscio_guard(mode="block", identity=None, config=None, api_key=None)
+def my_node(state: dict) -> dict: ...
 ```
+
+### `CapiscioTool`
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `tool` | `Tool` | LangChain tool to wrap |
+| `mode` | `str` | Enforcement mode |
+| `identity` | `AgentIdentity \| None` | Pre-existing identity |
 
 ---
 
 ## See Also
 
-- [FastAPI Integration](fastapi.md) — FastAPI setup details
-- [Sign Outbound Requests](../security/sign-outbound.md) — Signing details
-- [Security Guide](../../getting-started/secure/1-intro.md) — Full security setup
+- [Security Guide](../../getting-started/secure/1-intro.md) — Full CapiscIO security setup
+- [Sign Outbound Requests](../security/sign-outbound.md) — Request signing details
+- [Ephemeral Deployment](../security/ephemeral-deployment.md) — `from_env()` patterns for CI/CD
+- [FastAPI Integration](fastapi.md) — FastAPI middleware setup
