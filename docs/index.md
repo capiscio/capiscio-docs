@@ -4,9 +4,6 @@ description: Verifiable identity and trust for the Agent-to-Agent (A2A) Protocol
 keywords: A2A protocol, AI agent identity, DID, decentralized identifier, agent trust, trust badges, agent registry
 og:image: https://docs.capisc.io/assets/social-card-home.png
 canonical_url: https://docs.capisc.io/
-hide:
-  - navigation
-  - toc
 ---
 
 <style>
@@ -71,58 +68,6 @@ Like Let's Encrypt revolutionized HTTPS, CapiscIO brings verifiable identity and
 
 ---
 
-## The CapiscIO Stack
-
-Three products that work together to secure the agent economy:
-
-<div class="grid cards" markdown>
-
--   :material-console:{ .lg .middle } **CapiscIO Core**
-
-    ---
-
-    **CLI & validation engine** — Validate agent cards, generate keys, issue badges.
-
-    ```bash
-    pip install capiscio  # or npm install -g capiscio
-    capiscio validate agent-card.json
-    ```
-
-    [:octicons-arrow-right-24: CLI Reference](reference/cli/index.md)
-
--   :material-language-python:{ .lg .middle } **Agent Guard**
-
-    ---
-
-    **Runtime security** — Sign requests, verify badges, enforce trust in your A2A agents.
-
-    ```python
-    from capiscio_sdk import SimpleGuard
-    guard = SimpleGuard(dev_mode=True)
-    ```
-
-    [:octicons-arrow-right-24: Agent Guard](reference/sdk-python/index.md)
-
--   :material-shield-check:{ .lg .middle } **MCP Guard**
-
-    ---
-
-    **Tool authorization** — Protect MCP tools with trust-level requirements.
-
-    ```python
-    @guard(min_trust_level=2)
-    async def read_database(query: str):
-        pass
-    ```
-
-    [:octicons-arrow-right-24: MCP Guard](mcp-guard/index.md)
-
-</div>
-
-[:octicons-arrow-right-24: See how these fit together](overview/index.md)
-
----
-
 ## Developers Love CapiscIO
 
 Every feature works in **three commands or less**.
@@ -160,38 +105,6 @@ Every feature works in **three commands or less**.
     async def write_file(path: str, content: str):
         pass  # Enterprise agents only
     ```
-
----
-
-## Quick Links
-
-<div class="grid cards" markdown>
-
--   [:material-rocket-launch: **Getting Started**](getting-started/index.md)
-
-    Step-by-step tutorials to get up and running
-
--   [:material-book-open: **Concepts**](concepts/index.md)
-
-    Understand DIDs, trust badges, and the trust model
-
--   [:material-clipboard-list: **How-To Guides**](how-to/index.md)
-
-    Task-focused recipes for common scenarios
-
--   [:material-api: **API Reference**](reference/index.md)
-
-    Complete CLI, SDK, and server API documentation
-
--   [:material-file-document: **RFCs**](rfcs/index.md)
-
-    Protocol specifications and standards
-
--   [:material-help-circle: **Troubleshooting**](troubleshooting.md)
-
-    Common issues and solutions
-
-</div>
 
 ---
 

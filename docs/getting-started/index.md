@@ -60,41 +60,6 @@ Get a complete agent identity in **under 60 seconds**:
 
 ---
 
-## Choose Your Setup Path
-
-<div class="grid cards" markdown>
-
--   :material-rocket-launch:{ .lg .middle } **Path 1: Quick Start (Recommended)**
-
-    ---
-
-    Just use your API key. We auto-discover your agent.
-
-    ```bash
-    export CAPISCIO_API_KEY=sk_live_...
-    capiscio init
-    ```
-
-    **Best for:** Getting started fast, single-agent setups, demos.
-
--   :material-view-dashboard:{ .lg .middle } **Path 2: UI-First**
-
-    ---
-
-    Create your agent in the dashboard first, then initialize.
-
-    ```bash
-    # 1. Create agent at app.capisc.io → get agent ID
-    # 2. Initialize with specific agent
-    capiscio init --agent-id agt_abc123
-    ```
-
-    **Best for:** Teams, production, multiple agents per org.
-
-</div>
-
----
-
 ## What You Get
 
 After running `capiscio init`, your `.capiscio/` directory contains:

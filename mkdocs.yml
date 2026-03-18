@@ -183,6 +183,7 @@ nav:
           - getting-started/cicd/4-comments.md
           - getting-started/cicd/5-matrix.md
       - Complete Workflow: getting-started/complete-workflow.md
+      - Sample Files: samples.md
 
   - Concepts:
       - concepts/index.md
@@ -230,8 +231,6 @@ nav:
           - Pre-commit Hook: how-to/cicd/pre-commit.md
           - GitLab CI: how-to/cicd/gitlab-ci.md
           - Jenkins: how-to/cicd/jenkins.md
-
-  - Samples: samples.md
 
   - Reference:
       - reference/index.md

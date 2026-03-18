@@ -312,37 +312,6 @@ Revoked badges are rejected immediately. The short TTL (5 minutes) also limits e
 
 ---
 
-## Developer Experience
-
-### Attach Badge to Requests (Automatic)
-
-```python
-from capiscio_sdk import SimpleGuard
-
-guard = SimpleGuard(badge_path="./capiscio_keys/badge.jwt")
-
-# Badge automatically attached to outbound requests
-async with guard.client() as client:
-    response = await client.post(
-        "https://other-agent.com/task",
-        json={"task": "weather"}
-    )
-```
-
-### Verify Inbound Badge (Automatic)
-
-```python
-@app.post("/task")
-@guard.protect  # Verifies badge automatically
-async def handle_task(request: A2ARequest):
-    # request.sender_trust_level available
-    if request.sender_trust_level >= 2:
-        return process_sensitive_task(request)
-    return {"error": "Insufficient trust level"}
-```
-
----
-
 ## Next Steps
 
 <div class="grid cards" markdown>
