@@ -62,53 +62,7 @@ This identity:
 - ✅ **Works everywhere** — W3C standard, interoperable
 - ✅ **Scales trust** — Link to organizational verification
 
----
-
-## Choose Your Setup Path
-
-<div class="grid cards" markdown>
-
--   :material-rocket-launch:{ .lg .middle } **Path 1: Quick Start (Recommended)**
-
-    ---
-
-    Just use your API key. We handle everything.
-    
-    ```bash
-    export CAPISCIO_API_KEY=sk_live_...
-    capiscio init
-    ```
-    
-    **Best for:** Getting started fast, single-agent setups.
-
--   :material-view-dashboard:{ .lg .middle } **Path 2: UI-First**
-
-    ---
-
-    Create your agent in the dashboard first.
-    
-    ```bash
-    # 1. Create agent at app.capisc.io
-    # 2. Initialize with specific ID
-    capiscio init --agent-id agt_abc123
-    ```
-    
-    **Best for:** Teams, production, multiple agents.
-
--   :material-laptop:{ .lg .middle } **Path 3: Local Only**
-
-    ---
-
-    Generate keys without server registration.
-    
-    ```bash
-    capiscio init --output-dir .capiscio
-    # No API key needed
-    ```
-    
-    **Best for:** Offline dev, testing, self-hosted.
-
-</div>
+[:octicons-arrow-right-24: Full setup instructions](../getting-started/index.md)
 
 ---
 
@@ -190,35 +144,6 @@ did:key              did:key               did:key
      │                    │                      │
      ▼                    ▼                      ▼
 Trust Level 0        Trust Level 1-2       Trust Level 3-4
-```
-
----
-
-## Using Your Identity
-
-### Python SDK
-
-```python
-from capiscio_sdk import CapiscIO, secure
-
-# Get your identity
-agent = CapiscIO.connect(api_key="sk_live_...")
-
-# Use it to secure your agent
-secured_agent = secure(MyAgentExecutor())
-
-# Emit events with your identity
-agent.emit("task_started", {"task_id": "123"})
-```
-
-### CLI
-
-```bash
-# View your identity
-cat .capiscio/did.txt
-
-# Validate that identity is properly configured
-capiscio validate agent-card.json
 ```
 
 ---

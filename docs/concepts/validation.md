@@ -263,43 +263,6 @@ Each skill in the `skills` array must have:
 - Registry submission
 - Compliance verification
 
-### Conservative Mode
-
-=== "Command"
-
-    ```bash
-    capiscio validate agent.json --conservative
-    ```
-
-=== "Output"
-
-    ```ansi
-    ✅ BASIC VALIDATION PASSED
-    
-    Mode: Conservative (minimal)
-    
-    ┌───────────────────────────────────────┐
-    │  Score: 60/100                        │
-    │  Checks: 5 passed, 0 failed           │
-    └───────────────────────────────────────┘
-
-    ✓ Basic schema structure valid
-    ✓ Required fields present
-    
-    ℹ️  Skipped: endpoint testing, security checks
-    ```
-
-**Characteristics:**
-- Minimal validation requirements
-- Basic schema structure checking
-- Optional endpoint testing
-- Permissive security requirements
-
-**Use Cases:**
-- Early development
-- Legacy agent support
-- Basic structure validation
-
 ## Advanced Feature Detection
 
 ### Legacy Endpoint Handling
