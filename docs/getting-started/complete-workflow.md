@@ -152,14 +152,10 @@ Update your `agent-card.json` to include the public key:
 For local development, run capiscio-server with Docker:
 
 !!! note "Enterprise License Required"
-    Access to the capiscio-server repository requires an enterprise license. [Contact Sales](mailto:sales@capisc.io) for access.
+    The CapiscIO server is distributed as a **closed-source binary** or **Docker container** to licensed enterprise customers. [Contact Sales](mailto:sales@capisc.io) for access.
 
 ```bash
-# Clone the server repo (enterprise customers only)
-git clone https://github.com/capiscio/capiscio-server
-cd capiscio-server
-
-# Start with Docker Compose
+# Start with Docker Compose (using provided compose file)
 docker-compose up -d
 ```
 

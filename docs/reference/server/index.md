@@ -174,20 +174,16 @@ Trust level is specified in badge requests:
 ### Local Development
 
 !!! note "Enterprise License Required"
-    Access to the capiscio-server repository requires an enterprise license. [Contact Sales](mailto:sales@capisc.io) for access.
+    The CapiscIO server is distributed as a **closed-source binary** (or Docker container) to licensed enterprise customers. [Contact Sales](mailto:sales@capisc.io) for access.
 
 ```bash
-# Clone the repo (enterprise customers only)
-git clone https://github.com/capiscio/capiscio-server
-cd capiscio-server
+# Option 1: Docker (recommended)
+docker run -d -p 8080:8080 \
+  -e DATABASE_URL=postgres://user:pass@localhost/capiscio \
+  registry.capisc.io/capiscio-server:latest
 
-# Start PostgreSQL
-docker-compose up -d db
-
-# Run the server
-./run_dev.sh
-# or
-make run
+# Option 2: Binary
+./capiscio-server
 ```
 
 The server starts at `http://localhost:8080`.

@@ -11,7 +11,6 @@ Deploy capiscio-server in production or development environments.
 
 ## Prerequisites
 
-- **Go 1.23+** (for building from source)
 - **PostgreSQL 15+** (database)
 - **Docker** (recommended for deployment)
 
@@ -255,21 +254,14 @@ spec:
 
 ---
 
-## Building from Source
+## Running the Binary
 
 !!! note "Enterprise License Required"
-    Access to the capiscio-server repository requires an enterprise license. [Contact Sales](mailto:sales@capisc.io) for access.
+    The CapiscIO server is distributed as a **closed-source binary** or **Docker container** to licensed enterprise customers. Source code is not shipped. [Contact Sales](mailto:sales@capisc.io) for access.
 
 ```bash
-# Clone repository (enterprise customers only)
-git clone https://github.com/capiscio/capiscio-server
-cd capiscio-server
-
-# Build
-make build
-
-# Run
-./bin/server
+# Run the server binary directly
+./capiscio-server
 ```
 
 ---
