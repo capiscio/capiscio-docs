@@ -1,11 +1,5 @@
 # Badge Certificate Authority
 
-<!--
-  VERIFIED: 2025-12-18
-  Source: capiscio-server/internal/ca/ca.go
-  Updated: Added RFC-003 PoP protocol documentation
--->
-
 The capiscio-server includes a built-in Certificate Authority (CA) for issuing trust badges with two identity assurance levels.
 
 ---

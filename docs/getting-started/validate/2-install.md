@@ -25,7 +25,7 @@ The CapiscIO CLI is available for Node.js and Python. Choose your preferred plat
 
     Expected output:
     ```
-    capiscio/2.5.0 (darwin-arm64)
+    capiscio/{{ capiscio_version }} (darwin-arm64)
     ```
 
 === "pip (Python)"
@@ -42,7 +42,7 @@ The CapiscIO CLI is available for Node.js and Python. Choose your preferred plat
 
     Expected output:
     ```
-    capiscio/2.5.0 (darwin-arm64)
+    capiscio/{{ capiscio_version }} (darwin-arm64)
     ```
 
 === "Go (Direct)"
@@ -142,7 +142,7 @@ cat > agent-card.json << 'EOF'
   "description": "A sample A2A agent for learning CapiscIO",
   "url": "https://example.com/agent",
   "version": "1.0.0",
-  "protocolVersion": "0.3.0",
+  "protocolVersion": "{{ protocol_version }}",
   "provider": {
     "organization": "My Company"
   },

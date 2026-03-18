@@ -21,11 +21,13 @@ config = SecurityConfig.production()
 config = SecurityConfig.strict()
 
 # Custom configuration
+from capiscio_sdk.config import DownstreamConfig, UpstreamConfig
+
 config = SecurityConfig(
-    validate_inbound=True,
-    validate_outbound=True,
-    require_signature=True,
-    log_level="INFO"
+    downstream=DownstreamConfig(require_signatures=True),
+    upstream=UpstreamConfig(validate_agent_cards=True),
+    strict_mode=True,
+    fail_mode="block",
 )
 ```
 
