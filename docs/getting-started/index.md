@@ -182,8 +182,8 @@ If you need more control, you can still do things step-by-step:
 # Generate keys only (no server registration)
 capiscio key gen --out-priv private.jwk --out-pub public.jwk
 
-# Derive DID from existing key
-capiscio key did --in public.jwk
+# Show DID derived from generated key
+capiscio key gen --show-did
 ```
 
 See the [CLI Reference](../reference/cli/index.md) for all options.

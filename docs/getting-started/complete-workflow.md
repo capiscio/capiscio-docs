@@ -1,8 +1,7 @@
 # End-to-End Tutorial
 
 <!-- 
-  VERIFIED: 2025-12-11
-  Based on: capiscio-core, capiscio-server, capiscio-sdk-python source code
+  Source: capiscio-core, capiscio-server, capiscio-sdk-python source code
 -->
 
 This tutorial walks through the complete CapiscIO workflow: from creating an A2A agent to deploying it with trust badge enforcement.
@@ -31,7 +30,7 @@ pip install capiscio
 npm install -g capiscio
 
 # Verify installation
-capiscio version
+capiscio --version
 ```
 
 ---
@@ -184,7 +183,7 @@ curl -X POST http://localhost:8080/v1/api-keys \
 Save the returned API key securely:
 
 ```bash
-export CAPISCIO_API_KEY="cpsc_live_xxx"
+export CAPISCIO_API_KEY="sk_live_xxx"
 ```
 
 ### 3.4 Register Your Agent
@@ -260,7 +259,7 @@ Badges expire quickly (5 minutes by default). Use the badge keeper daemon:
 
     ```bash
     capiscio badge keep \
-      --ca-url "http://localhost:8080" \
+      --ca "http://localhost:8080" \
       --agent-id "$AGENT_ID" \
       --api-key "$CAPISCIO_API_KEY" \
       --domain "my-agent.example.com" \
@@ -364,17 +363,18 @@ For simpler deployments, use the SDK middleware instead of the gateway:
 
 ```python
 from fastapi import FastAPI
-from capiscio_sdk import CapiscioMiddleware, SecurityConfig
+from capiscio_sdk import SimpleGuard, SecurityConfig
+from capiscio_sdk.integrations.fastapi import CapiscioMiddleware
 
 app = FastAPI()
+
+guard = SimpleGuard()
 
 # Add badge verification middleware
 app.add_middleware(
     CapiscioMiddleware,
-    config=SecurityConfig.production(
-        trusted_issuers=["https://registry.capisc.io"],
-        min_trust_level=2,
-    ),
+    guard=guard,
+    config=SecurityConfig.production(),
 )
 
 @app.post("/task")

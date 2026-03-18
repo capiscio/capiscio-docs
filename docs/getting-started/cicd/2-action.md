@@ -68,7 +68,7 @@ cat > agent-card.json << 'EOF'
   "description": "A sample A2A agent",
   "url": "https://example.com/agent",
   "version": "1.0.0",
-  "protocolVersion": "0.2.0",
+  "protocolVersion": "0.3.0",
   "provider": {
     "organization": "My Company"
   },
@@ -101,7 +101,7 @@ When the action runs, you'll see output like:
 ```
 ✅ A2A AGENT VALIDATION PASSED
 Score: 75/100
-Version: 0.2.0
+Version: 0.3.0
 Agent passed with warnings
 
 ISSUES FOUND:

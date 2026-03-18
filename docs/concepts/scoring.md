@@ -80,57 +80,50 @@ Each dimension has its own detailed breakdown, rating enum, and independent scor
 
 ### Scoring Breakdown
 
-The compliance score uses a **60/20/15/5 weighting** across four categories:
+The compliance score uses a **penalty-based model** starting at 100 points. Each violation deducts a fixed penalty:
 
-#### Core Fields (60 points)
+#### Core Fields
 
-Checks for presence of all 9 required A2A v0.3.0 fields:
+Checks for presence of all required A2A fields:
 
-| Field | Points | Purpose |
-|-------|--------|---------|
-| `protocolVersion` | 6.67 | Declares A2A version (e.g., "0.3.0") |
-| `name` | 6.67 | Agent display name |
-| `description` | 6.67 | Agent description |
-| `url` | 6.67 | Agent base URL |
-| `version` | 6.67 | Agent semantic version |
-| `capabilities` | 6.67 | Supported capabilities |
-| `defaultInputModes` | 6.67 | Accepted MIME types |
-| `defaultOutputModes` | 6.67 | Response MIME types |
-| `skills` | 6.67 | Available skills array |
+| Violation | Penalty | Example |
+|-----------|---------|---------|
+| Missing critical field | -20 | No `url` or `name` |
+| Missing important field | -15 | No `protocolVersion` |
+| Missing recommended field | -10 | No `capabilities` |
+| Missing optional field | -5 | No `provider` |
 
-**Penalty:** Each missing field costs 6.67 points.
-
-#### Skills Quality (20 points)
+#### Skills Quality
 
 Evaluates the quality of the skills array:
 
-- **Skills present** (10 points) - At least one skill defined
-- **Required fields** (5 points) - All skills have `id`, `name`, `description`
-- **Tags present** (5 points) - All skills have at least one tag
+| Violation | Penalty |
+|-----------|---------|
+| No skills defined | -10 |
+| Missing required skill fields (`id`, `name`, `description`) | -2 per skill |
+| Skills without tags | -1 per skill |
 
-**Penalties:**
-- -2 points per skill missing required fields
-- -1 point per skill without tags
+#### Format Compliance
 
-#### Format Compliance (15 points)
+Validates proper formatting:
 
-Validates proper formatting across the agent card:
+| Violation | Penalty |
+|-----------|---------|
+| Invalid MIME types | -10 |
+| Invalid URL format | -5 |
+| Invalid semver | -5 |
+| Invalid protocol version | -5 |
+| Invalid transport | -2 |
 
-- **Valid semver** (3 points) - `version` follows semantic versioning (e.g., `1.0.0`)
-- **Valid protocol version** (3 points) - `protocolVersion` is `0.3.0`
-- **Valid URL** (3 points) - `url` is a proper HTTPS URL
-- **Valid transports** (3 points) - Transport protocols are `JSONRPC`, `GRPC`, or `HTTP+JSON`
-- **Valid MIME types** (3 points) - Input/output modes are valid MIME types
+#### Data Quality
 
-**Special penalty:** -10 points for invalid MIME types (security risk)
+Checks for data integrity:
 
-#### Data Quality (5 points)
-
-Checks for data integrity and security:
-
-- **No duplicate skill IDs** (2 points) - Each skill has a unique identifier
-- **Field lengths valid** (2 points) - Names, descriptions within reasonable limits
-- **No SSRF risks** (1 point) - URLs don't point to internal/private networks
+| Violation | Penalty |
+|-----------|---------|
+| Duplicate skill IDs | -2 |
+| Field length violations | -2 |
+| SSRF-risk URLs | -1 |
 
 ### Rating Levels
 
@@ -152,64 +145,32 @@ Checks for data integrity and security:
 
 ---
 
-## 🔐 Dimension 2: Trust (100 points + multiplier)
+## 🔐 Dimension 2: Trust (100 points)
 
 **What it measures:** How trustworthy and secure is this agent? Can users verify its authenticity?
 
-**Why it matters:** Trust is critical for adoption. Without signatures, users can't verify your agent's identity. Security claims without proof get penalized.
+**Why it matters:** Trust is critical for adoption. Without signatures, users can't verify your agent's identity.
 
-### The Trust Confidence Multiplier 🔑
+### Scoring Model
 
-**Revolutionary concept:** The presence and validity of cryptographic signatures affects ALL trust claims via a confidence multiplier:
+Trust scoring uses a **discrete assignment model** based on the agent card's signature state:
 
-- **✅ Valid JWS signature**: `1.0x` multiplier (full trust)
-- **⚪ No signature**: `0.6x` multiplier (unverified claims)
-- **❌ Invalid signature**: `0.4x` multiplier (active distrust)
+| Signature State | Score | Description |
+|----------------|-------|-------------|
+| Valid signature from trusted issuer | **100** | Fully verified |
+| Valid signature, no trusted issuers configured | **80** | Signature valid but no issuer list |
+| Valid signature, issuer not in trusted list | **60** | Signature valid but issuer unknown |
+| No signature | **20** | Unverified claims |
+| Invalid signature | **0** | Active red flag |
 
-**Why this matters:** An agent claiming strong security without signatures gets reduced trust. This prevents "trust washing" where agents make security claims they can't prove.
+The signature state is the dominant factor. Additional agent card metadata (provider info, security schemes, documentation URLs) contributes to the validation report details but the trust score is primarily driven by signature validity.
 
-### Scoring Breakdown
+### What Affects Trust
 
-The trust score uses a **40/25/20/15 weighting** across four categories:
-
-#### Signatures (40 points + confidence key)
-
-The foundation of trust:
-
-- **Valid signature present** (30 points) - JWS signature verified
-- **Multiple signatures** (+3 points) - Redundant verification
-- **Comprehensive coverage** (+4 points) - Signature covers all critical fields
-- **Recent signature** (+3 points) - Signed within last 90 days
-
-**Penalties:**
-- **Invalid signature** (-15 points + 0.4x multiplier) - Worse than no signature!
-- **Expired signature** (-10 points + 0.6x multiplier)
-
-#### Provider Information (25 points)
-
-Who is behind this agent?
-
-- **Organization specified** (10 points) - `provider.organization` present
-- **Provider URL** (10 points) - `provider.url` present and uses HTTPS
-- **URL reachable** (+5 bonus) - Provider website responds *(requires live testing)*
-
-#### Security Practices (20 points)
-
-How secure is the implementation?
-
-- **HTTPS-only endpoints** (10 points) - All URLs use HTTPS
-- **Security schemes declared** (5 points) - `securitySchemes` defined in agent card
-- **Strong authentication** (5 points) - OAuth2, OpenID Connect, or similar
-
-**Penalty:** -10 points for any HTTP URLs (major security risk)
-
-#### Documentation (15 points)
-
-Transparency and user support:
-
-- **Documentation URL** (5 points) - `documentationUrl` provided
-- **Terms of Service** (5 points) - `termsOfServiceUrl` provided
-- **Privacy Policy** (5 points) - `privacyPolicyUrl` provided
+- **Cryptographic signatures** — JWS-signed agent cards receive significantly higher scores
+- **Trusted issuers** — Configuring a trusted issuer list and matching against it yields the highest score
+- **HTTPS-only endpoints** — HTTP URLs are flagged as security risks
+- **Provider information** — Organization and URL presence improves trust indicators
 
 ### Rating Levels
 
@@ -221,23 +182,12 @@ Transparency and user support:
 | 20-39 | **Low Trust** | Minimal security indicators |
 | <20 | **Untrusted** | Security red flags present |
 
-### Example: Confidence Multiplier in Action
-
-**Scenario:** Agent card claims strong security (OAuth2, HTTPS-only, security schemes) = 40 raw points
-
-- **With valid signature**: `40 × 1.0 = 40 points` ✅ (Claims verified)
-- **Without signature**: `40 × 0.6 = 24 points` ⚠️ (Unverified claims)
-- **Invalid signature**: `40 × 0.4 = 16 points` ❌ (Active red flag)
-
-The same security features are worth **167% more** with a valid signature!
-
 ### Common Issues
 
-- ❌ No cryptographic signatures (reduces trust by 40%)
-- ❌ Missing provider information
-- ❌ No documentation or privacy policy URLs
-- ❌ Using HTTP instead of HTTPS
-- ❌ No security schemes declared
+- ❌ No cryptographic signatures (score drops to 20)
+- ❌ Invalid signature (score drops to 0)
+- ❌ Using HTTP instead of HTTPS (flagged in validation report)
+- ❌ Missing provider information (noted in trust details)
 
 ---
 
@@ -494,7 +444,7 @@ The old `result.score` property still exists but returns `compliance.total` and 
     Yes. If live testing is not performed, `availability.total` is `None` and `availability.rating` is `AvailabilityRating.NOT_TESTED`.
 
 ??? question "Why does my trust score seem low?"
-    If you have security features but no signature, the 0.6x confidence multiplier reduces your score by 40%. Add JWS signatures to achieve full trust potential.
+    Without a valid cryptographic signature, the trust score is capped at 20. Adding JWS signatures is the single most impactful change for trust scores. If your signature is valid but you see 60, your issuer may not be in the verifier's trusted issuer list.
 
 ??? question "What if I only care about one dimension?"
     You can ignore the others, but we recommend considering all three. An agent with perfect compliance but zero trust is still a security risk.
