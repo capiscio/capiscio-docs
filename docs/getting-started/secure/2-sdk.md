@@ -23,7 +23,7 @@ python -c "import capiscio_sdk; print(capiscio_sdk.__version__)"
 
 Expected output:
 ```
-0.2.0
+2.5.0
 ```
 
 ---
@@ -56,7 +56,7 @@ async def get_agent_card():
         "description": "An A2A agent with CapiscIO security",
         "url": "http://localhost:8000",
         "version": "1.0.0",
-        "protocolVersion": "0.2.0",
+        "protocolVersion": "0.3.0",
         "provider": {
             "organization": "My Company"
         },
@@ -124,7 +124,7 @@ async def get_agent_card():
         "description": "An A2A agent with CapiscIO security",
         "url": "http://localhost:8000",
         "version": "1.0.0",
-        "protocolVersion": "0.2.0",
+        "protocolVersion": "0.3.0",
         "provider": {"organization": "My Company"},
         "capabilities": {"streaming": False, "pushNotifications": False},
         "public_keys": [

@@ -1,7 +1,6 @@
 # capiscio-server Reference
 
 <!-- 
-  VERIFIED: 2025-12-11
   Source: capiscio-server/internal/api/, capiscio-server/docs/swagger.json
 -->
 
@@ -11,7 +10,7 @@ The **capiscio-server** is a commercial backend API server that powers the Capis
     capiscio-server is a commercial product available to enterprise customers. [Contact Sales](mailto:sales@capisc.io) for licensing options.
 
 !!! info "Version"
-    Current version: **v0.1.0** (pre-release)
+    Current version: **v2.5.0**
 
 ## Overview
 

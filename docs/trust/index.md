@@ -84,8 +84,11 @@ No registration needed. You immediately get a `did:key` identity at Trust Level 
 ### Level 1: Registered (REG)
 
 ```bash
-# Registered badges require account registration with CapiscIO Registry
-capiscio badge request --did did:web:example.com:agents:myagent --key ./private.jwk --ca https://registry.capisc.io --api-key YOUR_API_KEY
+# Registered badges require an API key and agent identity
+capiscio badge request \
+  --did did:web:example.com:agents:myagent \
+  --key ./private.jwk \
+  --api-key "$CAPISCIO_API_KEY"
 ```
 
 For internal agents and early development.
@@ -93,7 +96,11 @@ For internal agents and early development.
 ### Level 2: Domain Validated (DV)
 
 ```bash
-capiscio badge request --level 2 --domain example.com
+# Start DV challenge for your domain
+capiscio badge dv create \
+  --domain example.com \
+  --challenge-type dns-01 \
+  --key ./private.jwk
 ```
 
 CapiscIO will ask you to:
@@ -113,16 +120,7 @@ Saved to: ./capiscio_keys/badge.jwt
 
 ### Levels 3-4: Organization/Extended Validation
 
-These require manual review. Start the process:
-
-```bash
-capiscio badge request --level 3
-```
-
-You'll be guided through:
-- Business registration documents
-- Domain ownership proof
-- Legal entity verification
+These require manual review. Contact CapiscIO to start the process.
 
 ---
 
@@ -210,39 +208,51 @@ sequenceDiagram
 ### In Your Agent (Python SDK)
 
 ```python
-from capiscio_sdk import SimpleGuard
+from capiscio_sdk import verify_badge, TrustLevel
 
-# Require at least Level 2 for production
-guard = SimpleGuard(
-    min_trust_level=2,
-    badge_path="./capiscio_keys/badge.jwt"
+# Verify incoming badge and check trust level
+result = verify_badge(
+    token,
+    trusted_issuers=["https://registry.capisc.io"],
 )
 
-# Requests from Level 0-1 agents will be rejected
+if result.valid:
+    level = int(result.claims.trust_level.value)
+    if level < 2:
+        # Reject agents below Level 2 for production
+        raise HTTPException(403, "Insufficient trust level")
 ```
 
 ### In the CLI
 
 ```bash
-# Validate and check trust level
-capiscio validate agent-card.json --min-trust-level 2
-
 # Verify a specific badge
 capiscio badge verify ./badge.jwt
+
+# Verify and accept self-signed badges (development only)
+capiscio badge verify ./badge.jwt --accept-self-signed
 ```
 
 ### Trust Level Policies
 
-Define different requirements for different operations:
+Implement different requirements for different operations:
 
 ```python
-guard = SimpleGuard(
-    trust_policies={
+from capiscio_sdk import verify_badge
+
+def check_access(token: str, operation: str) -> bool:
+    """Enforce trust level policies per operation."""
+    result = verify_badge(token, trusted_issuers=["https://registry.capisc.io"])
+    if not result.valid:
+        return False
+    
+    level = int(result.claims.trust_level.value)
+    policies = {
         "read": 0,      # Anyone can read
         "write": 2,     # Domain-validated for writes
         "admin": 3,     # Org-validated for admin
     }
-)
+    return level >= policies.get(operation, 4)
 ```
 
 ---

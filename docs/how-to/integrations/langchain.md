@@ -63,8 +63,12 @@ guard = CapiscioGuard(mode="log")      # Log only — good for development
 | Mode | On missing/invalid badge |
 |------|--------------------------|
 | `block` | Raises `CapiscioTrustError` |
-| `monitor` | Logs warning, adds `capiscio_warnings` to input, continues |
-| `log` | Logs info, adds `capiscio_warnings` to input, continues |
+| `monitor` | Logs warning, sets `verified=False` and `warnings` in `CapiscioRequestContext`, continues |
+| `log` | Logs info, sets `verified=False` and `warnings` in `CapiscioRequestContext`, continues |
+
+In all modes the guard is a **pure passthrough** — it returns the input unchanged.
+Verification metadata is stored in the `CapiscioRequestContext` context variable,
+not in the output.
 
 ---
 
@@ -206,6 +210,17 @@ set_capiscio_context(CapiscioRequestContext(
     badge_token=badge_jwt,
     caller_did="did:web:caller.example.com",
 ))
+```
+
+After guard execution, read the verification result from the same context:
+
+```python
+from langchain_capiscio import get_capiscio_context
+
+ctx = get_capiscio_context()
+ctx.verified   # True if badge was valid
+ctx.claims     # Decoded badge claims dict
+ctx.warnings   # List of warning strings (monitor/log modes), or None
 ```
 
 ---

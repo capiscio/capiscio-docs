@@ -52,6 +52,8 @@ def verify_badge(
     skip_revocation_check: bool = False,
     skip_agent_status_check: bool = False,
     public_key_jwk: Optional[str] = None,
+    fail_open: bool = False,
+    stale_threshold_seconds: int = 300,
     options: Optional[VerifyOptions] = None,
 ) -> VerifyResult
 ```
@@ -67,6 +69,8 @@ def verify_badge(
 | `skip_revocation_check` | `bool` | Skip revocation check (testing only) |
 | `skip_agent_status_check` | `bool` | Skip agent status check (testing only) |
 | `public_key_jwk` | `str` | Override public key for offline verification |
+| `fail_open` | `bool` | If `True`, treat verification errors as valid (use with caution) |
+| `stale_threshold_seconds` | `int` | Max staleness for cached revocation data (default: 300) |
 | `options` | `VerifyOptions` | Alternative to individual parameters |
 
 **Returns:** `VerifyResult` with validation status and claims.
@@ -216,13 +220,9 @@ token = request_badge_sync(
 
 Parsed badge claims from a Trust Badge token.
 
-!!! warning "SDK vs RFC-002 Implementation Gap"
-    The current SDK `badge.py` dataclass has limited fields. RFC-002 §4.3 specifies additional required claims (`ial`, `key`, `cnf`) that may be added in future SDK versions.
-
 ```python
 @dataclass
 class BadgeClaims:
-    # Currently implemented in SDK v2.3.1:
     jti: str                    # Unique badge identifier (UUID)
     issuer: str                 # Badge issuer URL (CA) - maps to `iss`
     subject: str                # Agent DID (did:key or did:web) - maps to `sub`
@@ -230,17 +230,11 @@ class BadgeClaims:
     expires_at: datetime        # When expires - maps to `exp`
     trust_level: TrustLevel     # From `vc.credentialSubject.level`
     domain: str                 # Agent's verified domain
-    agent_name: str             # Human-readable name
-    audience: List[str]         # Intended audience URLs - maps to `aud`
-    
-    # RFC-002 §4.3 required (check for SDK updates):
-    # ial: str                  # Identity Assurance Level ("0" or "1")
-    # key: dict                 # Agent's public key (JWK)
-    # cnf: dict                 # Confirmation claim (required for IAL-1)
+    agent_name: str = ""        # Human-readable name
+    audience: List[str] = []    # Intended audience URLs - maps to `aud`
+    ial: str = "0"              # Identity Assurance Level ("0" or "1", per RFC-002)
+    raw_claims: Optional[dict] = None  # Original decoded claims dict
 ```
-
-!!! note "RFC-002 §4.3 Required Claims"
-    Per RFC-002 §4.3, these claims are REQUIRED: `jti`, `iss`, `sub`, `iat`, `exp`, `ial`, `key`, `vc`. The `cnf` claim is required only for IAL-1 badges (proof of possession).
 
 **Properties:**
 
@@ -249,6 +243,8 @@ class BadgeClaims:
 | `agent_id` | `str` | Extracted agent ID from subject DID |
 | `is_expired` | `bool` | Whether badge has expired |
 | `is_not_yet_valid` | `bool` | Whether badge is not yet valid |
+| `has_key_binding` | `bool` | Whether badge has a confirmation key (IAL-1) |
+| `confirmation_key` | `Optional[dict]` | The confirmation key JWK, if present |
 
 **Methods:**
 
@@ -289,6 +285,8 @@ class VerifyOptions:
     skip_revocation_check: bool = False
     skip_agent_status_check: bool = False
     public_key_jwk: Optional[str] = None
+    fail_open: bool = False
+    stale_threshold_seconds: int = 300
 ```
 
 **Example:**
@@ -426,8 +424,8 @@ def require_trust_level(token: str, min_level: TrustLevel) -> bool:
     if not result.valid:
         return False
     
-    # TrustLevel enum values are integers 0-4, can compare directly
-    return result.claims.trust_level.value >= min_level.value
+    # TrustLevel enum values are strings "0"-"4", compare as integers
+    return int(result.claims.trust_level.value) >= int(min_level.value)
 
 # Usage
 if require_trust_level(token, TrustLevel.LEVEL_2):

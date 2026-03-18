@@ -15,7 +15,7 @@ pip install capiscio
 Or with a specific version:
 
 ```bash
-pip install capiscio==2.3.1
+pip install capiscio==2.5.0
 ```
 
 ---

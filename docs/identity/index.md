@@ -219,9 +219,6 @@ cat .capiscio/did.txt
 
 # Validate that identity is properly configured
 capiscio validate agent-card.json
-
-# Resolve any DID
-capiscio identity resolve did:key:z6Mk...
 ```
 
 ---

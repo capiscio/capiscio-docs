@@ -137,16 +137,20 @@ Every feature works in **three commands or less**.
 === "Sign Requests"
 
     ```python
-    from capiscio_sdk import sign_request
-    signed = sign_request(request, badge)
+    from capiscio_sdk import SimpleGuard
+
+    guard = SimpleGuard()
+    headers = guard.make_headers({"sub": agent_did})
     ```
 
-=== "Protect APIs"
+=== "Verify Badges"
 
     ```python
-    @guard.protect(min_trust_level=2)
-    async def handle_task(request):
-        pass  # Only trusted agents reach here
+    from capiscio_sdk import verify_badge
+
+    result = verify_badge(token, trusted_issuers=["https://registry.capisc.io"])
+    if result.valid:
+        print(f"Trusted: {result.claims.subject}")
     ```
 
 === "Guard MCP Tools"

@@ -36,11 +36,11 @@ capiscio validate agent-card.json
 # ✅ Score: 95/100 (A+)
 
 # Generate cryptographic keys
-capiscio key gen --did did:key
+capiscio key gen --show-did
 # ✅ did:key:z6Mk...
 
 # Issue a trust badge
-capiscio badge issue --level 0 --self-sign
+capiscio badge issue --self-sign
 # ✅ Badge written to badge.jwt
 ```
 
@@ -60,25 +60,20 @@ capiscio badge issue --level 0 --self-sign
 **What it does:** Runtime security enforcement for your agent.
 
 ```python
-from capiscio_sdk import SimpleGuard, sign_request, verify_request
+from capiscio_sdk import SimpleGuard, verify_badge
 
-# 1. Protect your endpoints
-guard = SimpleGuard(min_trust_level=2)
+# 1. Sign outbound requests
+guard = SimpleGuard()
+headers = guard.make_headers({"sub": agent_did})
 
-@app.post("/task")
-@guard.protect
-async def handle_task(request):
-    # Only Level 2+ agents reach here
-    caller = guard.get_caller_identity(request)
-    return await process_task(request)
-
-# 2. Sign your outbound requests
-signed = await sign_request(request, badge=my_badge)
-
-# 3. Verify incoming requests
-result = await verify_request(request)
-if result.trust_level >= 2:
-    allow_access()
+# 2. Verify incoming badges
+result = verify_badge(
+    token,
+    trusted_issuers=["https://registry.capisc.io"],
+)
+if result.valid:
+    print(f"Verified: {result.claims.subject}")
+    print(f"Trust Level: {result.claims.trust_level.value}")
 ```
 
 **Use cases:**
@@ -130,8 +125,8 @@ Here's how trust flows through a typical interaction:
 |:----:|--------------|------|
 | **1** | Generate DID and cryptographic keypair | `capiscio key gen` |
 | **2** | Registry issues trust badge (Level 0-4) | `capiscio badge issue` |
-| **3** | Sign outbound requests with badge | `sign_request()` |
-| **4** | Verify signature and enforce trust level | `@guard.protect` |
+| **3** | Sign outbound requests with badge | `guard.sign_outbound()` |
+| **4** | Verify incoming badge and check trust level | `verify_badge()` |
 
 ---
 
@@ -150,17 +145,19 @@ CapiscIO uses a 5-level trust hierarchy (RFC-002 §5):
 **The key insight:** Higher levels require more verification but enable more sensitive operations.
 
 ```python
-# Development: Accept any cryptographic identity
-@guard.protect(min_trust_level=0)
-async def public_endpoint(): ...
+from capiscio_sdk import verify_badge, TrustLevel
 
-# Production: Require verified domain
-@guard.protect(min_trust_level=2)
-async def internal_api(): ...
+# Verify a badge and check trust level
+result = verify_badge(token, trusted_issuers=["https://registry.capisc.io"])
 
-# Enterprise: Require verified organization
-@guard.protect(min_trust_level=3)
-async def financial_operation(): ...
+if result.valid:
+    level = int(result.claims.trust_level.value)
+    if level >= 2:
+        # Domain-verified agent — allow production access
+        pass
+    elif level >= 3:
+        # Org-verified agent — allow enterprise operations
+        pass
 ```
 
 ---
@@ -184,7 +181,7 @@ Depending on your use case:
 
     ```python
     from capiscio_sdk import SimpleGuard
-    guard = SimpleGuard(min_trust_level=2)
+    guard = SimpleGuard()
     ```
 
 === "Protect MCP Tools"

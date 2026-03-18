@@ -1,7 +1,6 @@
 # API Reference
 
 <!-- 
-  VERIFIED: 2025-12-11
   Source: capiscio-server/docs/swagger.json
 -->
 

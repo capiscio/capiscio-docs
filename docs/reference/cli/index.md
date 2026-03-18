@@ -1,9 +1,7 @@
 # CLI Reference
 
 <!-- 
-  VERIFIED: 2025-12-26
   Source: capiscio-core/cmd/capiscio/*.go
-  All flags verified against actual CLI --help output.
 -->
 
 The `capiscio` CLI provides commands for validating Agent Cards, managing cryptographic keys, issuing trust badges, and running the security gateway.
@@ -343,7 +341,7 @@ capiscio badge request [flags]
 | `--ca` | `string` | `https://registry.capisc.io` | Certificate Authority URL |
 | `--api-key` | `string` | *(none)* | API key for CA authentication |
 | `--out` | `string` | *(stdout)* | Output file path for the badge |
-| `--ttl` | `duration` | `5m` | Requested badge TTL |
+| `--ttl` | `int` | `300` | Requested badge TTL in seconds |
 | `--audience` | `string` | *(none)* | Audience restriction (comma-separated URLs) |
 
 ### Examples
@@ -355,12 +353,12 @@ capiscio badge request \
   --key ./private.jwk \
   --api-key "$CAPISCIO_API_KEY"
 
-# Request badge with specific TTL and audience
+# Request badge with specific TTL (seconds) and audience
 capiscio badge request \
   --did "did:web:example.com:agents:my-agent" \
   --key ./private.jwk \
   --api-key "$CAPISCIO_API_KEY" \
-  --ttl 10m \
+  --ttl 600 \
   --audience "https://api.example.com"
 
 # Save badge to file
@@ -409,10 +407,10 @@ capiscio badge dv create [flags]
 
 | Flag | Type | Description |
 |------|------|-------------|
-| `--domain` | `string` | Domain to validate |
-| `--method` | `string` | Validation method: `dns` or `http` |
+| `--domain` | `string` | Domain to validate (required) |
+| `--challenge-type` | `string` | Challenge type: `http-01` or `dns-01` (default: `http-01`) |
+| `--key` | `string` | Path to private key file (JWK, required) |
 | `--ca` | `string` | CA URL (default: https://registry.capisc.io) |
-| `--api-key` | `string` | API key for authentication |
 
 **Example:**
 
@@ -420,8 +418,8 @@ capiscio badge dv create [flags]
 # Start DNS-based DV challenge
 capiscio badge dv create \
   --domain example.com \
-  --method dns \
-  --api-key "$CAPISCIO_API_KEY"
+  --challenge-type dns-01 \
+  --key ./private.jwk
 
 # Output: Challenge created
 # DNS TXT Record: _capiscio-challenge.example.com
@@ -433,20 +431,20 @@ capiscio badge dv create \
 Check the status of a pending DV challenge.
 
 ```bash
-capiscio badge dv status [challenge-id] [flags]
+capiscio badge dv status [flags]
 ```
 
 **Flags:**
 
 | Flag | Type | Description |
 |------|------|-------------|
+| `--order-id` | `string` | DV order ID (UUID, required) |
 | `--ca` | `string` | CA URL |
-| `--api-key` | `string` | API key for authentication |
 
 **Example:**
 
 ```bash
-capiscio badge dv status ch_abc123 --api-key "$CAPISCIO_API_KEY"
+capiscio badge dv status --order-id ch_abc123
 
 # Output: 
 # Status: pending
@@ -461,25 +459,23 @@ capiscio badge dv status ch_abc123 --api-key "$CAPISCIO_API_KEY"
 Complete the DV process after placing the challenge record. The CA will verify the challenge and issue a Level 2 badge.
 
 ```bash
-capiscio badge dv finalize [challenge-id] [flags]
+capiscio badge dv finalize [flags]
 ```
 
 **Flags:**
 
 | Flag | Type | Description |
 |------|------|-------------|
+| `--order-id` | `string` | DV order ID (UUID, required) |
 | `--ca` | `string` | CA URL |
-| `--api-key` | `string` | API key for authentication |
-| `--key` | `string` | Private key for badge signing |
 | `--out` | `string` | Output file for badge |
 
 **Example:**
 
 ```bash
 # After placing DNS TXT record, finalize the challenge
-capiscio badge dv finalize ch_abc123 \
-  --api-key "$CAPISCIO_API_KEY" \
-  --key ./private.jwk \
+capiscio badge dv finalize \
+  --order-id ch_abc123 \
   --out ./dv-badge.jwt
 
 # Output:
@@ -491,11 +487,11 @@ capiscio badge dv finalize ch_abc123 \
 ### DV Workflow
 
 ```
-1. Create challenge:    capiscio badge dv create --domain example.com --method dns
+1. Create challenge:    capiscio badge dv create --domain example.com --challenge-type dns-01 --key ./private.jwk
 2. Add DNS TXT record:  _capiscio-challenge.example.com → <challenge-token>
 3. Wait for DNS propagation (usually 1-5 minutes)
-4. Check status:        capiscio badge dv status <challenge-id>
-5. Finalize:           capiscio badge dv finalize <challenge-id> --key ./private.jwk
+4. Check status:        capiscio badge dv status --order-id <order-id>
+5. Finalize:           capiscio badge dv finalize --order-id <order-id>
 ```
 
 ---
