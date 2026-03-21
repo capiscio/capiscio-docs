@@ -216,6 +216,7 @@ nav:
           - Verify Inbound: how-to/security/verify-inbound.md
           - Trust Badges: how-to/security/badges.md
           - Badge Keeper: how-to/security/badge-keeper.md
+          - Policy Enforcement: how-to/security/policy-enforcement.md
           - Security Gateway: how-to/security/gateway-setup.md
           - Ephemeral Deployment: how-to/security/ephemeral-deployment.md
           - Dev Mode: how-to/security/dev-mode.md

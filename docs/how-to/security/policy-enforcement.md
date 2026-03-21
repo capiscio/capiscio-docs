@@ -86,7 +86,7 @@ export CAPISCIO_ENFORCEMENT_MODE=EM-STRICT
 
 When the embedded PDP's policy bundle hasn't been rebuilt within the staleness threshold:
 
-| Mode | Behaviour |
+| Mode | Behavior |
 |------|-----------|
 | `EM-OBSERVE` | Request proceeds; `bundle_stale` annotation in telemetry |
 | `EM-GUARD` | Request proceeds; `bundle_stale` annotation in telemetry |
@@ -113,7 +113,7 @@ This requires `X-Capiscio-Registry-Key` authentication and the API key must belo
 
 ## Option B: External PDP
 
-Connect to any PDP that accepts HTTP POST requests with PIP-format decision requests (RFC-005 §5.1).
+Connect to any PDP that accepts HTTP POST requests with PIP-format decision requests ([RFC-005 §5.1](https://github.com/capiscio/capiscio-rfcs)).
 
 ### Prerequisites
 
@@ -132,11 +132,11 @@ export CAPISCIO_PDP_TIMEOUT_MS=500
 
 In this mode, PDP DENY decisions are logged but requests proceed. If the PDP is unreachable, requests also proceed with an `ALLOW_OBSERVE` telemetry marker.
 
-Restart the server and monitor logs for `capiscio.policy_enforced` events.
+Restart the server and monitor logs for `capiscio.policy_enforced` events. Each event contains a `payload.policy.decision` field with the PDP's verdict.
 
 ---
 
-## Step 2: Review Decisions
+### Step 2: Review Decisions
 
 Check server logs for policy events. Each request that passes through the PEP emits:
 
@@ -150,7 +150,7 @@ Verify that legitimate requests receive `ALLOW` and unauthorized access patterns
 
 ---
 
-## Step 3: Tighten Enforcement
+### Step 3: Tighten Enforcement
 
 Once decisions look correct, switch to `EM-GUARD`:
 
@@ -170,7 +170,7 @@ In EM-STRICT, unknown obligation types cause the request to be denied.
 
 ---
 
-## Step 4: Configure Break-Glass (Optional)
+### Step 4: Configure Break-Glass (Optional)
 
 For emergency access when the PDP is down or mis-configured:
 
@@ -222,7 +222,7 @@ The PEP sends a JSON POST to the PDP endpoint. Your PDP must accept this format:
     "did": "did:web:agent.example.com",
     "badge_jti": "badge-uuid",
     "ial": "1",
-    "trust_level": "DV"
+    "trust_level": "DV"  // Trust level code (DV/OV/EV) — maps to IAL 1/2/3
   },
   "action": {
     "operation": "POST /api/v1/badges",
