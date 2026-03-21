@@ -44,7 +44,7 @@ The embedded PDP runs an OPA evaluator inside the server process. It automatical
 
 ```bash
 export CAPISCIO_EMBEDDED_PDP=true
-export CAPISCIO_WORKSPACE=<your-workspace-uuid>
+export CAPISCIO_WORKSPACE=YOUR_WORKSPACE_UUID
 export CAPISCIO_ENFORCEMENT_MODE=EM-OBSERVE
 ```
 
@@ -263,7 +263,7 @@ Confirm policy enforcement is active:
 
 ```bash
 # Send a request and check response headers
-curl -v https://your-server/v1/badges \
+curl -v https://your-server/v1/agents \
   -H "X-Capiscio-Badge: $BADGE_JWS"
 
 # Look for Server-Timing header with policy timing
