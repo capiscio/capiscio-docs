@@ -90,6 +90,7 @@ When the embedded PDP's policy bundle hasn't been rebuilt within the staleness t
 |------|-----------|
 | `EM-OBSERVE` | Request proceeds; `staleness.bundle_stale` annotation in telemetry |
 | `EM-GUARD` | Request proceeds; `staleness.bundle_stale` annotation in telemetry |
+| `EM-DELEGATE` | Request proceeds; `staleness.bundle_stale` annotation in telemetry |
 | `EM-STRICT` | Request denied with `BUNDLE_STALE` error code |
 
 Configure staleness via:
@@ -166,7 +167,7 @@ For stricter obligation handling, use `EM-DELEGATE`:
 export CAPISCIO_ENFORCEMENT_MODE=EM-DELEGATE
 ```
 
-In EM-DELEGATE, DENY decisions block requests and obligations are attempted. Failed obligations are logged but do not block the request (best-effort obligation enforcement).
+In EM-DELEGATE, DENY decisions always block requests. For ALLOW decisions, all attached obligations are executed on a best-effort basis: failures are logged but do not change the ALLOW decision or block the request.
 
 For full obligation enforcement, use `EM-STRICT`:
 
