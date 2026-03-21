@@ -206,6 +206,32 @@ config = SecurityConfig.from_env()
 
 ---
 
+## Policy Enforcement (Server)
+
+These environment variables configure the PDP integration on the CapiscIO server (RFC-005). They are read by the server, not the SDK.
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `CAPISCIO_PDP_ENDPOINT` | `string` | _(empty)_ | PDP URL. Empty = badge-only mode |
+| `CAPISCIO_PDP_TIMEOUT_MS` | `int` | `500` | PDP query timeout in milliseconds |
+| `CAPISCIO_ENFORCEMENT_MODE` | `string` | `EM-OBSERVE` | `EM-OBSERVE`, `EM-GUARD`, `EM-DELEGATE`, or `EM-STRICT` |
+| `CAPISCIO_BREAKGLASS_PUBLIC_KEY` | `string` | _(empty)_ | Path to break-glass Ed25519 public key |
+| `CAPISCIO_PEP_ID` | `string` | _(empty)_ | PEP instance identifier |
+| `CAPISCIO_WORKSPACE` | `string` | _(empty)_ | Workspace/tenant identifier |
+
+### Example
+
+```bash
+# Enable policy enforcement in observe mode
+export CAPISCIO_PDP_ENDPOINT=http://pdp.internal:9090/v1/evaluate
+export CAPISCIO_ENFORCEMENT_MODE=EM-OBSERVE
+export CAPISCIO_PDP_TIMEOUT_MS=500
+```
+
+See [Policy Enforcement Setup](../how-to/security/policy-enforcement.md) for step-by-step configuration.
+
+---
+
 ## Complete Example
 
 ```python

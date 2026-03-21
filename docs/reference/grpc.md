@@ -304,6 +304,46 @@ result = client.mcp.verify_server_identity(
 }
 ```
 
+### EvaluatePolicyDecision
+
+Evaluate an authorization decision via the PDP integration (RFC-005). The server-side PEP calls this RPC to enforce policy decisions from an external PDP.
+
+```protobuf
+rpc EvaluatePolicyDecision(PolicyDecisionRequest) returns (PolicyDecisionResponse);
+```
+
+**Request:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `subject` | `PolicySubject` | Badge-derived identity (`did`, `badge_jti`, `ial`, `trust_level`, `badge_exp`) |
+| `action` | `PolicyAction` | Operation being attempted (`operation`, `capability_class`) |
+| `resource` | `PolicyResource` | Target resource (`identifier`) |
+| `config` | `PolicyConfig` | PEP/PDP configuration (`pdp_endpoint`, `pdp_timeout_ms`, `enforcement_mode`, `pep_id`, `workspace`, `breakglass_public_key`) |
+| `breakglass_token` | `string` | Optional break-glass JWS for emergency override |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `decision` | `string` | `ALLOW`, `DENY`, or `ALLOW_OBSERVE` |
+| `decision_id` | `string` | Unique evaluation ID |
+| `reason` | `string` | Human-readable reason |
+| `ttl` | `int32` | Cache TTL in seconds |
+| `obligations` | `MCPObligation[]` | Obligations to enforce (`type`, `params_json`) |
+| `enforcement_mode` | `string` | Mode that was applied |
+| `cache_hit` | `bool` | Whether the decision came from cache |
+| `breakglass_override` | `bool` | Whether a break-glass override was applied |
+| `breakglass_jti` | `string` | Break-glass token JTI (if override) |
+| `error_code` | `string` | `pdp_unavailable`, `pdp_timeout`, `pdp_invalid_response`, or empty |
+| `pdp_latency_ms` | `int64` | PDP query latency |
+| `txn_id` | `string` | Transaction ID |
+
+!!! note "Error Handling"
+    This RPC does not return gRPC errors for PDP unavailability. All outcomes (including PDP failures) are encoded in the response fields so SDKs can handle them uniformly.
+
+---
+
 ### ParseServerIdentity
 
 Extract server identity from HTTP headers or JSON-RPC `_meta`.
