@@ -140,7 +140,12 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
 
+hooks:
+  - hooks/version_vars.py
+
 extra:
+  capiscio_version: "2.5.0"
+  protocol_version: "0.3.0"
   homepage: https://docs.capisc.io
   # Analytics: Cloudflare Pages auto-injects Web Analytics at the edge
   # Enable in: CF Dashboard → Pages → capiscio-docs → Settings → Web Analytics

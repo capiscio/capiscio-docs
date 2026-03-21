@@ -362,7 +362,7 @@ def health(client_version: str = "") -> dict
 **Example:**
 
 ```python
-status = client.mcp.health(client_version="capiscio-sdk-python/2.5.0")
+status = client.mcp.health(client_version="capiscio-sdk-python/{{ capiscio_version }}")
 
 if status["healthy"]:
     print(f"✅ MCP service healthy (core {status['core_version']})")

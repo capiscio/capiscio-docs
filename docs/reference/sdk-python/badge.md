@@ -32,316 +32,131 @@ if result.valid:
 else:
     print(f"❌ Verification failed: {result.error}")
 ```
-```
 
 ---
 
 ## Functions
 
-### verify_badge
+::: capiscio_sdk.badge.verify_badge
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-Verify a Trust Badge token with full RFC-002 validation.
+::: capiscio_sdk.badge.parse_badge
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-```python
-def verify_badge(
-    token: str,
-    *,
-    trusted_issuers: Optional[List[str]] = None,
-    audience: Optional[str] = None,
-    mode: VerifyMode = VerifyMode.ONLINE,
-    skip_revocation_check: bool = False,
-    skip_agent_status_check: bool = False,
-    public_key_jwk: Optional[str] = None,
-    fail_open: bool = False,
-    stale_threshold_seconds: int = 300,
-    options: Optional[VerifyOptions] = None,
-) -> VerifyResult
-```
+::: capiscio_sdk.badge.request_badge
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-**Parameters:**
+::: capiscio_sdk.badge.request_badge_sync
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `token` | `str` | The badge JWT/JWS token to verify |
-| `trusted_issuers` | `List[str]` | Trusted issuer URLs. If empty, all issuers accepted |
-| `audience` | `str` | Your service URL for audience validation |
-| `mode` | `VerifyMode` | Verification mode (online, offline, hybrid) |
-| `skip_revocation_check` | `bool` | Skip revocation check (testing only) |
-| `skip_agent_status_check` | `bool` | Skip agent status check (testing only) |
-| `public_key_jwk` | `str` | Override public key for offline verification |
-| `fail_open` | `bool` | If `True`, treat verification errors as valid (use with caution) |
-| `stale_threshold_seconds` | `int` | Max staleness for cached revocation data (default: 300) |
-| `options` | `VerifyOptions` | Alternative to individual parameters |
+::: capiscio_sdk.badge.request_pop_badge
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-**Returns:** `VerifyResult` with validation status and claims.
+::: capiscio_sdk.badge.request_pop_badge_sync
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-**Example:**
-
-```python
-from capiscio_sdk import verify_badge
-
-# Basic verification
-result = verify_badge(token)
-
-# With trusted issuers (recommended for production)
-result = verify_badge(
-    token,
-    trusted_issuers=["https://registry.capisc.io", "https://my-ca.example.com"],
-)
-
-# With audience check
-result = verify_badge(
-    token,
-    audience="https://my-agent.example.com",
-)
-```
-
----
-
-### parse_badge
-
-Parse badge claims without verification. Use for inspection before full verification.
-
-```python
-def parse_badge(token: str) -> BadgeClaims
-```
-
-**Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `token` | `str` | The badge JWT/JWS token to parse |
-
-**Returns:** `BadgeClaims` object with parsed claims.
-
-**Raises:** `ValueError` if the token cannot be parsed.
-
-**Example:**
-
-```python
-from capiscio_sdk import parse_badge
-
-# Inspect badge before verification
-claims = parse_badge(token)
-print(f"Agent: {claims.agent_id}")
-print(f"Issuer: {claims.issuer}")
-print(f"Expires: {claims.expires_at}")
-print(f"Expired: {claims.is_expired}")
-```
-
----
-
-### request_badge
-
-Request a new Trust Badge from a Certificate Authority (async).
-
-```python
-async def request_badge(
-    agent_id: str,
-    *,
-    ca_url: str = "https://registry.capisc.io",
-    api_key: Optional[str] = None,
-    domain: Optional[str] = None,
-    trust_level: TrustLevel = TrustLevel.LEVEL_1,
-    audience: Optional[List[str]] = None,
-    timeout: float = 30.0,
-) -> str
-```
-
-**Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `agent_id` | `str` | Agent identifier to request badge for |
-| `ca_url` | `str` | Certificate Authority URL |
-| `api_key` | `str` | API key for CA authentication |
-| `domain` | `str` | Agent's domain (required for verification) |
-| `trust_level` | `TrustLevel` | Requested trust level |
-| `audience` | `List[str]` | Optional audience restrictions |
-| `timeout` | `float` | Request timeout in seconds |
-
-**Returns:** The signed badge JWT token.
-
-**Example:**
-
-```python
-import asyncio
-from capiscio_sdk import request_badge, TrustLevel
-
-async def get_badge():
-    token = await request_badge(
-        agent_id="my-agent",
-        ca_url="https://registry.capisc.io",
-        api_key=os.environ["CAPISCIO_API_KEY"],
-        domain="example.com",
-        trust_level=TrustLevel.LEVEL_2,
-    )
-    return token
-
-badge = asyncio.run(get_badge())
-```
-
----
-
-### request_badge_sync
-
-Synchronous version of `request_badge`.
-
-```python
-def request_badge_sync(
-    agent_id: str,
-    *,
-    ca_url: str = "https://registry.capisc.io",
-    api_key: Optional[str] = None,
-    domain: Optional[str] = None,
-    trust_level: TrustLevel = TrustLevel.LEVEL_1,
-    audience: Optional[List[str]] = None,
-    timeout: float = 30.0,
-) -> str
-```
-
-**Example:**
-
-```python
-from capiscio_sdk import request_badge_sync
-
-token = request_badge_sync(
-    agent_id="my-agent",
-    api_key=os.environ["CAPISCIO_API_KEY"],
-    domain="example.com",
-)
-```
+::: capiscio_sdk.badge.start_badge_keeper
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
 ---
 
 ## Classes
 
-### BadgeClaims
+::: capiscio_sdk.badge.BadgeClaims
+    options:
+      show_root_heading: true
+      show_source: false
+      members_order: source
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-Parsed badge claims from a Trust Badge token.
+::: capiscio_sdk.badge.VerifyResult
+    options:
+      show_root_heading: true
+      show_source: false
+      members_order: source
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-```python
-@dataclass
-class BadgeClaims:
-    jti: str                    # Unique badge identifier (UUID)
-    issuer: str                 # Badge issuer URL (CA) - maps to `iss`
-    subject: str                # Agent DID (did:key or did:web) - maps to `sub`
-    issued_at: datetime         # When issued - maps to `iat`
-    expires_at: datetime        # When expires - maps to `exp`
-    trust_level: TrustLevel     # From `vc.credentialSubject.level`
-    domain: str                 # Agent's verified domain
-    agent_name: str = ""        # Human-readable name
-    audience: List[str] = []    # Intended audience URLs - maps to `aud`
-    ial: str = "0"              # Identity Assurance Level ("0" or "1", per RFC-002)
-    raw_claims: Optional[dict] = None  # Original decoded claims dict
-```
+::: capiscio_sdk.badge.VerifyOptions
+    options:
+      show_root_heading: true
+      show_source: false
+      members_order: source
+      heading_level: 3
+      show_signature_annotations: true
+      separate_signature: true
+      docstring_style: google
+      docstring_section_style: spacy
 
-**Properties:**
+::: capiscio_sdk.badge.VerifyMode
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      docstring_style: google
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `agent_id` | `str` | Extracted agent ID from subject DID |
-| `is_expired` | `bool` | Whether badge has expired |
-| `is_not_yet_valid` | `bool` | Whether badge is not yet valid |
-| `has_key_binding` | `bool` | Whether badge has a confirmation key (IAL-1) |
-| `confirmation_key` | `Optional[dict]` | The confirmation key JWK, if present |
-
-**Methods:**
-
-| Method | Description |
-|--------|-------------|
-| `from_dict(data)` | Create from dictionary |
-| `to_dict()` | Convert to dictionary |
-
----
-
-### VerifyResult
-
-Result of badge verification.
-
-```python
-@dataclass
-class VerifyResult:
-    valid: bool                           # Whether valid
-    claims: Optional[BadgeClaims]         # Parsed claims
-    error: Optional[str]                  # Error message
-    error_code: Optional[str]             # RFC-002 error code
-    warnings: List[str]                   # Non-fatal issues
-    mode: VerifyMode                      # Mode used
-```
-
----
-
-### VerifyOptions
-
-Options for badge verification.
-
-```python
-@dataclass
-class VerifyOptions:
-    mode: VerifyMode = VerifyMode.ONLINE
-    trusted_issuers: List[str] = []
-    audience: Optional[str] = None
-    skip_revocation_check: bool = False
-    skip_agent_status_check: bool = False
-    public_key_jwk: Optional[str] = None
-    fail_open: bool = False
-    stale_threshold_seconds: int = 300
-```
-
-**Example:**
-
-```python
-from capiscio_sdk import verify_badge, VerifyOptions, VerifyMode
-
-options = VerifyOptions(
-    mode=VerifyMode.HYBRID,
-    trusted_issuers=["https://registry.capisc.io"],
-    audience="https://my-service.example.com",
-)
-
-result = verify_badge(token, options=options)
-```
-
----
-
-### VerifyMode
-
-Badge verification mode.
-
-```python
-class VerifyMode(Enum):
-    ONLINE = "online"    # Real-time checks against registry
-    OFFLINE = "offline"  # Local trust store and cache only
-    HYBRID = "hybrid"    # Try online, fall back to cache
-```
-
----
-
-### TrustLevel
-
-Trust level as defined in RFC-002 §5.
-
-```python
-class TrustLevel(Enum):
-    # RFC-002 §5 Trust Levels
-    LEVEL_0 = "0"  # Self-Signed (SS) - Development only
-    LEVEL_1 = "1"  # Registered (REG) - Account registration
-    LEVEL_2 = "2"  # Domain Validated (DV) - DNS/HTTP challenge
-    LEVEL_3 = "3"  # Organization Validated (OV) - Legal entity
-    LEVEL_4 = "4"  # Extended Validated (EV) - Security audit
-```
-
-| Level | Name | Description |
-|-------|------|-------------|
-| 0 | Self-Signed (SS) | Development only, `did:key` issuer, `iss` = `sub` |
-| 1 | Registered (REG) | Account registration with CapiscIO CA |
-| 2 | Domain Validated (DV) | DNS TXT or HTTP challenge, domain ownership |
-| 3 | Organization Validated (OV) | DV + legal entity verification |
-| 4 | Extended Validated (EV) | OV + manual security audit |
-
-!!! warning "Level 0 (Self-Signed)"
-    Level 0 badges are for **development only**. In production, verifiers MUST reject Level 0 badges by default. Use `--accept-self-signed` (CLI) to explicitly opt in during development.
+::: capiscio_sdk.badge.TrustLevel
+    options:
+      show_root_heading: true
+      show_source: false
+      heading_level: 3
+      docstring_style: google
 
 ---
 

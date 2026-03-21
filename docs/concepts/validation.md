@@ -113,7 +113,7 @@ If only a domain is provided, CapiscIO will attempt discovery:
 
 ## Schema Validation
 
-### Required Fields (A2A v0.3.0)
+### Required Fields (A2A v{{ protocol_version }})
 
 #### Basic Required Fields
 - `name`: Agent display name
@@ -123,7 +123,7 @@ If only a domain is provided, CapiscIO will attempt discovery:
 - `version`: Agent version (semver format)
 
 #### A2A Protocol Required Fields
-- `protocolVersion`: A2A protocol version (e.g., "0.3.0")
+- `protocolVersion`: A2A protocol version (e.g., "{{ protocol_version }}")
 - `preferredTransport`: Primary transport protocol
 
 #### Provider Structure
@@ -275,7 +275,7 @@ Each skill in the `skills` array must have:
 **Warning Generated:**
 ```
 LEGACY_DISCOVERY_ENDPOINT: Agent discovered via legacy endpoint.
-The A2A v0.3.0 specification recommends using /.well-known/agent-card.json
+The A2A v{{ protocol_version }} specification recommends using /.well-known/agent-card.json
 ```
 
 ### Transport Protocol Validation
@@ -297,7 +297,7 @@ The A2A v0.3.0 specification recommends using /.well-known/agent-card.json
 ✅ A2A AGENT VALIDATION PASSED
 Agent: https://example.com/.well-known/agent-card.json
 Score: 100/100
-Version: 0.3.0 (Strictness: progressive)
+Version: {{ protocol_version }} (Strictness: progressive)
 
 🔍 VALIDATION SUMMARY:
   📊 3 checks performed: 3 passed, 0 failed, 0 warnings
@@ -310,8 +310,8 @@ Version: 0.3.0 (Strictness: progressive)
 ✅ Endpoint Connectivity
    All endpoints are accessible and responding
    Duration: 195ms
-✅ A2A v0.3.0 Features
-   All v0.3.0 features are properly configured
+✅ A2A v{{ protocol_version }} Features
+   All v{{ protocol_version }} features are properly configured
 
 🏆 Perfect! Your agent passes all validations.
 🚀 Your agent is ready for deployment!
@@ -331,14 +331,14 @@ Version: 0.3.0 (Strictness: progressive)
       "id": "schema_validation",
       "name": "Schema Validation",
       "status": "passed",
-      "message": "Agent card conforms to A2A v0.3.0 schema",
+      "message": "Agent card conforms to A2A v{{ protocol_version }} schema",
       "duration": 12,
       "details": "Agent card structure is valid"
     }
   ],
   "versionInfo": {
-    "detectedVersion": "0.3.0",
-    "validatorVersion": "0.3.0",
+    "detectedVersion": "{{ protocol_version }}",
+    "validatorVersion": "{{ protocol_version }}",
     "strictness": "progressive",
     "compatibility": {
       "compatible": true,

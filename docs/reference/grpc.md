@@ -1,10 +1,5 @@
 # gRPC Services
 
-<!-- 
-  VERIFIED: 2025-12-26
-  Source: capiscio-core/proto/capiscio/v1/*.proto
--->
-
 `capiscio-core` exposes gRPC services for validation, scoring, and badge operations. The gRPC server is **automatically started and managed by the SDK** when using the Python or Node.js SDKs.
 
 !!! note "No Manual Server Start Required"

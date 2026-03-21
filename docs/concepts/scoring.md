@@ -46,7 +46,7 @@ Every agent card validation returns three independent score dimensions:
 
     ---
 
-    How well does the agent card conform to the A2A v0.3.0 specification?
+    How well does the agent card conform to the A2A v{{ protocol_version }} specification?
     
     Measures protocol adherence, required fields, format validation, and data quality.
 
@@ -74,7 +74,7 @@ Each dimension has its own detailed breakdown, rating enum, and independent scor
 
 ## 📄 Dimension 1: Spec Compliance (100 points)
 
-**What it measures:** How well the agent card adheres to the A2A v0.3.0 specification.
+**What it measures:** How well the agent card adheres to the A2A v{{ protocol_version }} specification.
 
 **Why it matters:** Protocol compliance ensures interoperability. An agent with poor compliance won't work correctly with other agents, registries, or tooling.
 

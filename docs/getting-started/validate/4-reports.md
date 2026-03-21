@@ -55,11 +55,8 @@ Our sample agent card scores 75/100. Let's improve it:
   "description": "A sample A2A agent for learning CapiscIO",
   "url": "https://example.com/agent",
   "version": "1.0.0",
-  "protocolVersion": "0.3.0",
+  "protocolVersion": "{{ protocol_version }}",
   "provider": {
-    "organization": "My Company",
-    "url": "https://mycompany.com"
-  },
   "capabilities": {
     "streaming": false,
     "pushNotifications": false,

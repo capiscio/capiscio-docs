@@ -54,7 +54,7 @@ Here's a minimal example:
 {
   "name": "My Agent",
   "url": "https://example.com/agent",
-  "protocolVersion": "0.3.0"
+  "protocolVersion": "{{ protocol_version }}"
 }
 ```
 

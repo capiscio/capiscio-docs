@@ -1,10 +1,5 @@
 # Deployment Guide
 
-<!-- 
-  VERIFIED: 2025-12-11
-  Source: capiscio-server/README.md, capiscio-server/.env.example
--->
-
 Deploy capiscio-server in production or development environments.
 
 ---

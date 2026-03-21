@@ -1,16 +1,12 @@
 # capiscio-server Reference
 
-<!-- 
-  Source: capiscio-server/internal/api/, capiscio-server/docs/swagger.json
--->
-
 The **capiscio-server** is a commercial backend API server that powers the CapiscIO Registry. It provides agent management, badge issuance (CA-signed), and trust verification services.
 
 !!! info "Enterprise Product"
     capiscio-server is a commercial product available to enterprise customers. [Contact Sales](mailto:sales@capisc.io) for licensing options.
 
 !!! info "Version"
-    Current version: **v2.5.0**
+    Current version: **v{{ capiscio_version }}**
 
 ## Overview
 

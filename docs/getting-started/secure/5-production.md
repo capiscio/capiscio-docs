@@ -57,7 +57,7 @@ Create a proper `agent-card.json`:
   "description": "Production A2A agent for My Company",
   "url": "https://agent.mycompany.com",
   "version": "1.0.0",
-  "protocolVersion": "0.3.0",
+  "protocolVersion": "{{ protocol_version }}",
   "provider": {
     "organization": "My Company Inc.",
     "url": "https://mycompany.com"
