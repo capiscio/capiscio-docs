@@ -221,6 +221,7 @@ nav:
           - Dev Mode: how-to/security/dev-mode.md
           - Key Rotation: how-to/security/key-rotation.md
           - Trust Store: how-to/security/trust-store.md
+          - Policy Enforcement: how-to/security/policy-enforcement.md
       - MCP Security:
           - Protect MCP Tools: mcp-guard/guides/server-side.md
           - Verify MCP Servers: mcp-guard/guides/client-side.md
@@ -252,6 +253,7 @@ nav:
           - MCP: reference/sdk-python/mcp.md
           - Types: reference/sdk-python/types.md
           - Errors: reference/sdk-python/errors.md
+          - PIP Types: reference/sdk-python/pip.md
       - MCP Guard: '!include ../capiscio-mcp-python/mkdocs.yml'
       - Server API:
           - reference/server/index.md
