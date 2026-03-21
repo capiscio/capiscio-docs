@@ -88,8 +88,8 @@ When the embedded PDP's policy bundle hasn't been rebuilt within the staleness t
 
 | Mode | Behavior |
 |------|-----------|
-| `EM-OBSERVE` | Request proceeds; `bundle_stale` annotation in telemetry |
-| `EM-GUARD` | Request proceeds; `bundle_stale` annotation in telemetry |
+| `EM-OBSERVE` | Request proceeds; `staleness.bundle_stale` annotation in telemetry |
+| `EM-GUARD` | Request proceeds; `staleness.bundle_stale` annotation in telemetry |
 | `EM-STRICT` | Request denied with `BUNDLE_STALE` error code |
 
 Configure staleness via:
@@ -172,12 +172,12 @@ In EM-STRICT, unknown obligation types cause the request to be denied.
 
 ### Step 4: Configure Break-Glass (Optional)
 
-For emergency access when the PDP is down or mis-configured:
+For emergency access when the PDP is down or misconfigured:
 
 1. Generate a dedicated Ed25519 keypair for break-glass tokens:
 
     ```bash
-    capiscio keygen --output breakglass-key
+    capiscio key gen --out-priv breakglass-key.pem --out-pub breakglass-key.pub.pem
     ```
 
 2. Configure the server with the public key path:
@@ -215,7 +215,7 @@ All PDP-related environment variables:
 
 The PEP sends a JSON POST to the PDP endpoint. Your PDP must accept this format:
 
-```json
+```jsonc
 {
   "pip_version": "capiscio.pip.v1",
   "subject": {
@@ -225,11 +225,11 @@ The PEP sends a JSON POST to the PDP endpoint. Your PDP must accept this format:
     "trust_level": "DV"  // Trust level code (DV/OV/EV) — maps to IAL 1/2/3
   },
   "action": {
-    "operation": "POST /api/v1/badges",
+    "operation": "POST /v1/badges",
     "capability_class": null
   },
   "resource": {
-    "identifier": "/api/v1/badges"
+    "identifier": "/v1/badges"
   },
   "context": {
     "txn_id": "txn-uuid",
@@ -263,7 +263,7 @@ Confirm policy enforcement is active:
 
 ```bash
 # Send a request and check response headers
-curl -v https://your-server/api/v1/badges \
+curl -v https://your-server/v1/badges \
   -H "X-Capiscio-Badge: $BADGE_JWS"
 
 # Look for Server-Timing header with policy timing
