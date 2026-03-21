@@ -222,7 +222,7 @@ The PEP sends a JSON POST to the PDP endpoint. Your PDP must accept this format:
     "did": "did:web:agent.example.com",
     "badge_jti": "badge-uuid",
     "ial": "1",
-    "trust_level": "DV"  // Trust level code (DV/OV/EV) — maps to IAL 1/2/3
+    "trust_level": "DV"  // Badge trust level code: SS(0), REG(1), DV(2), OV(3), EV(4)
   },
   "action": {
     "operation": "POST /v1/badges",
