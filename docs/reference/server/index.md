@@ -14,6 +14,7 @@ capiscio-server provides:
 
 - **Agent Registry** — CRUD operations for agent records
 - **Badge CA** — Certificate Authority for issuing trust badges (levels 1-4)
+- **Embedded PDP** — In-process OPA policy evaluator with auto-built bundles
 - **JWKS Endpoint** — Public key set for badge verification
 - **DID Resolution** — `did:web` document serving for registered agents
 - **API Key Auth** — Secure API access management
