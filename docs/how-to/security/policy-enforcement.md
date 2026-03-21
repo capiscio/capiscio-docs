@@ -132,7 +132,7 @@ export CAPISCIO_PDP_TIMEOUT_MS=500
 
 In this mode, PDP DENY decisions are logged but requests proceed. If the PDP is unreachable, requests also proceed with an `ALLOW_OBSERVE` telemetry marker.
 
-Restart the server and monitor logs for `capiscio.policy_enforced` events. Each event contains a `payload.policy.decision` field with the PDP's verdict.
+Restart the server and monitor logs for policy enforcement events (the event type is `capiscio.policy_enforced`). Each event flattens the PDP verdict into the `capiscio.policy.*` fields described below, including `capiscio.policy.decision`.
 
 ---
 
@@ -202,7 +202,7 @@ All PDP-related environment variables:
 | `CAPISCIO_EMBEDDED_PDP` | `false` | Enable embedded OPA evaluator (in-process PDP) |
 | `CAPISCIO_PDP_ENDPOINT` | _(empty)_ | External PDP URL. Empty + no embedded PDP = badge-only mode |
 | `CAPISCIO_PDP_TIMEOUT_MS` | `500` | External PDP query timeout in milliseconds |
-| `CAPISCIO_ENFORCEMENT_MODE` | `EM-OBSERVE` | One of: `EM-OBSERVE`, `EM-GUARD`, `EM-DELEGATE`, `EM-STRICT` |
+| `CAPISCIO_ENFORCEMENT_MODE` | `EM-OBSERVE` | One of: `EM-OBSERVE`, `EM-GUARD`, `EM-STRICT` |
 | `CAPISCIO_WORKSPACE` | _(empty)_ | Workspace/tenant UUID (required for embedded PDP) |
 | `CAPISCIO_BUNDLE_POLL_INTERVAL` | `30s` | Embedded PDP bundle rebuild interval |
 | `CAPISCIO_BUNDLE_STALENESS_THRESHOLD` | `5m` | Embedded PDP bundle age before staleness warnings |
@@ -236,7 +236,7 @@ The PEP sends a JSON POST to the PDP endpoint. Your PDP must accept this format:
     "enforcement_mode": "EM-GUARD"
   },
   "environment": {
-    "workspace": "production",
+    "workspace": "00000000-0000-0000-0000-000000000000",
     "pep_id": "server-01",
     "time": "2026-03-01T12:00:00Z"
   }
