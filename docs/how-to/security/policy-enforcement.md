@@ -160,6 +160,14 @@ export CAPISCIO_ENFORCEMENT_MODE=EM-GUARD
 
 Now PDP DENY decisions block requests with `403 Forbidden`. If the PDP is unavailable, requests are denied with `503 Service Unavailable` (fail-closed).
 
+For stricter obligation handling, use `EM-DELEGATE`:
+
+```bash
+export CAPISCIO_ENFORCEMENT_MODE=EM-DELEGATE
+```
+
+In EM-DELEGATE, DENY decisions block requests and obligations are attempted. Failed obligations are logged but do not block the request (best-effort obligation enforcement).
+
 For full obligation enforcement, use `EM-STRICT`:
 
 ```bash
@@ -202,7 +210,7 @@ All PDP-related environment variables:
 | `CAPISCIO_EMBEDDED_PDP` | `false` | Enable embedded OPA evaluator (in-process PDP) |
 | `CAPISCIO_PDP_ENDPOINT` | _(empty)_ | External PDP URL. Empty + no embedded PDP = badge-only mode |
 | `CAPISCIO_PDP_TIMEOUT_MS` | `500` | External PDP query timeout in milliseconds |
-| `CAPISCIO_ENFORCEMENT_MODE` | `EM-OBSERVE` | One of: `EM-OBSERVE`, `EM-GUARD`, `EM-STRICT` |
+| `CAPISCIO_ENFORCEMENT_MODE` | `EM-OBSERVE` | One of: `EM-OBSERVE`, `EM-GUARD`, `EM-DELEGATE`, `EM-STRICT` |
 | `CAPISCIO_WORKSPACE` | _(empty)_ | Workspace/tenant UUID (required for embedded PDP) |
 | `CAPISCIO_BUNDLE_POLL_INTERVAL` | `30s` | Embedded PDP bundle rebuild interval |
 | `CAPISCIO_BUNDLE_STALENESS_THRESHOLD` | `5m` | Embedded PDP bundle age before staleness warnings |
