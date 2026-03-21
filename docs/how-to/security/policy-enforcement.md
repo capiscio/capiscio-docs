@@ -78,6 +78,9 @@ export CAPISCIO_ENFORCEMENT_MODE=EM-OBSERVE
 # Deny unauthorized — PDP DENY blocks requests (fail-closed on PDP failure)
 export CAPISCIO_ENFORCEMENT_MODE=EM-GUARD
 
+# Best-effort obligations — DENY blocks; ALLOW obligations attempted but failures don't block
+export CAPISCIO_ENFORCEMENT_MODE=EM-DELEGATE
+
 # Full enforcement — unknown obligation types also cause denial
 export CAPISCIO_ENFORCEMENT_MODE=EM-STRICT
 ```
