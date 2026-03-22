@@ -200,6 +200,7 @@ nav:
           - concepts/validation.md
           - concepts/scoring.md
       - Enforcement: concepts/enforcement.md
+      - Policy Scoping: concepts/policy-scoping.md
       - MCP Security:
           - Overview: concepts/mcp-security.md
 
@@ -233,6 +234,8 @@ nav:
           - Flask: how-to/integrations/flask.md
           - Express: how-to/integrations/express.md
           - LangChain: how-to/integrations/langchain.md
+      - Policy:
+          - Configure Agent Policy: how-to/configure-agent-policy.md
       - CI/CD:
           - Pre-commit Hook: how-to/cicd/pre-commit.md
           - GitLab CI: how-to/cicd/gitlab-ci.md
@@ -259,6 +262,9 @@ nav:
           - API Reference: reference/server/api.md
           - Deployment: reference/server/deployment.md
           - Badge CA: reference/server/badge-ca.md
+      - Policy:
+          - Policy Config YAML: reference/policy-config-yaml.md
+          - Policy API: reference/policy-api.md
       - Configuration: reference/configuration.md
       - Agent Card Schema: reference/agent-card-schema.md
       - Installation:
