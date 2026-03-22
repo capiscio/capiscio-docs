@@ -28,7 +28,7 @@ capiscio policy validate -f capiscio-policy.yaml
 
 ### 3. Deploy to Your Organization
 
-Use the dashboard UI or the CLI to create and approve a policy:
+Use the dashboard UI or the [Policy API](../reference/policy-api.md) to create and approve a policy proposal:
 
 ```bash
 # View current policy context
