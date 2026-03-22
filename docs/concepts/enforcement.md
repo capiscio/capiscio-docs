@@ -135,3 +135,13 @@ Server-Timing: capiscio-auth;dur=0.618;desc="CapiscIO Verification"
 | ✅ Enforce payload integrity (SHA-256 body hash) | ❌ Manage a central registry (coming soon) |
 | ✅ Block replay attacks (timestamp validation) | ❌ Replace your IAM/SSO (human auth) |
 | ✅ Work with keys you provision | ❌ Auto-discover external agent keys (coming soon) |
+
+## Policy-Driven Enforcement
+
+Beyond identity verification, CapiscIO supports **YAML-based policy configurations** that define trust requirements, access rules, and rate limits. Policies are scoped at three levels:
+
+- **Organization**: Baseline rules for all agents
+- **Group**: Rules for named collections of agents
+- **Agent**: Per-agent overrides for fine-grained control
+
+See [Policy Scoping](policy-scoping.md) for the full scoping model, or [Configure Agent Policy](../how-to/configure-agent-policy.md) for a practical walkthrough.

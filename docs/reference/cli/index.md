@@ -63,6 +63,8 @@ The `capiscio` CLI provides commands for validating Agent Cards, managing crypto
 | [`badge request`](#badge-request) | Request a badge from CA via PoP protocol (RFC-003) |
 | [`badge dv`](#badge-dv) | Domain Validation commands (create, status, finalize) |
 | [`badge keep`](#badge-keep) | Daemon to auto-renew badges |
+| [`policy validate`](#policy-validate) | Validate a YAML policy config file |
+| [`policy context`](#policy-context) | Fetch policy context from registry |
 | [`trust`](#trust) | Manage the local trust store |
 | [`gateway start`](#gateway-start) | Start the security gateway |
 | [`rpc`](#rpc) | Start the gRPC server for SDK integration |
@@ -806,9 +808,123 @@ The pip distribution includes wrapper management commands:
 
 ---
 
+## policy validate
+
+Validate a YAML policy configuration file locally. Checks syntax, schema compliance, and semantic rules without contacting the registry.
+
+### Usage
+
+```bash
+capiscio policy validate [flags]
+```
+
+### Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `-f`, `--file` | `string` | `capiscio-policy.yaml` | Path to the YAML policy config file |
+| `--json` | `bool` | `false` | Output results as JSON |
+
+### Examples
+
+```bash
+# Validate default file (capiscio-policy.yaml)
+capiscio policy validate
+
+# Validate a specific file
+capiscio policy validate -f my-policy.yaml
+
+# JSON output for CI pipelines
+capiscio policy validate -f policy.yaml --json
+```
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Policy config is valid |
+| `1` | Validation errors found |
+
+### Validation Rules
+
+The validator checks:
+
+- Version must be `"1"`
+- Trust levels must be valid (`""`, `SS`, `REG`, `DV`, `OV`, `EV`)
+- DIDs must start with `did:`
+- No duplicate DIDs within lists
+- No DIDs in both `allowed_dids` and `denied_dids`
+- Rate limit RPM must be positive
+- Operation patterns and MCP tool names must not be empty
+
+---
+
+## policy context
+
+Fetch the policy context from the CapiscIO registry. Returns the org's agents, groups, active policies, and pending proposals in JSON format.
+
+### Usage
+
+```bash
+capiscio policy context [flags]
+```
+
+### Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--registry` | `string` | `https://api.capisc.io` | Registry server URL |
+| `--api-key` | `string` | *(from env)* | API key for authentication |
+| `-o`, `--output` | `string` | *(stdout)* | Write output to file |
+
+### Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `CAPISCIO_API_KEY` | Default API key when `--api-key` is not provided |
+
+### Examples
+
+```bash
+# Fetch context using environment variable
+export CAPISCIO_API_KEY=your-api-key
+capiscio policy context
+
+# Specify registry URL explicitly
+capiscio policy context --registry https://api.capisc.io --api-key your-key
+
+# Save to file
+capiscio policy context -o policy-context.json
+```
+
+### Output
+
+Returns the complete policy context as JSON:
+
+```json
+{
+  "org_id": "22222222-2222-2222-2222-222222222222",
+  "agents": [
+    {
+      "id": "...",
+      "name": "my-agent",
+      "did": "did:web:my-agent.example.com",
+      "trust_level": "DV"
+    }
+  ],
+  "groups": [],
+  "active_policies": [],
+  "pending_proposals": []
+}
+```
+
+---
+
 ## See Also
 
 - [Go API Reference](../go-api.md) - Programmatic usage of capiscio-core
 - [Getting Started: Validate Your First Agent](../../getting-started/validate/1-intro.md)
 - [Configuration Reference](../configuration.md)
 - [Agent Card Schema](../agent-card-schema.md)
+- [Policy Config YAML Reference](../policy-config-yaml.md) - Full YAML schema
+- [Policy API Reference](../policy-api.md) - REST API endpoints
