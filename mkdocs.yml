@@ -236,6 +236,7 @@ nav:
           - LangChain: how-to/integrations/langchain.md
       - Policy:
           - Configure Agent Policy: how-to/configure-agent-policy.md
+          - Embedded Policy Enforcement: how-to/embedded-policy-enforcement.md
       - CI/CD:
           - Pre-commit Hook: how-to/cicd/pre-commit.md
           - GitLab CI: how-to/cicd/gitlab-ci.md
