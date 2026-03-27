@@ -62,6 +62,15 @@ from capiscio_sdk import ValidationResult, ValidationIssue, ValidationSeverity
 # MCP API (Model Context Protocol security)
 from capiscio_sdk._rpc.client import CapiscioRPCClient
 # Access MCP via: client.mcp.evaluate_tool_access(...)
+
+# PIP Types (Policy enforcement - RFC-005)
+from capiscio_sdk.pip import (
+    PIPRequest, PIPResponse,
+    SubjectAttributes, ActionAttributes,
+    ResourceAttributes, ContextAttributes,
+    EnvironmentAttributes, Obligation,
+    EnforcementMode,
+)
 ```
 
 ---
@@ -131,6 +140,15 @@ from capiscio_sdk._rpc.client import CapiscioRPCClient
     (RFC-006) and server identity verification (RFC-007).
 
     [:octicons-arrow-right-24: MCP API](mcp.md)
+
+-   :material-shield-check: **PIP Types**
+
+    ---
+
+    Policy Information Point request/response types for PDP integration.
+    Enforcement modes, obligations, and decision handling (RFC-005).
+
+    [:octicons-arrow-right-24: PIP Types](pip.md)
 
 </div>
 

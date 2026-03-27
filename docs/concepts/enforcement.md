@@ -127,6 +127,82 @@ Server-Timing: capiscio-auth;dur=0.618;desc="CapiscIO Verification"
 *   `dur`: Duration in milliseconds.
 *   `desc`: Description of the operation.
 
+## 5. Policy Enforcement (PDP Integration)
+
+Badge verification answers **"who is calling?"** — but not **"are they allowed to do this?"**. Policy enforcement adds authorization decisions via a Policy Decision Point (PDP).
+
+### How It Works
+
+The Policy Enforcement Point (PEP) sits between badge verification and your route handlers. After a badge is verified, the PEP asks an external PDP whether the request should proceed.
+
+```
+┌─────────┐     ┌─────────────┐     ┌─────┐     ┌──────────────┐
+│ Request  │────▶│   Badge     │────▶│ PEP │────▶│ Your Handler │
+│(+ badge) │     │ Verification│     │     │     │              │
+└─────────┘     └─────────────┘     └──┬──┘     └──────────────┘
+                                       │
+                                  ┌────▼────┐
+                                  │   PDP   │
+                                  │(external)│
+                                  └─────────┘
+```
+
+The PEP sends a **PIP request** (Policy Information Point) containing identity, action, and resource attributes. The PDP returns ALLOW or DENY, plus optional **obligations** the PEP must enforce.
+
+### Enforcement Modes
+
+Four modes control how strictly the PEP enforces PDP decisions. They form a total order from most permissive to most restrictive:
+
+| Mode | PDP Denies | PDP Unavailable | Unknown Obligation |
+|------|-----------|-----------------|-------------------|
+| **EM-OBSERVE** | Log only, allow through | Allow (emit `ALLOW_OBSERVE`) | Log, skip |
+| **EM-GUARD** | Block request | Deny (fail-closed) | Log, skip |
+| **EM-DELEGATE** | Block request | Deny (fail-closed) | Log warning, proceed |
+| **EM-STRICT** | Block request | Deny (fail-closed) | Deny request |
+
+Start with `EM-OBSERVE` to monitor decisions without affecting traffic, then tighten as your policies mature.
+
+### Obligations
+
+A PDP can attach obligations to an ALLOW decision — actions the PEP must perform before forwarding the request. Examples from the RFC:
+
+| Obligation Type | Purpose | Example Params |
+|----------------|---------|----------------|
+| `rate_limit.apply` | Enforce per-agent rate limits | `{ "rpm": 100, "key": "agent-did" }` |
+| `redact.fields` | Remove sensitive fields | `{ "fields": ["/pii/email"] }` |
+| `log.enhanced` | Enhanced audit logging | `{ "level": "audit" }` |
+| `require_step_up` | Require human review | `{ "mode": "human_review" }` |
+
+How the PEP handles obligation failures depends on the enforcement mode. In EM-STRICT, failing to enforce any known obligation blocks the request. In EM-OBSERVE, failures are logged but the request proceeds.
+
+### Decision Caching
+
+The PEP caches ALLOW decisions to reduce PDP latency. Cache keys are derived from the agent DID, badge JTI, operation, and resource. The effective TTL is the minimum of:
+
+- The PDP-returned `ttl`
+- The badge `exp` (expiry)
+- The envelope `expires_at` (if present)
+
+DENY decisions are not cached by default.
+
+### Break-Glass Override
+
+For emergencies, a break-glass token bypasses the PDP entirely. The token is a signed JWS (EdDSA) with a scoped grant and an expiry (recommended: 5 minutes). It skips authorization but **not** authentication — the badge must still be valid.
+
+The PEP emits `capiscio.policy.override = true` telemetry for audit when a break-glass token is used.
+
+!!! warning "Break-Glass Keys"
+    Use a separate Ed25519 keypair for break-glass tokens. Do not reuse your CA badge-signing key.
+
+### Badge-Only Mode
+
+If no PDP endpoint is configured, the PEP is a no-op passthrough. Badge verification still runs, but no policy decisions are made. This is the default behavior.
+
+!!! tip "Getting Started"
+    See [Policy Enforcement Setup](../how-to/security/policy-enforcement.md) for step-by-step configuration.
+
+---
+
 ## Summary: What Guard Does and Doesn't Do
 
 | Guard Does | Guard Doesn't |
@@ -135,6 +211,8 @@ Server-Timing: capiscio-auth;dur=0.618;desc="CapiscIO Verification"
 | ✅ Enforce payload integrity (SHA-256 body hash) | ❌ Manage a central registry (coming soon) |
 | ✅ Block replay attacks (timestamp validation) | ❌ Replace your IAM/SSO (human auth) |
 | ✅ Work with keys you provision | ❌ Auto-discover external agent keys (coming soon) |
+| ✅ Enforce PDP policy decisions (when configured) | ❌ Provide a PDP (bring your own) |
+| ✅ Support break-glass emergency overrides | ❌ Bypass authentication for overrides |
 
 ## Policy-Driven Enforcement
 
