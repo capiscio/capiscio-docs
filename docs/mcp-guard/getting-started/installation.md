@@ -1,42 +1,75 @@
----
-title: Installation
-description: Install CapiscIO MCP Guard for tool-level security on MCP servers.
----
+<!-- Synced from capiscio-mcp-python/docs/ — do not edit locally -->
 
 # Installation
 
-MCP Guard provides trust badges and identity verification for [Model Context Protocol](https://modelcontextprotocol.io) tool calls.
+## PyPI Installation
+
+```bash
+# Standalone (no MCP SDK dependency)
+pip install capiscio-mcp
+
+# With MCP SDK integration
+pip install capiscio-mcp[mcp]
+
+# With PoP signing/verification (requires cryptography)
+pip install capiscio-mcp[crypto]
+
+# Full installation
+pip install capiscio-mcp[mcp,crypto]
+```
+
+## Using uv
+
+```bash
+uv add capiscio-mcp
+uv add capiscio-mcp --extra mcp
+```
 
 ## Requirements
 
 - Python 3.10+
-- A CapiscIO account or self-hosted registry
+- capiscio-core (auto-downloaded on first use)
 
-## Install via pip
+## Core Connection Modes
+
+capiscio-mcp connects to capiscio-core for cryptographic operations:
+
+### Embedded Mode (Default)
+
+The SDK automatically downloads and manages the core binary:
 
 ```bash
 pip install capiscio-mcp
+# Just works! Binary downloaded on first use.
 ```
 
-For MCP SDK integration (FastMCP wrapper):
+The binary is cached at `~/.capiscio/bin/capiscio`.
+
+### External Mode
+
+Connect to a separately managed core service:
 
 ```bash
-pip install capiscio-mcp[mcp]
+# Start core in another terminal
+capiscio mcp serve --listen localhost:50051
+
+# SDK connects to external core
+export CAPISCIO_CORE_ADDR="localhost:50051"
 ```
 
 ## Verify Installation
 
-```bash
-python -c "import capiscio_mcp; print(capiscio_mcp.__version__)"
+```python
+from capiscio_mcp import MCP_VERSION, CORE_MIN_VERSION
+
+print(f"capiscio-mcp version: {MCP_VERSION}")
+print(f"Required core version: {CORE_MIN_VERSION}")
 ```
 
-## What's Included
+## Environment Variables
 
-| Package | Description |
-|---------|-------------|
-| `capiscio-mcp` | Core guard decorator and evidence logging |
-| `capiscio-mcp[mcp]` | FastMCP integration for automatic tool wrapping |
-
-## Next Steps
-
-- [Quickstart](quickstart.md) — protect your first MCP tool in 5 minutes
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CAPISCIO_CORE_ADDR` | External core address | (embedded mode) |
+| `CAPISCIO_SERVER_ORIGIN` | Server origin for guard | (auto-detect) |
+| `CAPISCIO_LOG_LEVEL` | Logging verbosity | `info` |

@@ -1,62 +1,240 @@
----
-title: Server Registration
-description: Register your MCP server's identity with the CapiscIO registry.
----
+<!-- Synced from capiscio-mcp-python/docs/ — do not edit locally -->
 
-# Server Registration
+# Server Identity Registration
 
-Register your MCP server's DID to establish its identity in the CapiscIO trust network.
+This guide covers setting up a verifiable identity for your MCP server.
 
-## Generate a Keypair
+## Why Server Identity?
+
+MCP servers expose powerful tools—file systems, databases, APIs. But how do clients know they're connecting to the **real** server and not an imposter?
+
+Server identity registration solves this by:
+
+- **Generating a keypair** for cryptographic signing
+- **Creating a DID** (Decentralized Identifier) for the server
+- **Registering with the CapiscIO Registry** for discoverability
+
+## Quick Start
+
+```python
+from capiscio_mcp import setup_server_identity
+
+# One-step setup: generate keys + register with registry
+result = await setup_server_identity(
+    server_id="550e8400-e29b-41d4-a716-446655440000",  # From dashboard
+    api_key="sk_live_...",  # Registry API key
+    output_dir="./keys",
+)
+
+print(f"Server DID: {result['did']}")
+# did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK
+```
+
+## Prerequisites
+
+1. **Create your MCP server in the CapiscIO Dashboard**
+   - Go to [dashboard.capisc.io](https://dashboard.capisc.io)
+   - Navigate to Servers → Create Server
+   - Copy the server UUID
+
+2. **Get an API key**
+   - In the dashboard, go to Settings → API Keys
+   - Create a key with `servers:write` permission
+
+3. **capiscio-core must be running**
+   - Either embedded (auto-downloaded) or external
+
+## Step-by-Step Registration
+
+### Step 1: Generate Keypair
+
+Generate an Ed25519 keypair for your server:
 
 ```python
 from capiscio_mcp import generate_server_keypair
 
-keypair = generate_server_keypair()
-print(f"DID: {keypair.did}")
-print(f"Private key saved to: {keypair.key_path}")
+keys = await generate_server_keypair(output_dir="./keys")
+
+print(f"DID: {keys['did_key']}")
+print(f"Private key: {keys['private_key_path']}")
 ```
 
-## Register with the Registry
+Returns:
+
+| Key | Description |
+|-----|-------------|
+| `key_id` | Unique key identifier |
+| `did_key` | The derived `did:key:z6Mk...` URI |
+| `public_key_pem` | PEM-encoded public key |
+| `private_key_pem` | PEM-encoded private key |
+| `private_key_path` | Path to saved key file (if `output_dir` provided) |
+
+### Step 2: Register with Registry
+
+Register the DID with the CapiscIO registry:
 
 ```python
-from capiscio_mcp import register_server
+from capiscio_mcp import register_server_identity
 
-result = await register_server(
-    did="did:web:example.com:mcp:my-server",
-    name="My MCP Server",
-    description="Database access tools",
-    registry_url="https://registry.capisc.io",
+await register_server_identity(
+    server_id="550e8400-e29b-41d4-a716-446655440000",
+    api_key="sk_live_...",
+    did=keys["did_key"],
+    public_key=keys["public_key_pem"],
 )
 ```
 
-## Using the CLI
+### Combined: setup_server_identity
 
-```bash
-# Generate keypair
-capiscio mcp keygen --did did:web:example.com:mcp:my-server
+For convenience, use the combined function:
 
-# Register server
-capiscio mcp register \
-    --did did:web:example.com:mcp:my-server \
-    --name "My MCP Server"
+```python
+from capiscio_mcp import setup_server_identity
+
+result = await setup_server_identity(
+    server_id="550e8400-e29b-41d4-a716-446655440000",
+    api_key="sk_live_...",
+    output_dir="./keys",
+)
+
+# Returns everything you need
+print(f"DID: {result['did']}")
+print(f"Private key: {result['private_key_path']}")
 ```
 
-## DID Format
+## Synchronous API
 
-MCP server DIDs follow the `did:web` method:
+All functions have sync wrappers:
 
-```
-did:web:example.com:mcp:server-name
+```python
+from capiscio_mcp import (
+    generate_server_keypair_sync,
+    register_server_identity_sync,
+    setup_server_identity_sync,
+)
+
+# Sync version
+result = setup_server_identity_sync(
+    server_id="550e8400-e29b-41d4-a716-446655440000",
+    api_key="sk_live_...",
+    output_dir="./keys",
+)
 ```
 
-The DID Document is hosted at:
+## Using the Identity
 
+After registration, use the DID and private key for server identity disclosure:
+
+### With CapiscioMCPServer
+
+```python
+from capiscio_mcp.integrations.mcp import CapiscioMCPServer
+
+server = CapiscioMCPServer(
+    name="filesystem",
+    did=result["did"],
+    private_key_path=result["private_key_path"],
+)
+
+@server.tool(min_trust_level=2)
+async def read_file(path: str) -> str:
+    """Server identity is automatically disclosed."""
+    with open(path) as f:
+        return f.read()
 ```
-https://example.com/.well-known/did.json
+
+### Manual Disclosure
+
+Add identity headers to responses:
+
+```python
+from fastapi import FastAPI, Response
+
+app = FastAPI()
+
+@app.middleware("http")
+async def add_server_identity(request, call_next):
+    response = await call_next(request)
+    response.headers["Capiscio-Server-DID"] = SERVER_DID
+    response.headers["Capiscio-Server-Badge"] = SERVER_BADGE
+    return response
 ```
+
+## Error Handling
+
+```python
+from capiscio_mcp import (
+    setup_server_identity,
+    RegistrationError,
+    KeyGenerationError,
+)
+from capiscio_mcp.errors import CoreConnectionError
+
+try:
+    result = await setup_server_identity(
+        server_id="550e8400-e29b-41d4-a716-446655440000",
+        api_key="sk_live_...",
+    )
+except CoreConnectionError as e:
+    print("Could not connect to capiscio-core")
+    print("Ensure it's running: capiscio mcp serve")
+except KeyGenerationError as e:
+    print(f"Key generation failed: {e}")
+except RegistrationError as e:
+    print(f"Registration failed: {e}")
+    if e.status_code == 401:
+        print("Invalid API key")
+    elif e.status_code == 404:
+        print("Server not found - create it in the dashboard first")
+```
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `CAPISCIO_SERVER_ID` | Server UUID from dashboard |
+| `CAPISCIO_API_KEY` | Registry API key |
+| `CAPISCIO_SERVER_URL` | Registry URL (default: production) |
+| `CAPISCIO_SERVER_DOMAIN` | Domain for badge issuance |
+| `CAPISCIO_SERVER_PRIVATE_KEY_PEM` | PEM-encoded Ed25519 private key (ephemeral environments) |
+| `CAPISCIO_CORE_ADDR` | External core address (default: embedded) |
+| `CAPISCIO_SERVER_DID` | Pre-configured server DID |
+| `CAPISCIO_SERVER_PRIVATE_KEY` | Path to private key PEM |
+
+!!! tip "Deploying to containers or serverless?"
+    See the [Deployment Guide](deployment.md) for Docker, Lambda, Cloud Run, and
+    Kubernetes examples using `CAPISCIO_SERVER_PRIVATE_KEY_PEM` for ephemeral
+    identity persistence.
+
+## Security Best Practices
+
+1. **Never commit private keys**
+   ```gitignore
+   # .gitignore
+   *.pem
+   keys/
+   capiscio_keys/
+   ```
+
+2. **Use restrictive permissions**
+   ```bash
+   chmod 600 ./keys/*.pem
+   ```
+
+3. **Rotate keys periodically**
+   - Generate new keypair
+   - Update registry with new DID
+   - Keep old key for transition period
+
+4. **Store API keys securely**
+   ```bash
+   # Use environment variables
+   export CAPISCIO_REGISTRY_API_KEY="sk_live_..."
+   ```
 
 ## Next Steps
 
-- [Server-Side Guide](server-side.md) — protect tools with the @guard decorator
-- [Evidence Logging](evidence.md) — audit tool invocations
+- [Deployment Guide](deployment.md) - Docker, Lambda, Cloud Run, Kubernetes
+- [Protect MCP Tools](server-side.md) - Add trust-level requirements
+- [Client-Side Verification](client-side.md) - Verify servers before connecting
+- [Evidence Logging](evidence.md) - Audit trail for all tool calls
