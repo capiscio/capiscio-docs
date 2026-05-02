@@ -1,49 +1,173 @@
----
-title: Verify MCP Servers
-description: Client-side guide for verifying MCP server identity before connecting.
----
+<!-- Synced from capiscio-mcp-python/docs/ — do not edit locally -->
 
-# Verify MCP Servers (Client-Side)
+# Client-Side: Verifying MCP Servers
 
-Before connecting to an MCP server, verify its identity using its DID and trust badge.
+This guide covers verifying MCP server identity per RFC-007.
 
-## Verify a Server
+## Basic Usage
 
 ```python
-from capiscio_mcp import verify_server
+from capiscio_mcp import verify_server, ServerState
 
-result = await verify_server("did:web:example.com:mcp:my-server")
+result = await verify_server(
+    server_did="did:web:mcp.example.com:servers:filesystem",
+    server_badge="eyJhbGc...",
+    transport_origin="https://mcp.example.com",
+)
 
-if result.verified:
-    print(f"Trust level: {result.trust_level}")
-    print(f"Issuer: {result.issuer}")
-else:
-    print(f"Verification failed: {result.reason}")
+if result.state == ServerState.VERIFIED_PRINCIPAL:
+    print(f"✅ Server verified at trust level {result.trust_level}")
+elif result.state == ServerState.DECLARED_PRINCIPAL:
+    print("⚠️ Identity declared but verification failed")
+    print(f"   Error: {result.error_detail}")
+elif result.state == ServerState.UNVERIFIED_ORIGIN:
+    print("❌ Server did not disclose any identity")
 ```
 
-## Verification Checks
-
-The client verifier performs the following checks:
-
-1. **DID Resolution** — resolves the server's `did:web` to its DID Document
-2. **Badge Validation** — verifies the JWS signature and claims
-3. **Trust Level** — confirms the badge meets your minimum trust requirement
-4. **Expiry** — ensures the badge has not expired
-5. **Revocation** — checks the badge has not been revoked
-
-## Configuration
+## VerifyConfig Options
 
 ```python
-from capiscio_mcp import MCPClient
+from capiscio_mcp import verify_server, VerifyConfig
 
-client = MCPClient(
+config = VerifyConfig(
+    # List of trusted issuer DIDs
+    trusted_issuers=[
+        "did:web:registry.capisc.io",
+    ],
+    
+    # Minimum trust level required (0-4)
     min_trust_level=2,
-    require_pop=True,
-    registry_url="https://registry.capisc.io",
+    
+    # Accept self-signed (did:key) servers?
+    accept_level_zero=False,
+    
+    # Skip revocation checks (offline mode)?
+    offline_mode=False,
+    
+    # Skip host/path binding checks (for trusted gateways)
+    skip_origin_binding=False,
+)
+
+result = await verify_server(
+    server_did="did:web:mcp.example.com",
+    server_badge="eyJhbGc...",
+    transport_origin="https://mcp.example.com",
+    config=config,
 )
 ```
 
-## Next Steps
+## Extracting Identity from Transport
 
-- [Server Registration](server-registration.md) — register your server's DID
-- [Quickstart](../getting-started/quickstart.md) — end-to-end example
+### From HTTP Headers
+
+```python
+from capiscio_mcp import parse_http_headers, verify_server
+
+# Extract from HTTP response
+headers = {
+    "Capiscio-Server-DID": "did:web:mcp.example.com",
+    "Capiscio-Server-Badge": "eyJhbGc...",
+}
+
+identity = parse_http_headers(headers)
+
+server_did, server_badge = identity
+if server_did:
+    result = await verify_server(
+        server_did=server_did,
+        server_badge=server_badge,
+        transport_origin="https://mcp.example.com",
+    )
+```
+
+### From JSON-RPC _meta
+
+```python
+from capiscio_mcp import parse_jsonrpc_meta, verify_server
+
+# Extract from MCP JSON-RPC response
+response = {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {...},
+    "_meta": {
+        "capiscio_server_did": "did:web:mcp.example.com",
+        "capiscio_server_badge": "eyJhbGc...",
+    }
+}
+
+identity = parse_jsonrpc_meta(response.get("_meta", {}))
+
+server_did, server_badge = identity
+if server_did:
+    result = await verify_server(
+        server_did=server_did,
+        server_badge=server_badge,
+    )
+```
+
+## Server States Explained
+
+| State | RFC-007 Definition | Recommended Action |
+|-------|-------------------|-------------------|
+| `VERIFIED_PRINCIPAL` | DID verified via badge chain | ✅ Safe to proceed |
+| `DECLARED_PRINCIPAL` | DID provided but verification failed | ⚠️ Warn user, consider blocking |
+| `UNVERIFIED_ORIGIN` | No identity material provided | ❌ Treat as untrusted |
+
+## Error Handling
+
+```python
+from capiscio_mcp import verify_server, ServerVerifyError
+
+try:
+    result = await verify_server(
+        server_did="did:web:mcp.example.com",
+        server_badge="eyJhbGc...",
+        transport_origin="https://mcp.example.com",
+    )
+except ServerVerifyError as e:
+    print(f"Verification error: {e.error_code}")
+    print(f"Detail: {e.message}")
+```
+
+## Error Codes
+
+| Code | Meaning |
+|------|---------|
+| `DID_INVALID` | Server DID is malformed |
+| `BADGE_INVALID` | Badge signature invalid |
+| `BADGE_EXPIRED` | Badge has expired |
+| `BADGE_REVOKED` | Badge has been revoked |
+| `TRUST_INSUFFICIENT` | Trust level below minimum |
+| `ORIGIN_MISMATCH` | Transport origin doesn't match DID domain |
+| `PATH_MISMATCH` | Endpoint path doesn't match DID path |
+| `ISSUER_UNTRUSTED` | Badge issuer not in trusted list |
+
+## Synchronous Version
+
+```python
+from capiscio_mcp import verify_server_sync
+
+result = verify_server_sync(
+    server_did="did:web:mcp.example.com",
+    server_badge="eyJhbGc...",
+    transport_origin="https://mcp.example.com",
+)
+```
+
+## Strict Mode
+
+Raises an exception if verification fails:
+
+```python
+from capiscio_mcp.server import verify_server_strict
+
+# Raises ServerVerifyError if not VERIFIED_PRINCIPAL
+result = await verify_server_strict(
+    server_did="did:web:mcp.example.com",
+    server_badge="eyJhbGc...",
+    transport_origin="https://mcp.example.com",
+)
+# If we get here, server is verified
+print(f"Server trust level: {result.trust_level}")
+```
