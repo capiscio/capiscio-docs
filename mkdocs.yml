@@ -212,6 +212,7 @@ nav:
           - Schema-Only Mode: how-to/validation/schema-only.md
           - Strict Mode: how-to/validation/strict-mode.md
           - Custom Timeout: how-to/validation/custom-timeout.md
+          - Trust Scores: how-to/validation/trust-scores.md
       - Security:
           - Sign Outbound: how-to/security/sign-outbound.md
           - Verify Inbound: how-to/security/verify-inbound.md

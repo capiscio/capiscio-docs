@@ -380,58 +380,9 @@ async def handle_task(request: dict):
 
 ---
 
-## Part 6: Monitor Trust Scores
-
-### 6.1 Check Validation Score
-
-```bash
-capiscio validate ./agent-card.json --json | jq '.scores'
-```
-
-Output:
-
-```json
-{
-  "compliance": 95,
-  "trust": 80,
-  "availability": 100
-}
-```
-
-### 6.2 Score Categories
-
-| Category | What It Measures |
-|----------|------------------|
-| **Compliance** | Schema correctness, required fields |
-| **Trust** | Signature validity, identity verification |
-| **Availability** | Endpoint reachability, response times |
-
-### 6.3 Improve Your Score
-
-- **Compliance**: Fix all schema warnings
-- **Trust**: Use CA-signed badges (level 2+)
-- **Availability**: Ensure `/.well-known/agent.json` is accessible
-
----
-
-## Part 7: Production Checklist
-
-Before going to production:
-
-- [ ] Agent card passes `--strict --registry-ready` validation
-- [ ] Private key secured (not in version control)
-- [ ] Domain verification completed (DNS TXT record)
-- [ ] Badge keeper daemon running
-- [ ] Gateway or SDK middleware configured
-- [ ] HTTPS enabled (TLS)
-- [ ] Health endpoints implemented
-- [ ] Monitoring configured
-
----
-
 ## Summary
 
-You've learned the complete CapiscIO workflow:
+You've completed the core CapiscIO workflow:
 
 1. **Create** an A2A agent card
 2. **Validate** with the CLI
@@ -439,12 +390,13 @@ You've learned the complete CapiscIO workflow:
 4. **Register** with capiscio-server
 5. **Obtain** CA-signed badges
 6. **Deploy** with gateway enforcement
-7. **Monitor** trust scores
 
 ---
 
 ## Next Steps
 
+- [Trust Scores](../how-to/validation/trust-scores.md) — Monitor and improve your agent's scores
+- [Production Checklist](../reference/server/deployment.md#production-checklist) — Readiness checks before going live
 - [Trust Model](../concepts/trust-model.md) — Understand trust levels
 - [Badge Guides](../how-to/security/badges.md) — Advanced badge operations
 - [Gateway Setup](../how-to/security/gateway-setup.md) — Gateway configuration

@@ -1,15 +1,11 @@
 ---
 title: Getting Started with CapiscIO
-description: Get your agent identity, trust badge, and validation in minutes. Zero to production-ready.
+description: Get your agent identity, trust badge, and validation in minutes.
 ---
 
 # Getting Started
 
-Get up and running with CapiscIO in minutes. **One command** gives your AI agent a cryptographic identity, just like Let's Encrypt did for HTTPS.
-
----
-
-## Quick Install
+Install CapiscIO and follow the guide that matches what you need to do.
 
 ```bash
 npm install -g capiscio       # or: pip install capiscio
@@ -17,79 +13,15 @@ npm install -g capiscio       # or: pip install capiscio
 
 ---
 
-## The Fastest Path: One Command Setup
-
-Get a complete agent identity in **under 60 seconds**:
-
-=== "CLI"
-
-    ```bash
-    # Set your API key (get one free at app.capisc.io)
-    export CAPISCIO_API_KEY=sk_live_...
-    
-    # That's it! One command does everything:
-    capiscio init
-    ```
-
-=== "Python"
-
-    ```python
-    from capiscio_sdk import CapiscIO
-    
-    # One line - handles everything automatically
-    agent = CapiscIO.connect(api_key="sk_live_...")
-    
-    print(agent.did)    # did:key:z6Mk...
-    print(agent.badge)  # Your trust badge
-    ```
-
-=== "Environment Variables"
-
-    ```python
-    # Set CAPISCIO_API_KEY in your environment
-    agent = CapiscIO.from_env()
-    ```
-
-**What happens automatically:**
-
-1. ✅ Ed25519 key pair generated
-2. ✅ `did:key` identity derived (RFC-002 compliant)
-3. ✅ DID registered with CapiscIO registry
-4. ✅ Agent card created with `x-capiscio` extension
-5. ✅ Trust badge requested and stored
-
----
-
-## What You Get
-
-After running `capiscio init`, your `.capiscio/` directory contains:
-
-```
-.capiscio/
-├── private.jwk      # Ed25519 private key (keep secret!)
-├── public.jwk       # Public key
-├── did.txt          # Your agent's did:key identifier
-└── agent-card.json  # A2A-compliant agent card
-```
-
-Your agent now has:
-
-- **Cryptographic identity** - A globally unique `did:key` that proves who you are
-- **Verifiable credentials** - Sign messages and prove authenticity
-- **Trust badge** - Registered with CapiscIO for discovery and verification
-- **A2A compliance** - Ready to interact with other A2A agents
-
----
-
-## Choose Your Next Step
+## Choose Your Path
 
 <div class="grid cards" markdown>
 
--   :material-check-decagram:{ .lg .middle } **Validate Your Agent**
+-   :material-check-decagram:{ .lg .middle } **Validate an Agent Card**
 
     ---
 
-    Ensure your agent card is A2A-compliant.
+    Check your `agent-card.json` is A2A-compliant.
 
     **5 minutes** · Beginner
 
@@ -99,7 +31,7 @@ Your agent now has:
 
     ---
 
-    Add request signing and verification.
+    Add request signing, badges, and trust verification.
 
     **15 minutes** · Intermediate
 
@@ -109,7 +41,7 @@ Your agent now has:
 
     ---
 
-    Add tool-level authorization to Model Context Protocol servers.
+    Add tool-level authorization to MCP servers.
 
     **10 minutes** · Intermediate
 
@@ -125,33 +57,15 @@ Your agent now has:
 
     [:octicons-arrow-right-24: Setup CI/CD](cicd/1-intro.md)
 
--   :material-routes:{ .lg .middle } **Complete Workflow**
-
-    ---
-
-    End-to-end guide: identity → badge → validation → deployment.
-
-    **30 minutes** · Comprehensive
-
-    [:octicons-arrow-right-24: Full Walkthrough](complete-workflow.md)
-
 </div>
 
 ---
 
-## Manual Setup (Advanced)
+## End-to-End Walkthrough
 
-If you need more control, you can still do things step-by-step:
+If you want to see the full flow — identity, registration, badges, gateway — in one tutorial:
 
-```bash
-# Generate keys only (no server registration)
-capiscio key gen --out-priv private.jwk --out-pub public.jwk
-
-# Show DID derived from generated key
-capiscio key gen --show-did
-```
-
-See the [CLI Reference](../reference/cli/index.md) for all options.
+[:octicons-arrow-right-24: Complete Workflow](complete-workflow.md) (30 minutes)
 
 ---
 
@@ -165,83 +79,8 @@ See the [CLI Reference](../reference/cli/index.md) for all options.
 
 ---
 
-## SDK Quick Reference
-
-=== "Python"
-
-    ```python
-    from capiscio_sdk import CapiscIO
-    
-    # Connect and get full identity
-    agent = CapiscIO.connect(api_key="sk_live_...")
-    
-    # Or from environment
-    agent = CapiscIO.from_env()  # Uses CAPISCIO_API_KEY
-    
-    # Use the agent
-    print(agent.did)           # did:key:z6Mk...
-    print(agent.badge)         # Current trust badge
-    print(agent.status())      # Full status dict
-    
-    # Emit events for observability
-    agent.emit("task_started", {"task_id": "123"})
-    ```
-
-=== "Node.js / TypeScript"
-
-    ```typescript
-    import { CapiscIO } from 'capiscio';
-    
-    // Connect and get full identity
-    const agent = await CapiscIO.connect({ apiKey: 'sk_live_...' });
-    
-    console.log(agent.did);    // did:key:z6Mk...
-    console.log(agent.badge);  // Current trust badge
-    ```
-
-=== "CLI"
-
-    ```bash
-    # Initialize agent identity
-    capiscio init --api-key $CAPISCIO_API_KEY
-    
-    # Or with explicit agent ID
-    capiscio init --agent-id agt_abc123
-    
-    # View your identity
-    cat .capiscio/did.txt
-    ```
-
----
-
 ## What's Next?
 
-After getting started, explore:
-
-<div class="grid cards" markdown>
-
--   :material-certificate:{ .lg .middle } **Get a Trust Badge**
-
-    ---
-
-    Upgrade from self-signed to verified trust.
-
-    [:octicons-arrow-right-24: Trust Badges](../trust/index.md)
-
--   :material-book-open:{ .lg .middle } **Understand the Concepts**
-
-    ---
-
-    Learn how validation, scoring, and trust work.
-
-    [:octicons-arrow-right-24: Concepts](../concepts/index.md)
-
--   :material-clipboard-list:{ .lg .middle } **How-To Guides**
-
-    ---
-
-    Solve specific problems with copy-paste recipes.
-
-    [:octicons-arrow-right-24: How-To Guides](../how-to/index.md)
-
-</div>
+- [Concepts](../concepts/index.md) — Understand how trust, scoring, and identity work
+- [How-To Guides](../how-to/index.md) — Solve specific problems with copy-paste recipes
+- [CLI Reference](../reference/cli/index.md) — All CLI commands and flags
