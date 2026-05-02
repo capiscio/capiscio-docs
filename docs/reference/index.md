@@ -119,7 +119,7 @@ Complete reference documentation for all CapiscIO products.
 |---------|---------|----------|--------------|
 | `capiscio` (npm) | 2.x | Node.js | ≥18.0 |
 | `capiscio` (pip) | 2.x | Python | ≥3.10 |
-| `capiscio-sdk` | 0.3.x | Python | ≥3.10 |
-| `capiscio-mcp` | 0.1.x | Python | ≥3.10 |
-| `capiscio-core` (Go) | 2.x | Go | ≥1.21 |
+| `capiscio-sdk` | 2.x | Python | ≥3.10 |
+| `capiscio-mcp` | 2.x | Python | ≥3.10 |
+| `capiscio-core` (Go) | 2.x | Go | ≥1.25 |
 
