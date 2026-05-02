@@ -70,63 +70,72 @@ capiscio-server provides:
 
 ## API Endpoints Summary
 
-### Agents
+!!! note "Dual-Path Architecture"
+    capiscio-server has **two** endpoint groups for agent management — SDK routes (for programmatic access) and Dashboard routes (for the web UI). See [API Reference](api.md) for full details.
+
+### SDK/CLI Routes (`X-Capiscio-Registry-Key`)
+
+Use these routes from the CLI, Python SDK, or CI/CD pipelines:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/sdk/agents` | List agents |
+| `POST` | `/v1/sdk/agents` | Create agent |
+| `GET` | `/v1/sdk/agents/{id}` | Get agent details |
+| `PUT` | `/v1/sdk/agents/{id}` | Update agent |
+| `POST` | `/v1/sdk/agents/{did}/badge/challenge` | PoP challenge (RFC-003) |
+| `POST` | `/v1/sdk/agents/{did}/badge/pop` | PoP badge issuance |
+| `GET` | `/v1/sdk/servers` | List MCP servers (RFC-007) |
+| `POST` | `/v1/sdk/servers` | Register MCP server |
+
+### Dashboard Routes (Clerk JWT)
+
+Used by the capiscio-ui web dashboard only:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/v1/agents` | List all agents |
 | `POST` | `/v1/agents` | Create new agent |
-| `GET` | `/v1/agents/{id}` | Get agent details |
-| `PUT` | `/v1/agents/{id}` | Update agent |
-| `DELETE` | `/v1/agents/{id}` | Delete agent |
+| `POST` | `/v1/agents/{id}/badge` | Issue IAL-0 badge |
 | `POST` | `/v1/agents/{id}/disable` | Disable agent |
-| `POST` | `/v1/agents/{id}/enable` | Enable agent |
-
-### Badges
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/v1/agents/{id}/badge` | Issue badge for agent |
-| `POST` | `/v1/validate` | Verify a badge token |
-| `GET` | `/.well-known/jwks.json` | Get CA public keys (JWKS) |
-
-### DID Resolution
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/agents/{id}/did.json` | Get agent's DID document |
-
-### API Keys
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
 | `GET` | `/v1/api-keys` | List API keys |
 | `POST` | `/v1/api-keys` | Create new API key |
 | `DELETE` | `/v1/api-keys/{id}` | Delete API key |
+
+### Public Endpoints (No Auth)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/validate` | Verify a badge token |
+| `GET` | `/.well-known/jwks.json` | Get CA public keys (JWKS) |
+| `GET` | `/agents/{id}/did.json` | Get agent's DID document |
+| `GET` | `/servers/{id}/did.json` | Get MCP server's DID document |
+| `GET` | `/v1/badges/{jti}/status` | Badge revocation status |
+| `GET` | `/v1/agents/{id}/status` | Agent status |
 
 ---
 
 ## Authentication
 
-capiscio-server supports two authentication methods:
+capiscio-server supports two authentication methods depending on the route group:
 
-### API Key Authentication
+### API Key Authentication (SDK/CLI Routes)
 
-For programmatic access (agents, CI/CD), use the `X-Capiscio-Registry-Key` header:
+For programmatic access via `/v1/sdk/*` endpoints, use the `X-Capiscio-Registry-Key` header:
 
 ```bash
-curl -X POST https://registry.capisc.io/v1/agents/{id}/badge \
+curl -X POST https://registry.capisc.io/v1/sdk/agents \
   -H "X-Capiscio-Registry-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"domain": "my-agent.example.com", "trustLevel": "2"}'
+  -d '{"name": "my-agent", "domain": "my-agent.example.com"}'
 ```
 
 !!! note "Header Name"
     Use `X-Capiscio-Registry-Key` for API key authentication, not `Authorization: Bearer`. The `X-Capiscio-Badge` header is used for agent-to-agent badge transport (RFC-002 §9.1).
 
-### Clerk Authentication
+### Clerk Authentication (Dashboard Routes)
 
-For the web dashboard (capiscio-ui), authentication is handled via [Clerk](https://clerk.dev).
+For the web dashboard (capiscio-ui), authentication is handled via [Clerk](https://clerk.dev). Dashboard routes at `/v1/agents`, `/v1/api-keys`, etc. use Clerk JWTs.
 
 ---
 
