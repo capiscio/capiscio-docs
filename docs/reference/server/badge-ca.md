@@ -72,11 +72,15 @@ The CA supports two badge issuance modes:
 
 ### IAL-0: Account-Based Issuance
 
-Simple badge issuance based on API key authentication. Suitable for internal systems where the caller controls the agent.
+Simple badge issuance based on account ownership. Available through the **dashboard API** (Clerk JWT auth) or via the SDK using the PoP-equivalent flow.
+
+!!! note "Route Authentication"
+    The IAL-0 endpoint `/v1/agents/{id}/badge` requires **Clerk JWT** (dashboard auth). For programmatic badge issuance from CLI/SDK, use the IAL-1 PoP flow via `/v1/sdk/agents/{did}/badge/challenge` + `/v1/sdk/agents/{did}/badge/pop`.
 
 ```bash
-curl -X POST https://registry.capisc.io/v1/agents/{did}/badge \
-  -H "X-Capiscio-Registry-Key: cpsc_live_xxx" \
+# Dashboard route (Clerk JWT - used by capiscio-ui)
+curl -X POST https://registry.capisc.io/v1/agents/{id}/badge \
+  -H "Authorization: Bearer YOUR_CLERK_JWT" \
   -H "Content-Type: application/json" \
   -d '{
     "mode": "ial0",
@@ -109,7 +113,7 @@ Two-phase challenge-response protocol that cryptographically proves the agent po
 **Phase 1: Request Challenge**
 
 ```bash
-curl -X POST https://registry.capisc.io/v1/agents/{did}/badge/challenge \
+curl -X POST https://registry.capisc.io/v1/sdk/agents/{did}/badge/challenge \
   -H "X-Capiscio-Registry-Key: cpsc_live_xxx" \
   -H "Content-Type: application/json" \
   -d '{
@@ -153,7 +157,7 @@ The agent creates a proof JWS signed with their private key:
 Then submit the proof:
 
 ```bash
-curl -X POST https://registry.capisc.io/v1/agents/{did}/badge/pop \
+curl -X POST https://registry.capisc.io/v1/sdk/agents/{did}/badge/pop \
   -H "Content-Type: application/json" \
   -d '{
     "challenge_id": "ch-550e8400-e29b-41d4-a716-446655440000",

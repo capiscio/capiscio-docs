@@ -185,7 +185,7 @@ export CAPISCIO_API_KEY="sk_live_xxx"
 ### 3.4 Register Your Agent
 
 ```bash
-curl -X POST http://localhost:8080/v1/agents \
+curl -X POST http://localhost:8080/v1/sdk/agents \
   -H "X-Capiscio-Registry-Key: $CAPISCIO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -224,27 +224,34 @@ _capiscio.my-agent.example.com TXT "capiscio-verification=550e8400-e29b-41d4-a71
 
 ### 4.2 Request Badge
 
+Use the CLI to request a badge (handles authentication automatically):
+
 ```bash
-curl -X POST "http://localhost:8080/v1/agents/$AGENT_ID/badge" \
-  -H "X-Capiscio-Registry-Key: $CAPISCIO_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "domain": "my-agent.example.com",
-    "trustLevel": "2"
-  }'
+capiscio badge keep \
+  --ca "http://localhost:8080" \
+  --agent-id "$AGENT_ID" \
+  --api-key "$CAPISCIO_API_KEY" \
+  --domain "my-agent.example.com" \
+  --level 2 \
+  --out ./badge.jwt
 ```
 
-Response:
+!!! note "SDK vs Dashboard Routes"
+    For programmatic badge issuance, use the CLI or Python SDK (which handle the [PoP flow](../reference/server/badge-ca.md#ial-1-proof-of-possession-rfc-003) automatically). The `/v1/agents/{id}/badge` REST endpoint is for the web dashboard only (Clerk JWT auth).
 
-```json
-{
-  "success": true,
-  "data": {
-    "token": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...",
-    "trustLevel": "2",
-    "expiresAt": "2025-01-15T10:35:00Z"
-  }
-}
+Verify the badge was issued:
+
+```bash
+capiscio badge verify ./badge.jwt
+```
+
+Output:
+
+```
+✓ Badge valid
+  Subject: did:web:registry.capisc.io:agents:550e8400
+  Level:   2 (DV)
+  Expires: 2025-01-15T10:35:00Z
 ```
 
 ### 4.3 Use Badge Keeper for Auto-Renewal
