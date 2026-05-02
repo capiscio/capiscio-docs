@@ -402,12 +402,12 @@ Version: {{ protocol_version }} (Strictness: progressive)
 
 ## See Also
 
-- **[Scoring System](scoring.md)** - Understand how validation results translate to scores
-- **[CLI Reference](../reference/cli/index.md)** - Command-line validation reference
-- **[Python SDK](../reference/sdk-python/index.md)** - Runtime protection for production agents
+- **[Scoring System](../../concepts/scoring.md)** - Understand how validation results translate to scores
+- **[CLI Reference](index.md)** - Command-line validation reference
+- **[Python SDK](../sdk-python/index.md)** - Runtime protection for production agents
 
 !!! tip "Production Deployment"
-  The CapiscIO CLI (`capiscio`) validates agent cards during development and CI/CD. For runtime protection, use [CapiscIO Python SDK](../reference/sdk-python/index.md).
+  The CapiscIO CLI (`capiscio`) validates agent cards during development and CI/CD. For runtime protection, use [CapiscIO Python SDK](../sdk-python/index.md).
 
 ## Contributing to Validation
 
@@ -415,6 +415,6 @@ See the core implementation repository (Go) at https://github.com/capiscio/capis
 
 ## Related Documentation
 
-- [CLI Usage Guide](../reference/cli/index.md)
-- [CLI Reference](../reference/cli/index.md)
+- [CLI Usage Guide](index.md)
+- [CLI Reference](index.md)
 - [A2A Protocol Specification](https://github.com/a2aproject/A2A){:target="_blank"}
