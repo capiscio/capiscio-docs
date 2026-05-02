@@ -112,7 +112,7 @@ response = client.score_agent_card(
 
 ## BadgeService
 
-Issue and verify trust badges per [RFC-002](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md).
+Issue and verify trust badges per [RFC-002](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md).
 
 ### SignBadge
 
@@ -471,6 +471,6 @@ except RpcError as e:
 - [Python SDK](sdk-python/index.md) — `CapiscioRPCClient` wrapper
 - [MCP API](sdk-python/mcp.md) — MCP tool access control
 - [Badge CA](server/badge-ca.md) — CA operations
-- [RFC-002: Trust Badge](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
-- [RFC-006: MCP Tool Authority](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority.md) — Tool access spec
-- [RFC-007: MCP Server Identity](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity.md) — Server identity spec
+- [RFC-002: Trust Badge](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
+- [RFC-006: MCP Tool Authority](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority-evidence.md) — Tool access spec
+- [RFC-007: MCP Server Identity](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity-discovery.md) — Server identity spec

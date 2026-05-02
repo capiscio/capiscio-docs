@@ -197,4 +197,4 @@ The server starts at `http://localhost:8080`.
 - [API Reference](api.md) — Full endpoint documentation
 - [Deployment Guide](deployment.md) — Production deployment
 - [Badge CA](badge-ca.md) — Certificate Authority operations
-- [RFC-002: Trust Badge](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
+- [RFC-002: Trust Badge](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md) — Badge specification

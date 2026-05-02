@@ -549,5 +549,5 @@ except RpcError as e:
 - [Trust Badges](../../how-to/security/badges.md) — Badge issuance and verification
 - [Trust Model](../../concepts/trust-model.md) — Trust levels explained
 - [Server Registration](../../mcp-guard/guides/server-registration.md) — MCP Guard server identity registration
-- [RFC-006: MCP Tool Authority](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority.md) — Specification
-- [RFC-007: MCP Server Identity](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity.md) — Specification
+- [RFC-006: MCP Tool Authority](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority-evidence.md) — Specification
+- [RFC-007: MCP Server Identity](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity-discovery.md) — Specification

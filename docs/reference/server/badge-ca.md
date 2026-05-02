@@ -568,5 +568,5 @@ curl -X PUT https://registry.capisc.io/v1/agents/{agent-id} \
 - [API Reference](api.md) — Badge endpoints
 - [Trust Model](../../concepts/trust-model.md) — Trust level explanation
 - [Badges Guide](../../how-to/security/badges.md) — Practical examples
-- [RFC-002](https://docs.capisc.io/rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
-- [RFC-003](https://docs.capisc.io/rfcs/blob/main/docs/003-key-ownership-proof.md) — Proof of Possession protocol
+- [RFC-002](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
+- [RFC-003](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/003-key-ownership-proof.md) — Proof of Possession protocol
