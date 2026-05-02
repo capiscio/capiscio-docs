@@ -247,6 +247,7 @@ nav:
       - reference/index.md
       - CapiscIO Core:
           - CLI Reference: reference/cli/index.md
+          - Validation Reference: reference/cli/validation.md
           - Go API: reference/go-api.md
           - gRPC Services: reference/grpc.md
       - Agent Guard:
@@ -265,6 +266,7 @@ nav:
           - API Reference: reference/server/api.md
           - Deployment: reference/server/deployment.md
           - Badge CA: reference/server/badge-ca.md
+          - Policy Enforcement: reference/server/policy-enforcement.md
       - Policy:
           - Policy Config YAML: reference/policy-config-yaml.md
           - Policy API: reference/policy-api.md

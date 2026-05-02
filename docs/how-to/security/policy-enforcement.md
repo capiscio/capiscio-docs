@@ -205,70 +205,6 @@ For emergency access when the PDP is down or misconfigured:
 
 ---
 
-## Configuration Reference
-
-All PDP-related environment variables:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `CAPISCIO_EMBEDDED_PDP` | `false` | Enable embedded OPA evaluator (in-process PDP) |
-| `CAPISCIO_PDP_ENDPOINT` | _(empty)_ | External PDP URL. Empty + no embedded PDP = badge-only mode |
-| `CAPISCIO_PDP_TIMEOUT_MS` | `500` | External PDP query timeout in milliseconds |
-| `CAPISCIO_ENFORCEMENT_MODE` | `EM-OBSERVE` | One of: `EM-OBSERVE`, `EM-GUARD`, `EM-DELEGATE`, `EM-STRICT` |
-| `CAPISCIO_WORKSPACE` | _(empty)_ | Workspace/tenant UUID (required for embedded PDP) |
-| `CAPISCIO_BUNDLE_POLL_INTERVAL` | `30s` | Embedded PDP bundle rebuild interval |
-| `CAPISCIO_BUNDLE_STALENESS_THRESHOLD` | `5m` | Embedded PDP bundle age before staleness warnings |
-| `CAPISCIO_BREAKGLASS_PUBLIC_KEY` | _(empty)_ | Path to break-glass Ed25519 public key file |
-| `CAPISCIO_PEP_ID` | _(empty)_ | PEP instance identifier (sent to PDP as `X-Capiscio-PEP-ID`) |
-
----
-
-## PDP Request Format
-
-The PEP sends a JSON POST to the PDP endpoint. Your PDP must accept this format:
-
-```jsonc
-{
-  "pip_version": "capiscio.pip.v1",
-  "subject": {
-    "did": "did:web:agent.example.com",
-    "badge_jti": "badge-uuid",
-    "ial": "1",
-    "trust_level": "DV"  // Badge trust level code: SS(0), REG(1), DV(2), OV(3), EV(4)
-  },
-  "action": {
-    "operation": "POST /v1/badges",
-    "capability_class": null
-  },
-  "resource": {
-    "identifier": "/v1/badges"
-  },
-  "context": {
-    "txn_id": "txn-uuid",
-    "enforcement_mode": "EM-GUARD"
-  },
-  "environment": {
-    "workspace": "00000000-0000-0000-0000-000000000000",
-    "pep_id": "server-01",
-    "time": "2026-03-01T12:00:00Z"
-  }
-}
-```
-
-And return:
-
-```json
-{
-  "decision": "ALLOW",
-  "decision_id": "eval-uuid",
-  "obligations": [],
-  "reason": "Policy matched: allow-trusted-agents",
-  "ttl": 300
-}
-```
-
----
-
 ## Verification
 
 Confirm policy enforcement is active:
@@ -281,3 +217,9 @@ curl -v https://your-server/v1/agents \
 # Look for Server-Timing header with policy timing
 # Server-Timing: capiscio-auth;dur=0.6, capiscio-policy;dur=12.3
 ```
+
+---
+
+## Reference
+
+For full configuration details, PDP request/response format, and telemetry field definitions, see the [Policy Enforcement Reference](../../reference/server/policy-enforcement.md).
