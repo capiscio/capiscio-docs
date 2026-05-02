@@ -312,6 +312,21 @@ error: signature verification failed
 
 ---
 
+## Production Checklist
+
+Before going to production, ensure:
+
+- [ ] Agent card passes `capiscio validate --strict --registry-ready`
+- [ ] Private key secured (not in version control)
+- [ ] Domain verification completed (DNS TXT record)
+- [ ] Badge keeper daemon running for auto-renewal
+- [ ] Gateway or SDK middleware configured
+- [ ] HTTPS/TLS enabled on all endpoints
+- [ ] Health endpoints implemented (`/healthz`)
+- [ ] Monitoring and alerting configured
+
+---
+
 ## See Also
 
 - [API Reference](api.md) — Full API documentation
