@@ -21,6 +21,7 @@ First, grab our sample agent card:
   "description": "A helpful AI assistant",
   "url": "https://my-agent.example.com",
   "version": "1.0.0",
+  "protocolVersion": "{{ protocol_version }}",
   "capabilities": {
     "streaming": true,
     "pushNotifications": false

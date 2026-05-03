@@ -25,7 +25,7 @@ The CapiscIO CLI is available for Node.js and Python. Choose your preferred plat
 
     Expected output:
     ```
-    capiscio/{{ capiscio_version }} (darwin-arm64)
+    capiscio version {{ capiscio_version }} (commit: <hash>)
     ```
 
 === "pip (Python)"
@@ -42,7 +42,7 @@ The CapiscIO CLI is available for Node.js and Python. Choose your preferred plat
 
     Expected output:
     ```
-    capiscio/{{ capiscio_version }} (darwin-arm64)
+    capiscio version {{ capiscio_version }} (commit: <hash>)
     ```
 
 === "Go (Direct)"

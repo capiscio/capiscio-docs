@@ -99,12 +99,14 @@ The token contains:
 
 ```json
 {
-  "iss": "did:capiscio:agent:my-agent",
   "iat": 1701432000,
   "exp": 1701432060,
   "bh": "sha256-hash-of-body"
 }
 ```
+
+!!! note "Production vs Dev Mode"
+    In production with registered badges, the token also includes `"iss"` (the agent's DID). In dev mode, only `iat`, `exp`, and `bh` are present.
 
 ---
 
