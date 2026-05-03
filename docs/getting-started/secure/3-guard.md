@@ -52,12 +52,14 @@ your-project/
     
     Decoded claims:
     {
-      "iss": "local-dev-agent",
       "iat": 1701432000,
       "exp": 1701432060,
       "bh": "sha256:a1b2c3d4e5f6..."
     }
     ```
+
+    !!! note
+        In dev mode, claims contain `iat`, `exp`, and `bh`. The `iss` claim (agent DID) is added when using registered badges in production.
 
 ### Use the Signature in HTTP
 
@@ -112,7 +114,7 @@ your-project/
     
     try:
         claims = guard.verify_inbound(jws=badge, body=body)
-        print(f"✓ Valid request from: {claims['iss']}")
+        print(f"✓ Valid request")
         print(f"  Issued at: {claims['iat']}")
         print(f"  Expires: {claims['exp']}")
     except VerificationError as e:
@@ -122,7 +124,7 @@ your-project/
 === "Valid Request"
 
     ```
-    ✓ Valid request from: partner-agent
+    ✓ Valid request
       Issued at: 1701432000
       Expires: 1701432060
     ```
@@ -215,6 +217,9 @@ When you call `verify_inbound()`, SimpleGuard checks:
 | **Body Hash** | `bh` matches body | `Integrity check failed` |
 | **Not Expired** | `exp` > now | `Token expired` |
 | **Not Future** | `iat` <= now | `Token not yet valid` |
+
+!!! warning "Dev Mode Trust"
+    In `dev_mode=True`, the trust store is permissive — all valid Ed25519 signatures are accepted. The **Trust** check above only rejects untrusted keys when you have a configured trust store (i.e., keys in `capiscio_keys/trusted/`) or when using the `CapiscioMiddleware`. See [Step 4: Test Enforcement](4-test.md) for an example that demonstrates trust rejection via the middleware.
 
 ---
 

@@ -154,7 +154,7 @@ async def handle_message(request: Request):
     # 3. Verify the signature
     try:
         claims = guard.verify_inbound(badge_token, body=body)
-        print(f"✅ Verified request from: {claims.get('iss')}")
+        print(f"✅ Verified request from: {claims.get('iss', 'dev-mode agent')}")
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Signature verification failed: {e}")
     

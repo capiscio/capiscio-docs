@@ -47,6 +47,7 @@ Every A2A agent needs an `agent-card.json` that describes its capabilities:
   "description": "A helpful assistant that can answer questions",
   "url": "https://my-agent.example.com",
   "version": "1.0.0",
+  "protocolVersion": "{{ protocol_version }}",
   "provider": {
     "organization": "My Company",
     "url": "https://example.com"

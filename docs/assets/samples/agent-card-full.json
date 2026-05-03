@@ -3,6 +3,7 @@
   "description": "AI-powered code review assistant that analyzes pull requests for bugs, security issues, and style improvements",
   "url": "https://codereview.example.com",
   "version": "2.1.0",
+  "protocolVersion": "0.2.1",
   "documentationUrl": "https://docs.codereview.example.com",
   "provider": {
     "organization": "DevTools Inc",

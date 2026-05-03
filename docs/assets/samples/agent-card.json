@@ -3,6 +3,7 @@
   "description": "A helpful AI assistant built with CapiscIO",
   "url": "https://my-agent.example.com",
   "version": "1.0.0",
+  "protocolVersion": "0.2.1",
   "provider": {
     "organization": "My Company",
     "url": "https://mycompany.com"
