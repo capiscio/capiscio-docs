@@ -128,3 +128,56 @@ Evidence logging helps with:
 - **GDPR**: Parameters are hashed, not stored raw
 - **HIPAA**: Track who accessed what tools
 - **PCI DSS**: Monitor privileged operations
+
+---
+
+## Event Emission on Deny
+
+When the `@guard` decorator denies a tool invocation, it automatically emits a `capiscio.policy_enforced` event to the CapiscIO Registry via the `GuardEventEmitter`.
+
+### Auto-Configuration
+
+If you use `MCPServerIdentity.connect()`, the event emitter is configured automatically — no manual setup required.
+
+### Manual Configuration
+
+```python
+from capiscio_mcp import GuardEventEmitter, set_event_emitter
+
+emitter = GuardEventEmitter(
+    server_url="https://registry.capisc.io",
+    api_key="sk_live_...",
+    agent_id="my-agent",       # Optional
+    enabled=True,              # Disable with False
+    timeout=5.0,               # HTTP timeout in seconds
+)
+set_event_emitter(emitter)
+```
+
+### Event Payload
+
+Events are POST'd to `/v1/events` with fire-and-forget semantics — failures do not block tool execution.
+
+| Field | Description |
+|-------|-------------|
+| `decision` | `"deny"` |
+| `tool_name` | Tool that was denied |
+| `deny_reason` | Reason code (e.g., `trust_insufficient`) |
+| `deny_detail` | Human-readable explanation |
+| `agent_did` | Caller's DID |
+| `trust_level` | Caller's trust level |
+| `evidence_id` | Evidence record ID |
+| `error_code` | Structured error code (e.g., `SCOPE_INSUFFICIENT`) |
+| `requested_capability` | Capability the caller asked for |
+| `presented_capability` | Capability the caller presented |
+| `severity` | Event severity level |
+
+### Accessing the Emitter
+
+```python
+from capiscio_mcp import get_event_emitter
+
+emitter = get_event_emitter()
+if emitter:
+    print(f"Event emission enabled: {emitter.enabled}")
+```

@@ -201,6 +201,7 @@ nav:
           - concepts/scoring.md
       - Enforcement: concepts/enforcement.md
       - Policy Scoping: concepts/policy-scoping.md
+      - Delegation Chains: concepts/delegation.md
       - MCP Security:
           - Overview: concepts/mcp-security.md
 
@@ -224,6 +225,7 @@ nav:
           - Dev Mode: how-to/security/dev-mode.md
           - Key Rotation: how-to/security/key-rotation.md
           - Trust Store: how-to/security/trust-store.md
+          - Delegation Chains: how-to/security/delegation-chains.md
       - MCP Security:
           - Protect MCP Tools: mcp-guard/guides/server-side.md
           - Verify MCP Servers: mcp-guard/guides/client-side.md

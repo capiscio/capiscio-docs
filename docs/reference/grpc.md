@@ -15,6 +15,7 @@ The gRPC API provides four core services:
 | `BadgeService` | Issue, verify, and manage trust badges |
 | `MCPService` | MCP tool access control and server identity (RFC-006/007) |
 | `ValidationService` | Schema validation for agent cards |
+| `SimpleGuardService` | Authority envelope operations (RFC-008) |
 
 ---
 
@@ -390,6 +391,137 @@ identity = client.mcp.parse_server_identity_jsonrpc(
 
 ---
 
+## SimpleGuardService — Authority Envelopes
+
+Create and verify delegated authority chains per [RFC-008](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/008-delegated-authority-envelopes.md).
+
+### CreateEnvelope
+
+Create a root authority envelope delegating authority to another agent.
+
+```protobuf
+rpc CreateEnvelope(CreateEnvelopeRequest) returns (CreateEnvelopeResponse);
+```
+
+**Request:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `key_id` | `string` | Yes | Key ID for signing |
+| `subject_did` | `string` | Yes | DID of the agent receiving authority |
+| `capability_class` | `string` | Yes | Dot-notation capability (e.g., `tools.database.read`) |
+| `delegation_depth_remaining` | `int32` | Yes | How many further delegations allowed |
+| `issuer_badge_jti` | `string` | No | JTI of the issuer's badge |
+| `txn_id` | `string` | No | Transaction ID (auto-generated if empty) |
+| `expires_in_seconds` | `int64` | No | TTL from now (default: 3600) |
+| `constraints_json` | `string` | No | JSON-serialized constraints object |
+| `subject_badge_jti` | `string` | No | JTI of the subject's badge |
+| `enforcement_mode_min` | `string` | No | Minimum enforcement mode |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `envelope_jws` | `string` | JWS Compact Serialization of the signed envelope |
+| `error_message` | `string` | Error description (empty on success) |
+
+### DeriveEnvelope
+
+Derive a child authority envelope from a parent, with hash linking and narrowing validation.
+
+```protobuf
+rpc DeriveEnvelope(DeriveEnvelopeRequest) returns (DeriveEnvelopeResponse);
+```
+
+**Request:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `key_id` | `string` | Yes | Key ID for signing |
+| `parent_envelope_jws` | `string` | Yes | Parent envelope JWS to derive from |
+| `subject_did` | `string` | Yes | DID of the next delegate |
+| `capability_class` | `string` | Yes | Must be equal or narrower than parent's |
+| `delegation_depth_remaining` | `int32` | Yes | Must be less than parent's depth |
+| `issuer_badge_jti` | `string` | No | JTI of the child issuer's own badge |
+| `expires_in_seconds` | `int64` | No | TTL from now (default: 1800) |
+| `constraints_json` | `string` | No | Must be equal or more restrictive than parent's |
+| `subject_badge_jti` | `string` | No | JTI of the subject's badge |
+| `enforcement_mode_min` | `string` | No | Cannot relax parent's mode |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `envelope_jws` | `string` | JWS Compact Serialization of the signed child envelope |
+| `error_message` | `string` | Error description (empty on success) |
+
+!!! warning "Narrowing Violations"
+    `DeriveEnvelope` returns an error if the child violates monotonic narrowing rules (capability, depth, constraints, or enforcement mode).
+
+### BuildTransportHeaders
+
+Encode a delegation chain into HTTP transport headers for use in requests.
+
+```protobuf
+rpc BuildTransportHeaders(BuildTransportHeadersRequest) returns (BuildTransportHeadersResponse);
+```
+
+**Request:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `chain` | `string[]` | Yes | Ordered list of envelope JWS strings `[root, ..., leaf]` |
+| `badge_map_json` | `string` | No | JSON object mapping DID → badge JWS for intermediate agents |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `authority` | `string` | Value for `X-Capiscio-Authority` header (leaf JWS) |
+| `authority_chain` | `string` | Value for `X-Capiscio-Authority-Chain` header (base64url JSON array) |
+| `badge_map` | `string` | Value for `X-Capiscio-Badge-Map` header (JSON object) |
+| `error_message` | `string` | Error description (empty on success) |
+
+### VerifyEnvelopeChain
+
+Verify the integrity of an authority envelope chain.
+
+```protobuf
+rpc VerifyEnvelopeChain(VerifyEnvelopeChainRequest) returns (VerifyEnvelopeChainResponse);
+```
+
+**Request:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `chain` | `string[]` | Yes | Ordered list of envelope JWS strings to verify |
+| `badge_map_json` | `string` | No | JSON object mapping DID → badge JWS for badge-issuer lookups |
+| `enforcement_mode` | `string` | No | Enforcement mode to apply during verification |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `valid` | `bool` | Whether the chain is valid |
+| `leaf_capability` | `string` | Capability class of the leaf envelope |
+| `leaf_subject` | `string` | Subject DID of the leaf envelope |
+| `chain_depth` | `int32` | Number of envelopes in the chain |
+| `error_message` | `string` | Error description (empty when valid) |
+| `error_code` | `string` | Machine-readable error code |
+
+**Error Codes:**
+
+| Code | Description |
+|------|-------------|
+| `ENVELOPE_SIGNATURE_INVALID` | Envelope signature verification failed |
+| `ENVELOPE_EXPIRED` | Envelope has expired |
+| `ENVELOPE_CHAIN_BROKEN` | Hash chain integrity failure |
+| `ENVELOPE_NARROWING_VIOLATION` | Child is wider than parent |
+| `ENVELOPE_DEPTH_EXCEEDED` | Delegation depth remaining is negative |
+| `ENVELOPE_CHAIN_TOO_DEEP` | Chain exceeds maximum allowed depth |
+
+---
+
 ## Trust Levels
 
 The `TrustLevel` enum maps to badge trust levels (RFC-002 §5):
@@ -414,6 +546,7 @@ capiscio-core/proto/capiscio/v1/
 ├── badge.proto      # BadgeService
 ├── mcp.proto        # MCPService (RFC-006/007)
 ├── scoring.proto    # ScoringService
+├── simpleguard.proto # SimpleGuardService (RFC-008)
 ├── common.proto     # Shared types
 ├── did.proto        # DID operations
 ├── registry.proto   # Registry operations
@@ -474,3 +607,4 @@ except RpcError as e:
 - [RFC-002: Trust Badge](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/002-trust-badge.md) — Badge specification
 - [RFC-006: MCP Tool Authority](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/006-mcp-tool-authority-evidence.md) — Tool access spec
 - [RFC-007: MCP Server Identity](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/007-mcp-server-identity-discovery.md) — Server identity spec
+- [RFC-008: Delegated Authority Envelopes](https://github.com/capiscio/capiscio-rfcs/blob/main/docs/008-delegated-authority-envelopes.md) — Delegation chain spec

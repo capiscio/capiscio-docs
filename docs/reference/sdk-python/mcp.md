@@ -107,6 +107,13 @@ def evaluate_tool_access(
 | `evidence_json` | `str` | RFC-006 §7 evidence record |
 | `evidence_id` | `str` | Unique evidence record ID |
 | `timestamp` | `str` | Evaluation timestamp (ISO 8601) |
+| `error_code` | `str` | Machine-readable error code (e.g., `SCOPE_INSUFFICIENT`) |
+| `rejection_detail` | `str` | Structured rejection explanation |
+| `requested_capability` | `str` | Capability the caller asked for |
+| `presented_capability` | `str` | Capability the caller actually presented |
+
+!!! info "Structured Rejection Fields (RFC-008 B8)"
+    The `error_code`, `rejection_detail`, `requested_capability`, and `presented_capability` fields are populated when a denial involves capability scope violations. They are empty for other denial reasons (e.g., `badge_missing`).
 
 **Deny Reasons:**
 
@@ -120,6 +127,7 @@ def evaluate_tool_access(
 | `tool_not_allowed` | Tool not in allowed list |
 | `issuer_untrusted` | Badge issuer not trusted |
 | `policy_denied` | Policy explicitly denied access |
+| `scope_insufficient` | Presented capability does not cover the requested scope (RFC-008) |
 
 **Example:**
 

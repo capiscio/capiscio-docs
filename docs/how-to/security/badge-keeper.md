@@ -280,6 +280,25 @@ Reduce check frequency:
 
 ---
 
+## Automatic PoP Mode Upgrade
+
+When badge keeper starts in CA mode, it automatically upgrades to **Proof of Possession (PoP) mode** if the agent's private key is available:
+
+1. Loads the agent's private JWK from `~/.capiscio/keys/`
+2. Derives the agent's DID via `did:key`
+3. Uses the PoP endpoints (`/v1/sdk/agents/{did}/badge/challenge` → `/pop`)
+
+This upgrade is transparent — no configuration change is needed. PoP badges (IAL-1) provide stronger identity assurance than CA-only badges because they cryptographically prove the agent possesses the private key corresponding to its DID.
+
+!!! info "When does PoP upgrade happen?"
+    The upgrade occurs automatically when:
+    
+    - The agent's private key exists at `~/.capiscio/keys/`
+    - The badge keeper is configured with `--key` pointing to the key
+    - The CapiscIO Registry supports PoP (all current versions do)
+
+---
+
 ## See Also
 
 - [Issue and Verify Badges](./badges.md) - Manual badge workflow

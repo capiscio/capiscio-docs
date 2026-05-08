@@ -44,15 +44,25 @@ did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK
     ```python
     from capiscio_sdk import CapiscIO
     
-    agent = CapiscIO.connect(api_key="sk_live_...")
+    # Simplest: reads CAPISCIO_API_KEY from environment
+    agent = CapiscIO.connect()
     print(agent.did)  # did:key:z6Mk...
+    
+    # Or pass explicitly
+    agent = CapiscIO.connect(api_key="sk_live_...")
     ```
 
 === "Environment Variables"
 
+    ```bash
+    # connect() reads these automatically:
+    export CAPISCIO_API_KEY=sk_live_...       # Required
+    export CAPISCIO_AGENT_ID=my-agent         # Optional
+    export CAPISCIO_SERVER_URL=https://...    # Optional (defaults to production)
+    ```
+
     ```python
-    # Set CAPISCIO_API_KEY in your environment
-    agent = CapiscIO.from_env()
+    agent = CapiscIO.connect()  # Reads from env vars
     ```
 
 This identity:

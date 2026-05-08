@@ -362,8 +362,28 @@ Your agent isn't reachable:
 
 ---
 
+## Authority Chain Verification
+
+The gateway automatically verifies [delegation chains](delegation-chains.md) when requests include `X-Capiscio-Authority` headers. No additional setup is required — chain verification is enabled by default.
+
+### Configuration
+
+```bash
+# Optional: adjust max chain depth (default: 10)
+export CAPISCIO_MAX_CHAIN_DEPTH=5
+
+# Optional: restrict to same-org chains
+export CAPISCIO_ORG_TRUST_BOUNDARY="did:web:myorg.example.com"
+```
+
+When a valid chain is present, the gateway enriches the PDP request with the leaf capability and chain depth, allowing policies to make fine-grained decisions based on delegated authority.
+
+---
+
 ## See Also
 
 - [Issue and Verify Badges](./badges.md) - Create badges for testing
 - [Badge Keeper](./badge-keeper.md) - Auto-renew client badges
+- [Delegation Chains](./delegation-chains.md) - Create and verify delegation chains
+- [Policy Enforcement Config](../../reference/server/policy-enforcement.md) - Chain verification settings
 - [CLI Reference: gateway](../../reference/cli/index.md#gateway-start) - Full command reference
