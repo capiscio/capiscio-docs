@@ -116,7 +116,7 @@ guard = CapiscioGuard(
 
 ### `from_env()` class method
 
-Mirrors `CapiscIO.from_env()` and `MCPServerIdentity.from_env()`:
+Mirrors `CapiscIO.connect()` and `CapiscioMCPServer.connect()`:
 
 ```python
 guard = CapiscioGuard.from_env(mode="log")

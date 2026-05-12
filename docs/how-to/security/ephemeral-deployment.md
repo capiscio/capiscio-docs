@@ -258,7 +258,7 @@ See [Key Rotation](key-rotation.md) for more advanced patterns.
 | `CAPISCIO_DEV_MODE` | No | Enable dev mode |
 | `CAPISCIO_AGENT_PRIVATE_KEY_JWK` | No | Ed25519 private JWK (JSON string) |
 
-### MCP Guard (`MCPServerIdentity.from_env()`)
+### MCP Guard (`CapiscioMCPServer.connect()`)
 
 | Variable | Required | Description |
 |----------|----------|-------------|
