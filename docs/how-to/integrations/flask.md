@@ -75,7 +75,7 @@ def handle_task():
     return response
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="127.0.0.1", port=8000)
 ```
 
 ---
@@ -160,7 +160,7 @@ def agent_card():
         return jsonify(json.load(f))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="127.0.0.1", port=8000)
 ```
 
 ### Step 4: Run the Application
