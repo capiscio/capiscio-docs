@@ -23,7 +23,7 @@ You should see:
 INFO:     Started server process
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000
+INFO:     Uvicorn running on http://127.0.0.1:8000
 ```
 
 ---
